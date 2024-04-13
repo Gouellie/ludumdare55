@@ -65,6 +65,8 @@ public:
 
     void SetTransform(const Vector3& pos, const Vector3& rotationAxis, float rotation);
 
+    Matrix GetMatrix();
+    
     void PushMatrix();
     void PopMatrix();
 };
@@ -138,7 +140,7 @@ public:
 
     void SetModel(const Model& model);
     void SetTint(Color color) { m_Tint = color; }
-    BoundingBox GetBoundingBox() const { return m_BoundingBox; }
+    BoundingBox GetBoundingBox(Matrix* mat) const;
 };
 
 class ModelAnimationComponent : public Component

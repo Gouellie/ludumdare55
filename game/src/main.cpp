@@ -54,6 +54,7 @@ Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
 Scene TestScene;
+Scene Settlements;
 
 static const int ScreenWidth = 1280;
 static const int ScreenHeight = 800;
@@ -61,7 +62,10 @@ static const int ScreenHeight = 800;
 Texture Wabbit = { 0 };
 Texture Logo = { 0 };
 Texture Sprite = { 0 };
+
 Model   Board = {0};
+Model   Settlement = { 0 };
+
 Camera camera = { 0 };
 
 // Required variables to manage screen transitions (fade-in, fade-out)
@@ -137,38 +141,55 @@ void SetupScene()
     sprite->SetSprite(Wabbit);
     sprite->SetScale(3);
 
-    auto* logo = TestScene.AddObject();
-    logo->AddComponent<TransformComponent>()->SetPosition(Vector2{ GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f });
-     sprite = logo->AddComponent<SpriteComponent>();
-    sprite->SetSprite(Logo);
-    sprite->SetScale(0.5f);
+    //auto* logo = TestScene.AddObject();
+    //logo->AddComponent<TransformComponent>()->SetPosition(Vector2{ GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f });
+    // sprite = logo->AddComponent<SpriteComponent>();
+    //sprite->SetSprite(Logo);
+    //sprite->SetScale(0.5f);
 
-    auto* spinner = logo->AddChild();
-    spinner->AddComponent<TransformComponent>();
-    spinner->AddComponent<Spiner>();
+    //auto* spinner = logo->AddChild();
+    //spinner->AddComponent<TransformComponent>();
+    //spinner->AddComponent<Spiner>();
 
-    auto* orbit = spinner->AddChild();
-    orbit->AddComponent<TransformComponent>()->SetPosition(Vector2{ 0, 200 });
-    sprite = orbit->AddComponent<SpriteComponent>();
-    sprite->SetSprite(Sprite);
+    //auto* orbit = spinner->AddChild();
+    //orbit->AddComponent<TransformComponent>()->SetPosition(Vector2{ 0, 200 });
+    //sprite = orbit->AddComponent<SpriteComponent>();
+    //sprite->SetSprite(Sprite);
 
-    auto* animator = orbit->AddComponent<SpriteAnimationComponent>();
-    auto& normalSequence = animator->AddSequence("normal");
-    normalSequence.FromSpriteSheet(Sprite, Sprite.width / 6, Sprite.height);
-    normalSequence.Loop = true;
-    normalSequence.FPS = 7;
+    //auto* animator = orbit->AddComponent<SpriteAnimationComponent>();
+    //auto& normalSequence = animator->AddSequence("normal");
+    //normalSequence.FromSpriteSheet(Sprite, Sprite.width / 6, Sprite.height);
+    //normalSequence.Loop = true;
+    //normalSequence.FPS = 7;
 
-    auto& reverseSequence = animator->AddSequence("reverse");
-    reverseSequence.FromSpriteSheet(Sprite, Sprite.width / 6, Sprite.height);
-    reverseSequence.Loop = true;
-    reverseSequence.FPS = normalSequence.FPS;
-    reverseSequence.FlipFrames(true, false);
+    //auto& reverseSequence = animator->AddSequence("reverse");
+    //reverseSequence.FromSpriteSheet(Sprite, Sprite.width / 6, Sprite.height);
+    //reverseSequence.Loop = true;
+    //reverseSequence.FPS = normalSequence.FPS;
+    //reverseSequence.FlipFrames(true, false);
 
-    animator->SetCurrentSequence("normal");
+    //animator->SetCurrentSequence("normal");
 
     auto* board = TestScene.AddObject();
     board->AddComponent<ModelComponent>()->SetModel(Board);
-    board->AddComponent<Transform3DComponent>()->SetTransform(Vector3Zero(), {0.0f, 1.0f, 0.0f}, 0.0f);
+    board->AddComponent<Transform3DComponent>()->SetPosition({0.0f, 0.0f, 0.0f});
+
+    // Settlements
+    auto* settlement_1 = Settlements.AddObject();
+    settlement_1->AddComponent<Transform3DComponent>()->SetPosition({ -6.0, 0.0, -3.0});
+    settlement_1->AddComponent<ModelComponent>()->SetModel(Settlement);
+
+    auto* settlement_2 = Settlements.AddObject();
+    settlement_2->AddComponent<Transform3DComponent>()->SetPosition({ 6.30, 0.0, 2.25 });
+    settlement_2->AddComponent<ModelComponent>()->SetModel(Settlement);
+
+    auto* settlement_3 = Settlements.AddObject();
+    settlement_3->AddComponent<Transform3DComponent>()->SetPosition({ -6.25, 0.0, 2.75 });
+    settlement_3->AddComponent<ModelComponent>()->SetModel(Settlement);
+
+    auto* settlement_4 = Settlements.AddObject();
+    settlement_4->AddComponent<Transform3DComponent>()->SetPosition({ 3.5f, 0.0, -2.5 });
+    settlement_4->AddComponent<ModelComponent>()->SetModel(Settlement);
 }
 
 void LoadResources()
@@ -178,10 +199,11 @@ void LoadResources()
     Logo = LoadTexture("resources/raylib_logo.png");
     Sprite = LoadTexture("resources/scarfy.png");
     Board = LoadModel("resources/models/board.glb");
+    Settlement = LoadModel("resources/models/settlement.glb");
 
     // Define the camera to look into our 3d world
     camera = { 0 };
-    camera.position = { 15.0f, 10.0f, 15.0f };    // Camera position
+    camera.position = { 15.0f, 10.0f, -15.0f };    // Camera position
     camera.target = { 0.0f, 0.0f, 0.0f };      // Camera looking at point
     camera.up = { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
@@ -333,6 +355,7 @@ static void UpdateMainLoop(void)
     // Update
     //----------------------------------------------------------------------------------
     //UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
+    static bool cameraOrbit;
 
     if (!onTransition)
     {
@@ -362,6 +385,10 @@ static void UpdateMainLoop(void)
         } break;
         case GAMEPLAY:
         {
+            if (cameraOrbit) {
+                UpdateCamera(&camera, CAMERA_ORBITAL);
+            }
+
             UpdateGameplayScreen();
 
             if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
@@ -401,6 +428,10 @@ static void UpdateMainLoop(void)
     if (onTransition) DrawTransition();
 
     //DrawFPS(10, 10);
+    if (GuiButton({ 10, 10, 80, 20 }, "ORBIT")) 
+    {
+        cameraOrbit = !cameraOrbit;
+    }
 
     EndDrawing();
     //----------------------------------------------------------------------------------

@@ -78,7 +78,6 @@ void TransformComponent::PopMatrix()
     }
 }
 
-
 //-----------------------Transform3DComponent-------------------------//
 
 void Transform3DComponent::SetPosition(const Vector3& pos)
@@ -116,6 +115,13 @@ void Transform3DComponent::SetTransform(const Vector3& pos, const Vector3& rotat
     SetPosition(pos);
     SetRotationAxis(rotationAxis);
     SetRotation(rotation);
+}
+
+Matrix Transform3DComponent::GetMatrix() {
+    Matrix mat = MatrixIdentity();
+    //mat = MatrixRotate(RotationAxis, Rotation);
+    mat = MatrixTranslate(Translation.x, Translation.y, Translation.z);
+    return mat;
 }
 
 void Transform3DComponent::PushMatrix()
@@ -315,10 +321,20 @@ void ModelComponent::OnRender3D() {
 
     Transform3DComponent* transform = GetComponent<Transform3DComponent>();
     if (transform) {
-        transform->PushMatrix();
+        Vector3 pos = transform->GetPosition();
         DrawModelEx(m_Model, transform->GetPosition(), transform->GetRotationAxis(), transform->GetRotation(), Vector3One(), m_Tint);
-        transform->PopMatrix();
     }
+}
+
+BoundingBox ModelComponent::GetBoundingBox(Matrix* matrix) const 
+{ 
+    BoundingBox bounds = m_BoundingBox;
+    if (matrix) {
+        bounds.min = Vector3Transform(bounds.min, *matrix);
+        bounds.max = Vector3Transform(bounds.max, *matrix);
+    }
+
+    return bounds;
 }
 
 //-----------------------AnimationComponent-------------------------//
