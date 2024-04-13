@@ -1,15 +1,15 @@
 Cube
- <Vector (0.0000, 0.0000, 0.0000)>
+ pos (0.0, 0.0, 0.0)
  <Euler (x=0.0000, y=0.0000, z=0.0000), order='XYZ'>
 Settlement
- <Vector (-5.2443, -6.4471, 2.0585)>
+ pos (-5.24, 0.0, -6.45)
  <Euler (x=0.0000, y=0.0000, z=0.0000), order='XYZ'>
 Settlement
- <Vector (5.5700, 5.4636, 1.9909)>
+ pos (5.57, 0.0, 5.46)
  <Euler (x=0.0000, y=0.0000, z=0.0000), order='XYZ'>
 Settlement
- <Vector (-3.5294, 5.4636, 1.9909)>
+ pos (-3.53, 0.0, 5.46)
  <Euler (x=0.0000, y=0.0000, z=0.0000), order='XYZ'>
 Settlement
- <Vector (2.1187, -0.7967, 1.9909)>
+ pos (2.12, 0.0, -0.8)
  <Euler (x=0.0000, y=0.0000, z=0.0000), order='XYZ'>

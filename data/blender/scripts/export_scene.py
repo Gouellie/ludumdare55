@@ -16,8 +16,10 @@ def export_scene(path):
     meshes = bpy.context.selected_objects
 
     for m in meshes:
+        pos = m.location
+        
         f.write(namecleaned(m.name))
-        f.write('\n ' + str(m.location))
+        f.write('\n pos (' + str(round(pos.x, 2)) + ', ' + str(round(pos.z, 2)) + ', ' + str(round(pos.y, 2)) + ')')
         f.write('\n ' + str(m.rotation_euler))
         f.write('\n')        
     f.close()
