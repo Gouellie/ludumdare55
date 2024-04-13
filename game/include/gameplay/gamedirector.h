@@ -38,6 +38,7 @@ public:
     void HealWarriors();
 
     [[nodiscard]] int GetPickedWarriorIndex() { return m_PickedWarriorIndex; }
+    void SetPickedWarriorIndex(int index) { m_PickedWarriorIndex = index; }
 
 private:
     GameDirector() {}
