@@ -4,10 +4,6 @@
 
 using super = GameObject;
 
-void SettlementComponent::UpdateSettlement()
-{
-
-}
 
 void SettlementComponent::GetWarriors(std::vector<Warrior*>& warriors)
 {
@@ -19,4 +15,20 @@ void SettlementComponent::GetData(std::string& name, SettlementStatus& status, s
     name = GetName();
     status = m_Status;
     GetWarriors(assignedWarriors);
+}
+
+Color SettlementComponent::GetColor()
+{
+    switch (GetStatus())
+    {
+    case SettlementStatus::Clear:
+        return BLUE;
+        break;
+    case SettlementStatus::Attacked:
+        return RED;
+        break;
+    case SettlementStatus::Destroyed:
+        return GREEN;
+        break;
+    }
 }

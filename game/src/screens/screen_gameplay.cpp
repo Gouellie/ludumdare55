@@ -5,6 +5,7 @@
 #include "simple_components.h"
 #include "game_object.h"
 
+#include <gameplay/gamedirector.h>
 #include <gameplay/settlement.h>
 
 #include <cstdlib>
@@ -19,8 +20,6 @@ static int finishScreen = 0;
 // Gameplay Screen Functions Definition
 //----------------------------------------------------------------------------------
 
-void ResolveTurn();
-
 // Gameplay Screen Initialization logic
 void InitGameplayScreen(void)
 {
@@ -34,6 +33,7 @@ void UpdateGameplayScreen(void)
 {
     TestScene.Update();
 
+    GameDirector directorInstance = GameDirector::GetInstance();
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 
 
@@ -43,8 +43,8 @@ void UpdateGameplayScreen(void)
         if (!child)
             continue;
 
-        //if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
-        //{
+        if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
+        {
             if (ModelComponent* model = child->GetComponent<ModelComponent>())
             {
                 if (model->GetPicked())
@@ -57,23 +57,22 @@ void UpdateGameplayScreen(void)
                 Matrix matrix = transform->GetMatrix();
 
                 RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox(&matrix));
-                if (raycol.hit && isMousePressed)
+                if (raycol.hit && isMousePressed && settlement->GetStatus() != SettlementStatus::Destroyed)
                 {
                     model->SetPicked(true);
-                    model->SetTint(RED);
                 }
                 else
                 {
-                    model->SetTint(BLUE);
+                    model->SetTint(settlement->GetColor());
                 }
             }
-        //}
+        }
     }
 
     // Here, plug event on "EndTurn" button pressed
     if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT))
     {
-        ResolveTurn();
+        directorInstance.ResolveTurn(Settlements);
     }
 }
 
@@ -97,32 +96,4 @@ void UnloadGameplayScreen(void)
 int FinishGameplayScreen(void)
 {
     return finishScreen;
-}
-
-// Handle end of turn
-void ResolveTurn()
-{
-    for (GameObject* child : TestScene.GetChildren())
-    {
-        if (!child)
-            continue;
-
-        if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
-        {
-            if (ModelComponent* model = child->GetComponent<ModelComponent>())
-            {
-                int min = 0;
-                int max = 10;
-                int random = min + (rand() % static_cast<int>(max - min + 1));
-                if (random > 5)
-                {
-                    model->SetTint(BLUE);
-                }
-                else
-                {
-                    model->SetTint(GREEN);
-                }
-            }
-        }
-    }
 }

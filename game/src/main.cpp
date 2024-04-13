@@ -173,24 +173,27 @@ void SetupScene()
     //animator->SetCurrentSequence("normal");
 
     auto* board = TestScene.AddObject();
-    board->AddComponent<SettlementComponent>();
     board->AddComponent<ModelComponent>()->SetModel(Board);
     board->AddComponent<Transform3DComponent>()->SetPosition({0.0f, 0.0f, 0.0f});
 
     // Settlements
     auto* settlement_1 = Settlements.AddObject();
+    settlement_1->AddComponent<SettlementComponent>();
     settlement_1->AddComponent<Transform3DComponent>()->SetPosition({ -6.0, 0.0, -3.0});
     settlement_1->AddComponent<ModelComponent>()->SetModel(Settlement);
 
     auto* settlement_2 = Settlements.AddObject();
+    settlement_2->AddComponent<SettlementComponent>();
     settlement_2->AddComponent<Transform3DComponent>()->SetPosition({ 6.30, 0.0, 2.25 });
     settlement_2->AddComponent<ModelComponent>()->SetModel(Settlement);
 
     auto* settlement_3 = Settlements.AddObject();
+    settlement_3->AddComponent<SettlementComponent>();
     settlement_3->AddComponent<Transform3DComponent>()->SetPosition({ -6.25, 0.0, 2.75 });
     settlement_3->AddComponent<ModelComponent>()->SetModel(Settlement);
 
     auto* settlement_4 = Settlements.AddObject();
+    settlement_4->AddComponent<SettlementComponent>();
     settlement_4->AddComponent<Transform3DComponent>()->SetPosition({ 3.5f, 0.0, -2.5 });
     settlement_4->AddComponent<ModelComponent>()->SetModel(Settlement);
 }

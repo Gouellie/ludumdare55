@@ -23,12 +23,15 @@ public:
     std::vector<Warrior*> m_AssignedWarriors;
     std::string m_Name;
 
-    void UpdateSettlement();
+    void SetStatus(SettlementStatus newStatus) { m_Status = newStatus; }
+    SettlementStatus GetStatus() { return m_Status; }
 
-    std::string GetName() { return m_Name; };
+    std::string GetName() { return m_Name; }
     void GetData(std::string& name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
 
     void GetWarriors(std::vector<Warrior*>& warriors);
+
+    Color GetColor();
 
 private:
 
