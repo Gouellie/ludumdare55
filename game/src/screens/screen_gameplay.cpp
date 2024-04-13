@@ -35,6 +35,7 @@ void InitGameplayScreen(void)
 void UpdateGameplayScreen(void)
 {
     TestScene.Update();
+    Settlements.Update();
 
     GameDirector& directorInstance = GameDirector::GetInstance();
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);

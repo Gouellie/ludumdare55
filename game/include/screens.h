@@ -45,6 +45,8 @@ extern Camera camera;
 extern Scene TestScene;
 extern Scene Settlements;
 
+extern Font TextFont;
+
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
 #endif

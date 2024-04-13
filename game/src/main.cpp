@@ -46,6 +46,7 @@ Use this as a starting point or replace it with your code.
 #include "screens.h" 
 
 #include <gameplay/settlement.h>
+#include <ui/boardcomponent.h>
 
 //----------------------------------------------------------------------------------
 // Shared Variables Definition (global)
@@ -65,10 +66,13 @@ Texture Wabbit = { 0 };
 Texture Logo = { 0 };
 Texture Sprite = { 0 };
 
+Texture BoardBackground = { 0 };
+
 Model   Board = {0};
 Model   Settlement = { 0 };
 
 Camera camera = { 0 };
+Font TextFont = { 0 };
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -181,21 +185,25 @@ void SetupScene()
     settlement_1->AddComponent<SettlementComponent>();
     settlement_1->AddComponent<Transform3DComponent>()->SetPosition({ -6.0, 0.0, -3.0});
     settlement_1->AddComponent<ModelComponent>()->SetModel(Settlement);
+    settlement_1->AddComponent<BoardComponent>()->SetSprite(BoardBackground)->SetMessage("Hello World\nHow Are you\n   today?");
 
     auto* settlement_2 = Settlements.AddObject();
     settlement_2->AddComponent<SettlementComponent>();
     settlement_2->AddComponent<Transform3DComponent>()->SetPosition({ 6.30, 0.0, 2.25 });
     settlement_2->AddComponent<ModelComponent>()->SetModel(Settlement);
+    settlement_2->AddComponent<BoardComponent>()->SetSprite(BoardBackground);
 
     auto* settlement_3 = Settlements.AddObject();
     settlement_3->AddComponent<SettlementComponent>();
     settlement_3->AddComponent<Transform3DComponent>()->SetPosition({ -6.25, 0.0, 2.75 });
     settlement_3->AddComponent<ModelComponent>()->SetModel(Settlement);
+    settlement_3->AddComponent<BoardComponent>()->SetSprite(BoardBackground);
 
     auto* settlement_4 = Settlements.AddObject();
     settlement_4->AddComponent<SettlementComponent>();
     settlement_4->AddComponent<Transform3DComponent>()->SetPosition({ 3.5f, 0.0, -2.5 });
     settlement_4->AddComponent<ModelComponent>()->SetModel(Settlement);
+    settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground)->SetMessage("Message\nOr is it?\nYes it is!");
 }
 
 void LoadResources()
@@ -204,16 +212,20 @@ void LoadResources()
     SetTextureFilter(Wabbit, TEXTURE_FILTER_POINT);
     Logo = LoadTexture("resources/raylib_logo.png");
     Sprite = LoadTexture("resources/scarfy.png");
+    BoardBackground = LoadTexture("resources/board_background.png");
+
     Board = LoadModel("resources/models/board.glb");
     Settlement = LoadModel("resources/models/settlement.glb");
 
     // Define the camera to look into our 3d world
     camera = { 0 };
-    camera.position = { 15.0f, 10.0f, -15.0f };    // Camera position
+    camera.position = { 25.0f, 20.f, 25.0f };    // Camera position
     camera.target = { 0.0f, 0.0f, 0.0f };      // Camera looking at point
     camera.up = { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
+
+    TextFont = LoadFont("resources/fonts/custom_alagard.png");
 }
 
 int main()
@@ -224,7 +236,6 @@ int main()
 
     LoadResources();
     SetupScene();
-
     // Load global data (assets that must be available in all screens, i.e. font)
     //font = LoadFont("resources/mecha.png");
     //music = LoadMusicStream("resources/ambient.ogg");
