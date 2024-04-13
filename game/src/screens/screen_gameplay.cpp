@@ -26,6 +26,9 @@ void InitGameplayScreen(void)
     // TODO: Initialize GAMEPLAY screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+
+    GameDirector& directorInstance = GameDirector::GetInstance();
+    directorInstance.AddWarrior("Guillaume", 150, 100);
 }
 
 // Gameplay Screen Update logic
@@ -33,9 +36,8 @@ void UpdateGameplayScreen(void)
 {
     TestScene.Update();
 
-    GameDirector directorInstance = GameDirector::GetInstance();
+    GameDirector& directorInstance = GameDirector::GetInstance();
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-
 
     Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
     for (GameObject* child : Settlements.GetChildren())
@@ -45,7 +47,7 @@ void UpdateGameplayScreen(void)
 
         if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
         {
-            if (ModelComponent* model = child->GetComponent<ModelComponent>())
+            if (ModelComponent* model = settlement->GetComponent<ModelComponent>())
             {
                 if (model->GetPicked())
                 {
@@ -53,13 +55,17 @@ void UpdateGameplayScreen(void)
                     continue;
                 }
 
-                Transform3DComponent* transform = child->GetComponent<Transform3DComponent>();
+                Transform3DComponent* transform = settlement->GetComponent<Transform3DComponent>();
                 Matrix matrix = transform->GetMatrix();
 
                 RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox(&matrix));
                 if (raycol.hit && isMousePressed && settlement->GetStatus() != SettlementStatus::Destroyed)
                 {
-                    model->SetPicked(true);
+                    if (directorInstance.GetWarrior(0)->GetStatus() == WarriorStatus::Waiting)
+                    {
+                        settlement->AddWarrior(directorInstance.GetWarrior(0)); // Must have a proper way to assign
+                    }
+                    directorInstance.SetPickedModel(model);
                 }
                 else
                 {

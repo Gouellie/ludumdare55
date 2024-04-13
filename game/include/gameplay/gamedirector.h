@@ -5,11 +5,14 @@
 #include <vector>
 
 class Scene;
+class ModelComponent;
 
 class GameDirector
 {
 public:
-    std::vector<Warrior*> m_AvailableWarriors;
+    std::vector<Warrior> m_AvailableWarriors;
+    ModelComponent* m_PickedModel = nullptr;
+    unsigned int m_CurrentTurn{ 0 };
 
     static GameDirector& GetInstance()
     {
@@ -18,11 +21,13 @@ public:
     }
 
     void ResolveTurn(const Scene& scene);
-    unsigned int m_CurrentTurn{ 0 };
 
-    void AddWarrior();
-    Warrior* GetWarrior(std::size_t index) { return m_AvailableWarriors.at(index); }
-    const Warrior* GetWarrior(std::size_t index) const { return m_AvailableWarriors.at(index); }
+    void SetPickedModel(ModelComponent* picked);
+    ModelComponent* GetPickedModel() { return m_PickedModel; }
+
+    void AddWarrior(std::string name, unsigned int health, unsigned int power);
+    Warrior* GetWarrior(std::size_t index) { return &m_AvailableWarriors.at(index); }
+    const Warrior* GetWarrior(std::size_t index) const { return &m_AvailableWarriors.at(index); }
 
 private:
     GameDirector() {}

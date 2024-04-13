@@ -5,6 +5,26 @@
 #include <gameplay/settlement.h>
 #include <gameplay/warrior.h>
 
+void GameDirector::AddWarrior(std::string name, unsigned int health, unsigned int power)
+{
+    m_AvailableWarriors.emplace_back(Warrior(name, health, power));
+}
+
+void GameDirector::SetPickedModel(ModelComponent* picked)
+{
+    if (m_PickedModel != nullptr)
+    {
+        m_PickedModel->SetPicked(false);
+        m_PickedModel = picked;
+        m_PickedModel->SetPicked(true);
+    }
+    else
+    {
+        m_PickedModel = picked;
+        m_PickedModel->SetPicked(true);
+    }
+}
+
 // Handle end of turn
 void GameDirector::ResolveTurn(const Scene& scene)
 {
@@ -38,7 +58,16 @@ void GameDirector::ResolveTurn(const Scene& scene)
                     }
                     else
                     {
-                        --event->m_TurnsToResolve;
+                        if (settlement->GetWarriorPower() >= event->m_RequiredPower)
+                        {
+                            settlement->SetStatus(SettlementStatus::Clear);
+                            settlement->ClearEvent();
+                            settlement->ClearWarriors();
+                        }
+                        else
+                        {
+                            --event->m_TurnsToResolve;
+                        }
                     }
                 }
             }

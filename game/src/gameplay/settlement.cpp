@@ -7,9 +7,44 @@ void SettlementComponent::AddEvent(unsigned int timeToSolve, unsigned int requir
     m_CurrentEvent = new Event(timeToSolve, requiredPower, penalty, cost);
 }
 
+void SettlementComponent::ClearEvent()
+{
+    delete m_CurrentEvent;
+    m_CurrentEvent = nullptr;
+}
+
 void SettlementComponent::GetWarriors(std::vector<Warrior*>& warriors)
 {
     warriors = m_AssignedWarriors;
+}
+
+void SettlementComponent::AddWarrior(Warrior* warrior)
+{
+    m_AssignedWarriors.push_back(warrior);
+    warrior->SetStatus(WarriorStatus::Dispatched);
+}
+
+void SettlementComponent::RemoveWarrior(std::size_t index)
+{
+    m_AssignedWarriors.at(index)->SetStatus(WarriorStatus::Waiting);
+    auto it = m_AssignedWarriors.begin();
+    std::next(it, index);
+    m_AssignedWarriors.erase(it);
+}
+
+const unsigned int SettlementComponent::GetWarriorPower() const
+{
+    unsigned int totalPower = 0;
+    for (const Warrior* warrior : m_AssignedWarriors)
+    {
+        totalPower += warrior->GetPowerLevel();
+    }
+    return totalPower;
+}
+
+void SettlementComponent::ClearWarriors()
+{
+    m_AssignedWarriors.clear();
 }
 
 void SettlementComponent::GetData(std::string& name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors)
