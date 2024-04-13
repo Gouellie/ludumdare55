@@ -37,6 +37,7 @@ void UpdateGameplayScreen(void)
 {
     TestScene.Update();
     Settlements.Update();
+    Barracks.Update();
 
     GameDirector& directorInstance = GameDirector::GetInstance();
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
@@ -92,6 +93,11 @@ void UpdateGameplayScreen(void)
     {
         directorInstance.ResolveTurn(Settlements);
     }
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) 
+    {
+        finishScreen = 42; 
+    }
 }
 
 // Gameplay Screen Draw logic
@@ -101,8 +107,10 @@ void DrawGameplayScreen(void)
     TestScene.Render3D();
     Settlements.Render3D();
     EndMode3D();
+
     TestScene.Render();
     Settlements.Render();
+    Barracks.Render();
 }
 
 // Gameplay Screen Unload logic

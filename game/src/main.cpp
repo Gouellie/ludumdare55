@@ -1,26 +1,3 @@
-/*
-Raylib example file.
-This is an example main file for a simple raylib project.
-Use this as a starting point or replace it with your code.
-
--- Copyright (c) 2020-2024 Jeffery Myers
---
---This software is provided "as-is", without any express or implied warranty. In no event
---will the authors be held liable for any damages arising from the use of this software.
-
---Permission is granted to anyone to use this software for any purpose, including commercial
---applications, and to alter it and redistribute it freely, subject to the following restrictions:
-
---  1. The origin of this software must not be misrepresented; you must not claim that you
---  wrote the original software. If you use this software in a product, an acknowledgment
---  in the product documentation would be appreciated but is not required.
---
---  2. Altered source versions must be plainly marked as such, and must not be misrepresented
---  as being the original software.
---
---  3. This notice may not be removed or altered from any source distribution.
-
-*/
 
 #include "raylib.h"
 #include "raymath.h"
@@ -48,16 +25,19 @@ Use this as a starting point or replace it with your code.
 #include <gameplay/settlement.h>
 #include <ui/boardcomponent.h>
 
+#include <gameplay/gamedirector.h>
+#include <gameplay/barrackcontroller.h>
+
 //----------------------------------------------------------------------------------
 // Shared Variables Definition (global)
 // NOTE: Those variables are shared between modules through screens.h
 //----------------------------------------------------------------------------------
 GameScreen currentScreen = LOGO;
 Font font = { 0 };
-Music music = { 0 };
 Sound fxCoin = { 0 };
 Scene TestScene;
 Scene Settlements;
+Scene Barracks;
 
 static const int ScreenWidth = 1280;
 static const int ScreenHeight = 800;
@@ -75,6 +55,9 @@ Model   Settlement = { 0 };
 Camera camera = { 0 };
 Font TextFont = { 0 };
 
+// Local Variables
+Music music = { 0 };
+
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
 static bool onTransition = false;
@@ -89,94 +72,10 @@ static void ChangeToScreen(GameScreen screen);     // Change to screen, no trans
 static void TransitionToScreen(GameScreen screen); // Request transition to next screen
 static void UpdateTransition(void);         // Update transition effect
 static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-
 static void UpdateMainLoop(void);           // Update and draw one frame
-
-// a simple behavior class that handles input
-class PlayerController : public GameObjectBehavior
-{
-public:
-    DEFINE_BEHAVIOR(PlayerController)
-
-        float Speed = 300;
-
-    void OnUpdate() override
-    {
-        TransformComponent* transform = GetComponent<TransformComponent>();
-        if (!transform)
-            return;
-
-        Vector2 movement = { 0 };
-        if (IsKeyDown(KEY_W))
-            movement.y -= 1;
-        if (IsKeyDown(KEY_S))
-            movement.y += 1;
-
-        if (IsKeyDown(KEY_A))
-            movement.x -= 1;
-        if (IsKeyDown(KEY_D))
-            movement.x += 1;
-
-        transform->SetPosition(Vector2Add(transform->GetPosition(), Vector2Scale(movement, Speed * GetFrameTime())));
-    }
-};
-
-class Spiner : public GameObjectBehavior
-{
-public:
-    DEFINE_BEHAVIOR(Spiner)
-
-    float Speed = -90;
-
-    void OnUpdate() override
-    {
-        TransformComponent* transform = GetComponent<TransformComponent>();
-        if (!transform)
-            return;
-
-        transform->SetRotation(transform->GetRotation() + Speed * GetFrameTime());
-        Vector2 movement = { 0 };
-    }
-};
 
 void SetupScene()
 {
-    auto* player = TestScene.AddObject();
-    player->AddComponent<TransformComponent>()->SetPosition(Vector2{ 100, 100 });
-    player->AddComponent<PlayerController>();
-    auto* sprite = player->AddComponent<SpriteComponent>();
-    sprite->SetSprite(Wabbit);
-    sprite->SetScale(3);
-
-    //auto* logo = TestScene.AddObject();
-    //logo->AddComponent<TransformComponent>()->SetPosition(Vector2{ GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f });
-    // sprite = logo->AddComponent<SpriteComponent>();
-    //sprite->SetSprite(Logo);
-    //sprite->SetScale(0.5f);
-
-    //auto* spinner = logo->AddChild();
-    //spinner->AddComponent<TransformComponent>();
-    //spinner->AddComponent<Spiner>();
-
-    //auto* orbit = spinner->AddChild();
-    //orbit->AddComponent<TransformComponent>()->SetPosition(Vector2{ 0, 200 });
-    //sprite = orbit->AddComponent<SpriteComponent>();
-    //sprite->SetSprite(Sprite);
-
-    //auto* animator = orbit->AddComponent<SpriteAnimationComponent>();
-    //auto& normalSequence = animator->AddSequence("normal");
-    //normalSequence.FromSpriteSheet(Sprite, Sprite.width / 6, Sprite.height);
-    //normalSequence.Loop = true;
-    //normalSequence.FPS = 7;
-
-    //auto& reverseSequence = animator->AddSequence("reverse");
-    //reverseSequence.FromSpriteSheet(Sprite, Sprite.width / 6, Sprite.height);
-    //reverseSequence.Loop = true;
-    //reverseSequence.FPS = normalSequence.FPS;
-    //reverseSequence.FlipFrames(true, false);
-
-    //animator->SetCurrentSequence("normal");
-
     auto* board = TestScene.AddObject();
     board->AddComponent<ModelComponent>()->SetModel(Board);
     board->AddComponent<Transform3DComponent>()->SetPosition({0.0f, 0.0f, 0.0f});
@@ -205,14 +104,13 @@ void SetupScene()
     settlement_4->AddComponent<Transform3DComponent>()->SetPosition({ 3.5f, 0.0, -2.5 });
     settlement_4->AddComponent<ModelComponent>()->SetModel(Settlement);
     settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
+
+    // Barack
+    Barracks.AddComponent<BarrackController>();
 }
 
 void LoadResources()
 {
-    Wabbit = LoadTexture("resources/wabbit_alpha.png");
-    SetTextureFilter(Wabbit, TEXTURE_FILTER_POINT);
-    Logo = LoadTexture("resources/raylib_logo.png");
-    Sprite = LoadTexture("resources/scarfy.png");
     BoardBackground = LoadTexture("resources/board_background.png");
     CloseButton = LoadTexture("resources/ui/ui_close.png");
 
@@ -228,6 +126,7 @@ void LoadResources()
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
     TextFont = LoadFont("resources/fonts/custom_alagard.png");
+    music = LoadMusicStream("resources/audio/ambient.ogg");
 }
 
 int main()
@@ -238,13 +137,6 @@ int main()
 
     LoadResources();
     SetupScene();
-    // Load global data (assets that must be available in all screens, i.e. font)
-    //font = LoadFont("resources/mecha.png");
-    //music = LoadMusicStream("resources/ambient.ogg");
-    //fxCoin = LoadSound("resources/coin.wav");
-
-    //SetMusicVolume(music, 1.0f);
-    //PlayMusicStream(music);
 
 // Setup and init first screen
 #ifdef DEBUG
@@ -253,6 +145,8 @@ int main()
 #else
     currentScreen = LOGO;
     InitLogoScreen();
+    SetMusicVolume(music, 1.0f);
+    PlayMusicStream(music);
 #endif // DEBUG
 
 #if defined(PLATFORM_WEB)
@@ -371,9 +265,10 @@ static void DrawTransition(void)
 
 static void UpdateMainLoop(void)
 {
-    // Update
-    //----------------------------------------------------------------------------------
-    //UpdateMusicStream(music);       // NOTE: Music keeps playing between screens
+#ifndef DEBUG
+    UpdateMusicStream(music);
+#endif
+
     static bool cameraOrbit;
 
     if (!onTransition)
@@ -410,7 +305,7 @@ static void UpdateMainLoop(void)
 
             UpdateGameplayScreen();
 
-            if (FinishGameplayScreen() == 1) TransitionToScreen(ENDING);
+            if (FinishGameplayScreen() == 42) TransitionToScreen(ENDING);
             //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
         } break;
@@ -452,6 +347,10 @@ static void UpdateMainLoop(void)
         cameraOrbit = !cameraOrbit;
     }
 
+    if (GuiButton({ 100, 10, 80, 20 }, "ADD WARRIOR"))
+    {
+        GameDirector::GetInstance().AddWarrior("Hello", 100, 100);
+    }
+
     EndDrawing();
-    //----------------------------------------------------------------------------------
 }
