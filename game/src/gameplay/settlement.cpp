@@ -2,8 +2,10 @@
 
 #include <gameplay/warrior.h>
 
-using super = GameObject;
-
+void SettlementComponent::AddEvent(unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost)
+{
+    m_CurrentEvent = new Event(timeToSolve, requiredPower, penalty, cost);
+}
 
 void SettlementComponent::GetWarriors(std::vector<Warrior*>& warriors)
 {
@@ -29,6 +31,9 @@ Color SettlementComponent::GetColor()
         break;
     case SettlementStatus::Destroyed:
         return GREEN;
+        break;
+    default:
+        return WHITE;
         break;
     }
 }

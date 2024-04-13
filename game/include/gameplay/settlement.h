@@ -2,6 +2,8 @@
 
 #include <simple_components.h>
 
+#include <gameplay/event.h>
+
 #include <string>
 #include <vector>
 
@@ -22,6 +24,10 @@ public:
     SettlementStatus m_Status{ SettlementStatus::Clear };
     std::vector<Warrior*> m_AssignedWarriors;
     std::string m_Name;
+    Event* m_CurrentEvent = nullptr;
+
+    void AddEvent(unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
+    Event* GetEvent() { return m_CurrentEvent; }
 
     void SetStatus(SettlementStatus newStatus) { m_Status = newStatus; }
     SettlementStatus GetStatus() { return m_Status; }

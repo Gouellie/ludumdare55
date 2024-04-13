@@ -1,7 +1,5 @@
 #pragma once
 
-#include <simple_components.h>
-
 #include <string>
 
 enum class WarriorStatus
@@ -12,18 +10,20 @@ enum class WarriorStatus
     Dead = 3
 };
 
-class WarriorComponent : public Component
+class Warrior
 {
 public:
-    DEFINE_COMPONENT(WarriorComponent)
     std::string m_Name;
-    unsigned int m_Health{ 0 };
     WarriorStatus m_Status{ WarriorStatus::Waiting };
-
-    void UpdateWarrior();
 
     void GetData();
 
-private:
+    const unsigned int GetHealth() const { return m_Health; }
+    void SetHealth(unsigned int newVal) { m_Health = newVal; }
+    const unsigned int GetPowerLevel() const { return m_PowerLevel; }
+    void SetPowerLevel(unsigned int newVal) { m_PowerLevel = newVal; }
 
+private:
+    unsigned int m_Health{ 100 };
+    unsigned int m_PowerLevel{ 100 };
 };

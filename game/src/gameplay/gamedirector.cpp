@@ -3,6 +3,7 @@
 #include <scene.h>
 
 #include <gameplay/settlement.h>
+#include <gameplay/warrior.h>
 
 // Handle end of turn
 void GameDirector::ResolveTurn(const Scene& scene)
@@ -21,12 +22,25 @@ void GameDirector::ResolveTurn(const Scene& scene)
                 int random = min + (rand() % static_cast<int>(max - min + 1));
                 if (random > 5)
                 {
+                    settlement->AddEvent(1, 10, 0, 0);
                     settlement->SetStatus(SettlementStatus::Attacked);
                 }
             }
             else
             {
-                settlement->SetStatus(SettlementStatus::Destroyed);
+                std::vector<Warrior*> warriors;
+                settlement->GetWarriors(warriors);
+                if (Event* event = settlement->GetEvent())
+                {
+                    if (event->m_TurnsToResolve == 0)
+                    {
+                        settlement->SetStatus(SettlementStatus::Destroyed);
+                    }
+                    else
+                    {
+                        --event->m_TurnsToResolve;
+                    }
+                }
             }
 
             if (ModelComponent* model = child->GetComponent<ModelComponent>())
