@@ -7,6 +7,7 @@
 
 #include <gameplay/gamedirector.h>
 #include <gameplay/settlement.h>
+#include <ui/boardcomponent.h>
 
 #include <cstdlib>
 
@@ -40,7 +41,8 @@ void UpdateGameplayScreen(void)
     GameDirector& directorInstance = GameDirector::GetInstance();
     bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 
-    Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
+    Vector2 mousePos = GetMousePosition();
+    Ray ray = GetScreenToWorldRay(mousePos, camera);
     for (GameObject* child : Settlements.GetChildren())
     {
         if (!child)
@@ -48,6 +50,15 @@ void UpdateGameplayScreen(void)
 
         if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
         {
+            if (BoardComponent* board = settlement->GetComponent<BoardComponent>()) {
+                if (board->GetShown() && board->GetCanBeClosed()) 
+                {
+                    if (isMousePressed && board->GetMouseOverCloseButton())
+                    {
+                        board->SetShown(false);
+                    }
+                }
+            }
             if (ModelComponent* model = settlement->GetComponent<ModelComponent>())
             {
                 if (model->GetPicked())

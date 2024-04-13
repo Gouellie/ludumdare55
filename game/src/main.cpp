@@ -67,6 +67,7 @@ Texture Logo = { 0 };
 Texture Sprite = { 0 };
 
 Texture BoardBackground = { 0 };
+Texture CloseButton = { 0 };
 
 Model   Board = {0};
 Model   Settlement = { 0 };
@@ -185,25 +186,25 @@ void SetupScene()
     settlement_1->AddComponent<SettlementComponent>();
     settlement_1->AddComponent<Transform3DComponent>()->SetPosition({ -6.0, 0.0, -3.0});
     settlement_1->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_1->AddComponent<BoardComponent>()->SetSprite(BoardBackground)->SetMessage("Hello World\nHow Are you\n   today?");
+    settlement_1->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
 
     auto* settlement_2 = Settlements.AddObject();
     settlement_2->AddComponent<SettlementComponent>();
     settlement_2->AddComponent<Transform3DComponent>()->SetPosition({ 6.30, 0.0, 2.25 });
     settlement_2->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_2->AddComponent<BoardComponent>()->SetSprite(BoardBackground);
+    settlement_2->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
 
     auto* settlement_3 = Settlements.AddObject();
     settlement_3->AddComponent<SettlementComponent>();
     settlement_3->AddComponent<Transform3DComponent>()->SetPosition({ -6.25, 0.0, 2.75 });
     settlement_3->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_3->AddComponent<BoardComponent>()->SetSprite(BoardBackground);
+    settlement_3->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
 
     auto* settlement_4 = Settlements.AddObject();
     settlement_4->AddComponent<SettlementComponent>();
     settlement_4->AddComponent<Transform3DComponent>()->SetPosition({ 3.5f, 0.0, -2.5 });
     settlement_4->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground)->SetMessage("Message\nOr is it?\nYes it is!");
+    settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
 }
 
 void LoadResources()
@@ -213,6 +214,7 @@ void LoadResources()
     Logo = LoadTexture("resources/raylib_logo.png");
     Sprite = LoadTexture("resources/scarfy.png");
     BoardBackground = LoadTexture("resources/board_background.png");
+    CloseButton = LoadTexture("resources/ui/ui_close.png");
 
     Board = LoadModel("resources/models/board.glb");
     Settlement = LoadModel("resources/models/settlement.glb");

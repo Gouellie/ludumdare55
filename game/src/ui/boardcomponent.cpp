@@ -8,6 +8,11 @@ void BoardComponent::OnUpdate()
     if (!m_Shown)
         return;
 
+    if (m_bCanBeClosed) 
+    {
+        Vector2 mousePos = GetMousePosition();
+    }
+
     const float maxOffset = 5.0f;
     const float offset = 0.1f;
 
@@ -50,10 +55,21 @@ void BoardComponent::OnRender()
 
     Vector2 pos = GetWorldToScreen(transform->GetPosition(), camera);
 
-    if (IsTextureReady(Sprite)) {
+    if (IsTextureReady(m_BackgroundSprite)) {
         Vector2 spritePos = { pos.x - fabsf(SourceRect.width) / 2, GetScreenHeight() / 2 - fabsf(SourceRect.height) / 2 };
         pos.y = spritePos.y + 40;
-        DrawTexture(Sprite, spritePos.x, spritePos.y - m_yOffset, WHITE);
+        DrawTexture(m_BackgroundSprite, spritePos.x, spritePos.y - m_yOffset, WHITE);
+    }
+
+    if (m_bCanBeClosed && IsTextureReady(m_CloseButtonSprite)) {
+        Vector2 spritePos = { pos.x + fabsf(SourceRect.width) / 2 - fabsf(m_CloseButtonSourceRect.width) / 2, GetScreenHeight() / 2 - fabsf(SourceRect.height) / 2 };
+        pos.y = spritePos.y + 40;
+
+        float halfWidth = m_CloseButtonSourceRect.width / 2;
+
+        Vector2 mousePos = GetMousePosition();
+        m_bMouseOverCloseButton = CheckCollisionPointCircle(mousePos, {spritePos.x + halfWidth, spritePos.y + halfWidth}, halfWidth);
+        DrawTextureEx(m_CloseButtonSprite, spritePos, 0, m_bMouseOverCloseButton ? 1.1 : 1, WHITE);
     }
 
     Vector2 position;
@@ -69,19 +85,13 @@ void BoardComponent::OnRender()
     DrawTextEx(TextFont, m_Message.c_str(), position, TextFont.baseSize, 2, WHITE);
 }
 
-BoardComponent* BoardComponent::SetSprite(const Texture2D& texture)
+BoardComponent* BoardComponent::SetSprite(const Texture2D& background, const Texture2D& closeButton)
 {
-    SetSprite(texture, Rectangle{ 0,0,float(texture.width),float(texture.height) });
+    m_BackgroundSprite = background;
+    SourceRect = Rectangle{ 0,0,float(background.width),float(background.height) };
+
+    m_CloseButtonSprite = closeButton;
+    m_CloseButtonSourceRect = Rectangle{ 0,0,float(closeButton.width),float(closeButton.height) };
+
     return this;
-}
-
-void BoardComponent::SetSprite(const Texture2D& texture, const Rectangle& sourceRect)
-{
-    Sprite = texture;
-    SourceRect = sourceRect;
-}
-
-void BoardComponent::SetSpriteRect(const Rectangle& sourceRect)
-{
-    SourceRect = sourceRect;
 }
