@@ -205,9 +205,14 @@ int main()
     //SetMusicVolume(music, 1.0f);
     //PlayMusicStream(music);
 
-    // Setup and init first screen
+// Setup and init first screen
+#ifdef DEBUG
+    currentScreen = GAMEPLAY;
+    InitGameplayScreen();
+#else
     currentScreen = LOGO;
     InitLogoScreen();
+#endif // DEBUG
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateMainLoop, 60, 1);

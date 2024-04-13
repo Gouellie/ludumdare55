@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "screens.h"
 #include "scene.h"
+#include "simple_components.h"
+#include "game_object.h"
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
@@ -24,6 +26,25 @@ void InitGameplayScreen(void)
 void UpdateGameplayScreen(void)
 {
     TestScene.Update();
+    Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
+    for (GameObject* child : TestScene.GetChildren()) {
+        ModelComponent* model = child->GetComponent<ModelComponent>();
+        if (model) 
+        {
+            RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox());
+            if (raycol.hit) 
+            {
+                model->SetTint(RED);
+            }
+            else {
+                model->SetTint(WHITE);
+            }
+        }
+    }
+}
+
+void test(GameObject& game) {
+    game.GetComponent<ModelComponent>();
 }
 
 // Gameplay Screen Draw logic

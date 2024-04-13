@@ -130,11 +130,15 @@ class ModelComponent : public Component
 {
 private:
     Model m_Model = { 0 };
+    Color m_Tint = WHITE;
+    BoundingBox m_BoundingBox = { 0 };
 public:
     DEFINE_COMPONENT(ModelComponent)
     void OnRender3D() override;
 
     void SetModel(const Model& model);
+    void SetTint(Color color) { m_Tint = color; }
+    BoundingBox GetBoundingBox() const { return m_BoundingBox; }
 };
 
 class ModelAnimationComponent : public Component

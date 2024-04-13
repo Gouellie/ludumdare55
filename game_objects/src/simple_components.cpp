@@ -306,6 +306,7 @@ bool SpriteAnimationComponent::IsAnimating() const
 //-----------------------ModelComponent-------------------------//
 void ModelComponent::SetModel(const Model& model) {
     m_Model = model;
+    m_BoundingBox = GetModelBoundingBox(model);
 }
 
 void ModelComponent::OnRender3D() {
@@ -315,7 +316,7 @@ void ModelComponent::OnRender3D() {
     Transform3DComponent* transform = GetComponent<Transform3DComponent>();
     if (transform) {
         transform->PushMatrix();
-        DrawModelEx(m_Model, transform->GetPosition(), transform->GetRotationAxis(), transform->GetRotation(), Vector3One(), WHITE);
+        DrawModelEx(m_Model, transform->GetPosition(), transform->GetRotationAxis(), transform->GetRotation(), Vector3One(), m_Tint);
         transform->PopMatrix();
     }
 }
