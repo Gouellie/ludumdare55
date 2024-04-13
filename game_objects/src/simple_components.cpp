@@ -24,6 +24,8 @@
 #include "rlgl.h"
 #include "raymath.h"
 
+//-----------------------TransformComponent-------------------------//
+
 void TransformComponent::SetPosition(const Vector2& pos)
 {
     Translation = pos;
@@ -76,6 +78,77 @@ void TransformComponent::PopMatrix()
     }
 }
 
+
+//-----------------------Transform3DComponent-------------------------//
+
+void Transform3DComponent::SetPosition(const Vector3& pos)
+{
+    Translation = pos;
+}
+
+Vector3 Transform3DComponent::GetPosition() const
+{
+    return Translation;
+}
+
+void Transform3DComponent::SetRotationAxis(const Vector3& rotationAxis)
+{
+    RotationAxis = rotationAxis;
+}
+
+Vector3 Transform3DComponent::GetRotationAxis() const
+{
+    return RotationAxis;
+}
+
+void Transform3DComponent::SetRotation(float rotation)
+{
+    Rotation = rotation;
+}
+
+float Transform3DComponent::GetRotation() const
+{
+    return Rotation;
+}
+
+void Transform3DComponent::SetTransform(const Vector3& pos, const Vector3& rotationAxis, float rotation) 
+{
+    SetPosition(pos);
+    SetRotationAxis(rotationAxis);
+    SetRotation(rotation);
+}
+
+void Transform3DComponent::PushMatrix()
+{
+    GameObject& object = GetGameObject();
+
+    GameObject* parent = object.GetParent();
+    if (parent)
+    {
+        Transform3DComponent* parentTransfom = parent->GetComponent<Transform3DComponent>();
+        if (parentTransfom)
+            parentTransfom->PushMatrix();
+    }
+
+    rlPushMatrix();
+    rlTranslatef(Translation.x, Translation.y, Translation.z);
+    rlRotatef(Rotation, RotationAxis.x, RotationAxis.y, RotationAxis.z);
+}
+
+void Transform3DComponent::PopMatrix()
+{
+    rlPopMatrix();
+
+    GameObject& object = GetGameObject();
+
+    GameObject* parent = object.GetParent();
+    if (parent)
+    {
+        Transform3DComponent* parentTransfom = parent->GetComponent<Transform3DComponent>();
+        if (parentTransfom)
+            parentTransfom->PopMatrix();
+    }
+}
 
 //-----------------------SpriteComponent-------------------------//
 void SpriteComponent::OnRender()
@@ -228,4 +301,51 @@ bool SpriteAnimationComponent::IsAnimating() const
         return true;
 
     return CurrentFrame < itr->second.Frames.size();
+}
+
+//-----------------------ModelComponent-------------------------//
+void ModelComponent::SetModel(const Model& model) {
+    m_Model = model;
+}
+
+void ModelComponent::OnRender3D() {
+    if (!IsModelReady(m_Model))
+        return;
+
+    Transform3DComponent* transform = GetComponent<Transform3DComponent>();
+    if (transform) {
+        transform->PushMatrix();
+        DrawModelEx(m_Model, transform->GetPosition(), transform->GetRotationAxis(), transform->GetRotation(), Vector3One(), WHITE);
+        transform->PopMatrix();
+    }
+}
+
+//-----------------------AnimationComponent-------------------------//
+void ModelAnimationComponent::OnUpdate()
+{
+    if (m_AnimCount > 0) {
+        // TODO
+    }
+}
+
+void ModelAnimationComponent::AddAnimation(ModelAnimation* animations, int animCount)
+{
+    m_Animations = animations;
+    m_AnimCount = animCount;
+}
+
+void ModelAnimationComponent::SetCurrentAnim(int currentAnim) 
+{
+    m_CurrentAnim = currentAnim;
+}
+
+void ModelAnimationComponent::ResetSequence() 
+{
+    m_CurrentFrame = 0;
+    m_LastFrameTime = 0.0f;
+}
+
+bool ModelAnimationComponent::IsAnimating() const 
+{
+    return true; // TODO
 }

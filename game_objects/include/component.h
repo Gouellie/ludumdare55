@@ -65,4 +65,5 @@ public:
     virtual void OnDestoy() {};
     virtual void OnUpdate() {};
     virtual void OnRender() {};
+    virtual void OnRender3D() {};
 };

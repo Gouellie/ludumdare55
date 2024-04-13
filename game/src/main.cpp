@@ -58,10 +58,11 @@ Scene TestScene;
 static const int ScreenWidth = 1280;
 static const int ScreenHeight = 800;
 
-
 Texture Wabbit = { 0 };
 Texture Logo = { 0 };
 Texture Sprite = { 0 };
+Model   Board = {0};
+Camera camera = { 0 };
 
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
@@ -150,7 +151,6 @@ void SetupScene()
     orbit->AddComponent<TransformComponent>()->SetPosition(Vector2{ 0, 200 });
     sprite = orbit->AddComponent<SpriteComponent>();
     sprite->SetSprite(Sprite);
-   // sprite->SetScale(0.5f);
 
     auto* animator = orbit->AddComponent<SpriteAnimationComponent>();
     auto& normalSequence = animator->AddSequence("normal");
@@ -165,6 +165,10 @@ void SetupScene()
     reverseSequence.FlipFrames(true, false);
 
     animator->SetCurrentSequence("normal");
+
+    auto* board = TestScene.AddObject();
+    board->AddComponent<ModelComponent>()->SetModel(Board);
+    board->AddComponent<Transform3DComponent>()->SetTransform(Vector3Zero(), {0.0f, 1.0f, 0.0f}, 0.0f);
 }
 
 void LoadResources()
@@ -173,25 +177,33 @@ void LoadResources()
     SetTextureFilter(Wabbit, TEXTURE_FILTER_POINT);
     Logo = LoadTexture("resources/raylib_logo.png");
     Sprite = LoadTexture("resources/scarfy.png");
+    Board = LoadModel("resources/models/board.glb");
+
+    // Define the camera to look into our 3d world
+    camera = { 0 };
+    camera.position = { 15.0f, 10.0f, 15.0f };    // Camera position
+    camera.target = { 0.0f, 0.0f, 0.0f };      // Camera looking at point
+    camera.up = { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 }
 
 int main()
 {
     // set up the window
     InitWindow(ScreenWidth, ScreenHeight, "Game Object Test");
+    InitAudioDevice();      // Initialize audio device
 
     LoadResources();
     SetupScene();
 
-    InitAudioDevice();      // Initialize audio device
-
     // Load global data (assets that must be available in all screens, i.e. font)
-    font = LoadFont("resources/mecha.png");
-    music = LoadMusicStream("resources/ambient.ogg");
-    fxCoin = LoadSound("resources/coin.wav");
+    //font = LoadFont("resources/mecha.png");
+    //music = LoadMusicStream("resources/ambient.ogg");
+    //fxCoin = LoadSound("resources/coin.wav");
 
-    SetMusicVolume(music, 1.0f);
-    PlayMusicStream(music);
+    //SetMusicVolume(music, 1.0f);
+    //PlayMusicStream(music);
 
     // Setup and init first screen
     currentScreen = LOGO;
@@ -325,7 +337,7 @@ static void UpdateMainLoop(void)
         {
             UpdateLogoScreen();
 
-            if (FinishLogoScreen()) TransitionToScreen(TITLE);
+            if (FinishLogoScreen()) TransitionToScreen(GAMEPLAY);
 
         } break;
         case TITLE:

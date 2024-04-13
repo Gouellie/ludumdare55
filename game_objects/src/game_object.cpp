@@ -43,6 +43,15 @@ void GameObject::Render()
         child->Render();
 }
 
+void GameObject::Render3D()
+{
+    for (auto& [id, componentPtr] : Components)
+        componentPtr->OnRender3D();
+
+    for (auto* child : Children)
+        child->Render3D();
+}
+
 Component* GameObject::AddComponent(std::unique_ptr<Component> component)
 {
     component->OnCreate();

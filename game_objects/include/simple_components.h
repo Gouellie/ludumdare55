@@ -45,6 +45,30 @@ public:
     void PopMatrix();
 };
 
+class Transform3DComponent : public Component {
+private:
+    Vector3 Translation = { 0 };
+    Vector3 RotationAxis = { 0.f,1.f,0.f };
+    float Rotation = 0; // Angle
+
+public:
+    DEFINE_COMPONENT(Transform3DComponent)
+
+    void SetPosition(const Vector3& pos);
+    Vector3 GetPosition() const;
+
+    void SetRotationAxis(const Vector3& axis);
+    Vector3 GetRotationAxis() const;
+
+    void SetRotation(float rotation);
+    float GetRotation() const;
+
+    void SetTransform(const Vector3& pos, const Vector3& rotationAxis, float rotation);
+
+    void PushMatrix();
+    void PopMatrix();
+};
+
 class SpriteComponent : public Component
 {
 private:
@@ -97,6 +121,40 @@ public:
     AnimationSequence& AddSequence(std::string_view name);
 
     void SetCurrentSequence(std::string_view sequenceName);
+    void ResetSequence();
+
+    bool IsAnimating() const;
+};
+
+class ModelComponent : public Component 
+{
+private:
+    Model m_Model = { 0 };
+public:
+    DEFINE_COMPONENT(ModelComponent)
+    void OnRender3D() override;
+
+    void SetModel(const Model& model);
+};
+
+class ModelAnimationComponent : public Component
+{
+private:
+    ModelAnimation* m_Animations = nullptr;
+    int m_AnimCount = -1;
+    int m_CurrentAnim = 0;
+
+    int m_CurrentFrame = 0;
+    float m_LastFrameTime = 0;
+
+public:
+    DEFINE_COMPONENT(ModelAnimationComponent)
+
+    void OnUpdate() override;
+
+    void AddAnimation(ModelAnimation* animations, int animCount);
+
+    void SetCurrentAnim(int currentAnim);
     void ResetSequence();
 
     bool IsAnimating() const;
