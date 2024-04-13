@@ -30,7 +30,7 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
     {
         if (Event* event = settlement->GetEvent())
         {
-            header = const_cast<char*>(TextFormat("%s", event->GetName().c_str()));
+            header = const_cast<char*>(TextFormat("%s", event->GetName()));
             message = const_cast<char*>(TextFormat("The Event will last for : %i turns", event->m_TurnsToResolve));
         }
         else
@@ -74,7 +74,7 @@ void GameDirector::ResolveTurn(const Scene& scene)
                 int random = min + (rand() % static_cast<int>(max - min + 1));
                 if (random > 5)
                 {
-                    settlement->AddEvent(std::string("ATTACK"), 1, 10, 0, 0);
+                    settlement->AddEvent("ATTACK", 1, 10, 0, 0);
                     settlement->SetStatus(SettlementStatus::Attacked);
                 }
             }

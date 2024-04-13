@@ -28,7 +28,7 @@ public:
     unsigned int m_Health{ 100 };
     unsigned int m_Income{ 5 };
 
-    void AddEvent(std::string& name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
+    void AddEvent(char* name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
     Event* GetEvent() { return m_CurrentEvent; }
     void ClearEvent();
 
