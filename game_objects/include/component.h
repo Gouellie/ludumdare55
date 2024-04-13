@@ -37,10 +37,11 @@ private:
     GameObject& HostingObject;
 
 protected:
+
+public:
     GameObject& GetGameObject() { return HostingObject; }
     const GameObject& GetGameObject() const { return HostingObject; }
 
-public:
     virtual size_t GetTypeId() const = 0;
 
     Component(GameObject& object)

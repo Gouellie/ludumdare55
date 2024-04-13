@@ -66,7 +66,7 @@ void UpdateGameplayScreen(void)
                     {
                         settlement->AddWarrior(directorInstance.GetWarrior(0)); // Must have a proper way to assign
                     }
-                    directorInstance.SetPickedModel(model);
+                    directorInstance.SetPickedModel(*model);
                 }
                 else
                 {
@@ -91,6 +91,7 @@ void DrawGameplayScreen(void)
     Settlements.Render3D();
     EndMode3D();
     TestScene.Render();
+    Settlements.Render();
 }
 
 // Gameplay Screen Unload logic

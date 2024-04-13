@@ -1,7 +1,10 @@
 #include <gameplay/gamedirector.h>
 
+
+#include <game_object.h>
 #include <scene.h>
 
+#include <ui/boardcomponent.h>
 #include <gameplay/settlement.h>
 #include <gameplay/warrior.h>
 
@@ -10,17 +13,21 @@ void GameDirector::AddWarrior(std::string name, unsigned int health, unsigned in
     m_AvailableWarriors.emplace_back(Warrior(name, health, power));
 }
 
-void GameDirector::SetPickedModel(ModelComponent* picked)
+void GameDirector::SetPickedModel(ModelComponent& picked)
 {
+    GameObject& object = picked.GetGameObject();
+    object.GetComponent<BoardComponent>()->SetMessage("Hello")->SetShown(true);
     if (m_PickedModel != nullptr)
     {
+        GameObject& oldObject = m_PickedModel->GetGameObject();
+        oldObject.GetComponent<BoardComponent>()->SetShown(false);
         m_PickedModel->SetPicked(false);
-        m_PickedModel = picked;
+        m_PickedModel = &picked;
         m_PickedModel->SetPicked(true);
     }
     else
     {
-        m_PickedModel = picked;
+        m_PickedModel = &picked;
         m_PickedModel->SetPicked(true);
     }
 }

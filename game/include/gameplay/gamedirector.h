@@ -22,7 +22,7 @@ public:
 
     void ResolveTurn(const Scene& scene);
 
-    void SetPickedModel(ModelComponent* picked);
+    void SetPickedModel(ModelComponent& picked);
     ModelComponent* GetPickedModel() { return m_PickedModel; }
 
     void AddWarrior(std::string name, unsigned int health, unsigned int power);
