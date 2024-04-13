@@ -1,6 +1,5 @@
 #include <gameplay/gamedirector.h>
 
-
 #include <game_object.h>
 #include <scene.h>
 
@@ -8,26 +7,45 @@
 #include <gameplay/settlement.h>
 #include <gameplay/warrior.h>
 
+#include <string>
+
 void GameDirector::AddWarrior(std::string name, unsigned int health, unsigned int power)
 {
     m_AvailableWarriors.emplace_back(Warrior(name, health, power));
 }
 
-void GameDirector::SetPickedModel(ModelComponent& picked)
+void GameDirector::SetPickedModel(ModelComponent* picked)
 {
-    GameObject& object = picked.GetGameObject();
-    object.GetComponent<BoardComponent>()->SetMessage("Hello")->SetShown(true);
+    if (picked == nullptr && m_PickedModel != nullptr)
+    {
+        m_PickedModel->SetPicked(false);
+        m_PickedModel = nullptr;
+        return;
+    }
+
+    GameObject& object = picked->GetGameObject();
+    char* header = "";
+    char* message = "";
+    if (SettlementComponent* settlement = object.GetComponent<SettlementComponent>())
+    {
+        if (Event* event = settlement->GetEvent())
+        {
+            header = const_cast<char*>(TextFormat("%s", event->GetName().c_str()));
+            message = const_cast<char*>(TextFormat("The Event will last for : %i turns", event->m_TurnsToResolve));
+        }
+    }
+    object.GetComponent<BoardComponent>()->SetHeader(header)->SetMessage(message)->SetShown(true, true);
     if (m_PickedModel != nullptr)
     {
         GameObject& oldObject = m_PickedModel->GetGameObject();
         oldObject.GetComponent<BoardComponent>()->SetShown(false);
         m_PickedModel->SetPicked(false);
-        m_PickedModel = &picked;
+        m_PickedModel = picked;
         m_PickedModel->SetPicked(true);
     }
     else
     {
-        m_PickedModel = &picked;
+        m_PickedModel = picked;
         m_PickedModel->SetPicked(true);
     }
 }
@@ -49,7 +67,7 @@ void GameDirector::ResolveTurn(const Scene& scene)
                 int random = min + (rand() % static_cast<int>(max - min + 1));
                 if (random > 5)
                 {
-                    settlement->AddEvent(1, 10, 0, 0);
+                    settlement->AddEvent(std::string("ATTACK"), 1, 10, 0, 0);
                     settlement->SetStatus(SettlementStatus::Attacked);
                 }
             }

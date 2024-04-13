@@ -26,7 +26,7 @@ public:
     std::string m_Name;
     Event* m_CurrentEvent = nullptr;
 
-    void AddEvent(unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
+    void AddEvent(std::string& name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
     Event* GetEvent() { return m_CurrentEvent; }
     void ClearEvent();
 

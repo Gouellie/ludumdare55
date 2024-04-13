@@ -2,9 +2,9 @@
 
 #include <gameplay/warrior.h>
 
-void SettlementComponent::AddEvent(unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost)
+void SettlementComponent::AddEvent(std::string& name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost)
 {
-    m_CurrentEvent = new Event(timeToSolve, requiredPower, penalty, cost);
+    m_CurrentEvent = new Event(name, timeToSolve, requiredPower, penalty, cost);
 }
 
 void SettlementComponent::ClearEvent()
@@ -28,7 +28,7 @@ void SettlementComponent::RemoveWarrior(std::size_t index)
 {
     m_AssignedWarriors.at(index)->SetStatus(WarriorStatus::Waiting);
     auto it = m_AssignedWarriors.begin();
-    std::next(it, index);
+    it = std::next(it, index);
     m_AssignedWarriors.erase(it);
 }
 

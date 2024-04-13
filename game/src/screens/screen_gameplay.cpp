@@ -56,6 +56,7 @@ void UpdateGameplayScreen(void)
                     if (isMousePressed && board->GetMouseOverCloseButton())
                     {
                         board->SetShown(false);
+                        directorInstance.SetPickedModel(nullptr);
                     }
                 }
             }
@@ -77,7 +78,7 @@ void UpdateGameplayScreen(void)
                     {
                         settlement->AddWarrior(directorInstance.GetWarrior(0)); // Must have a proper way to assign
                     }
-                    directorInstance.SetPickedModel(*model);
+                    directorInstance.SetPickedModel(model);
                 }
                 else
                 {
