@@ -1,6 +1,6 @@
 #pragma once
 
-#include <game_object.h>
+#include <simple_components.h>
 
 #include <string>
 #include <vector>
@@ -15,21 +15,20 @@ enum class SettlementStatus
 };
 
 // Contain in a SettlementsScene : scene
-class Settlement : public GameObject
+class SettlementComponent : public Component
 {
 public:
+    DEFINE_COMPONENT(SettlementComponent)
     SettlementStatus m_Status{ SettlementStatus::Clear };
-    Warrior* m_AssignedWarrior = nullptr;
+    std::vector<Warrior*> m_AssignedWarriors;
+    std::string m_Name;
 
-    // Model
-    // Transform
-
-    void Update();
     void UpdateSettlement();
 
-    void GetData(std::string& name, SettlementStatus& status, Warrior* assignedWarrior);
+    std::string GetName() { return m_Name; };
+    void GetData(std::string& name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
 
-    [[nodiscard]] Warrior* GetAssignedWarrior() const;
+    void GetWarriors(std::vector<Warrior*>& warriors);
 
 private:
 

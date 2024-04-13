@@ -45,6 +45,8 @@ Use this as a starting point or replace it with your code.
 
 #include "screens.h" 
 
+#include <gameplay/settlement.h>
+
 //----------------------------------------------------------------------------------
 // Shared Variables Definition (global)
 // NOTE: Those variables are shared between modules through screens.h
@@ -167,6 +169,7 @@ void SetupScene()
     animator->SetCurrentSequence("normal");
 
     auto* board = TestScene.AddObject();
+    board->AddComponent<SettlementComponent>();
     board->AddComponent<ModelComponent>()->SetModel(Board);
     board->AddComponent<Transform3DComponent>()->SetTransform(Vector3Zero(), {0.0f, 1.0f, 0.0f}, 0.0f);
 }

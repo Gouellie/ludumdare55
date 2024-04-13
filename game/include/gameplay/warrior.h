@@ -1,6 +1,6 @@
 #pragma once
 
-#include <game_object.h>
+#include <simple_components.h>
 
 #include <string>
 
@@ -12,16 +12,14 @@ enum class WarriorStatus
     Dead = 3
 };
 
-class Warrior : public GameObject
+class WarriorComponent : public Component
 {
 public:
+    DEFINE_COMPONENT(WarriorComponent)
+    std::string m_Name;
     unsigned int m_Health{ 0 };
     WarriorStatus m_Status{ WarriorStatus::Waiting };
 
-    Warrior();
-    Warrior(unsigned int health, WarriorStatus status);
-
-    void Update();
     void UpdateWarrior();
 
     void GetData();
