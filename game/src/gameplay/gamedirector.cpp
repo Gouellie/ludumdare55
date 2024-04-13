@@ -84,21 +84,18 @@ void GameDirector::ResolveTurn(const Scene& scene)
                 settlement->GetWarriors(warriors);
                 if (Event* event = settlement->GetEvent())
                 {
-                    if (event->m_TurnsToResolve == 0)
+                    if (settlement->GetWarriorPower() >= event->m_RequiredPower)
                     {
-                        settlement->SetStatus(SettlementStatus::Destroyed);
+                        settlement->SetStatus(SettlementStatus::Clear);
+                        settlement->ClearEvent();
+                        settlement->ClearWarriors();
                     }
                     else
                     {
-                        if (settlement->GetWarriorPower() >= event->m_RequiredPower)
+                        --event->m_TurnsToResolve;
+                        if (event->m_TurnsToResolve == 0)
                         {
-                            settlement->SetStatus(SettlementStatus::Clear);
-                            settlement->ClearEvent();
-                            settlement->ClearWarriors();
-                        }
-                        else
-                        {
-                            --event->m_TurnsToResolve;
+                            settlement->SetStatus(SettlementStatus::Destroyed);
                         }
                     }
                 }

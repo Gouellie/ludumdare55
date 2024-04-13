@@ -44,6 +44,10 @@ const unsigned int SettlementComponent::GetWarriorPower() const
 
 void SettlementComponent::ClearWarriors()
 {
+    for (Warrior* warrior : m_AssignedWarriors)
+    {
+        warrior->SetStatus(WarriorStatus::Waiting);
+    }
     m_AssignedWarriors.clear();
 }
 

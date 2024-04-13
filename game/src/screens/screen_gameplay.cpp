@@ -65,7 +65,6 @@ void UpdateGameplayScreen(void)
                 if (model->GetPicked())
                 {
                     model->SetTint(YELLOW);
-                    continue;
                 }
 
                 Transform3DComponent* transform = settlement->GetComponent<Transform3DComponent>();
