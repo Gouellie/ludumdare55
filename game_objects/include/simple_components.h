@@ -134,9 +134,13 @@ private:
     Model m_Model = { 0 };
     Color m_Tint = WHITE;
     BoundingBox m_BoundingBox = { 0 };
+    bool m_IsPicked = false;
 public:
     DEFINE_COMPONENT(ModelComponent)
     void OnRender3D() override;
+
+    void SetPicked(bool value) { m_IsPicked = value; }
+    bool GetPicked() const { return m_IsPicked; }
 
     void SetModel(const Model& model);
     void SetTint(Color color) { m_Tint = color; }

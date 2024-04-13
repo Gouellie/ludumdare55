@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "raymath.h"
 #include "screens.h"
 #include "scene.h"
 #include "simple_components.h"
@@ -33,30 +34,40 @@ void UpdateGameplayScreen(void)
 {
     TestScene.Update();
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    {
-        Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
-        for (GameObject* child : TestScene.GetChildren())
-        {
-            if (!child)
-                continue;
+    bool isMousePressed = IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 
-            if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
+
+    Ray ray = GetScreenToWorldRay(GetMousePosition(), camera);
+    for (GameObject* child : Settlements.GetChildren())
+    {
+        if (!child)
+            continue;
+
+        //if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
+        //{
+            if (ModelComponent* model = child->GetComponent<ModelComponent>())
             {
-                if (ModelComponent* model = child->GetComponent<ModelComponent>())
+                if (model->GetPicked())
                 {
-                    RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox());
-                    if (raycol.hit)
-                    {
-                        model->SetTint(RED);
-                    }
-                    else
-                    {
-                        model->SetTint(WHITE);
-                    }
+                    model->SetTint(YELLOW);
+                    continue;
+                }
+
+                Transform3DComponent* transform = child->GetComponent<Transform3DComponent>();
+                Matrix matrix = transform->GetMatrix();
+
+                RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox(&matrix));
+                if (raycol.hit && isMousePressed)
+                {
+                    model->SetPicked(true);
+                    model->SetTint(RED);
+                }
+                else
+                {
+                    model->SetTint(BLUE);
                 }
             }
-        }
+        //}
     }
 
     // Here, plug event on "EndTurn" button pressed
@@ -71,6 +82,7 @@ void DrawGameplayScreen(void)
 {
     BeginMode3D(camera);
     TestScene.Render3D();
+    Settlements.Render3D();
     EndMode3D();
     TestScene.Render();
 }
