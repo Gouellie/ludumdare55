@@ -7,6 +7,7 @@ class Event
 public:
     std::string m_Name;
     unsigned int m_TurnsToResolve{ 0 };
+    unsigned int m_Damage{ 0 };
     unsigned int m_RequiredPower{ 0 };
     unsigned int m_Penalty{ 0 }; // If ignored
     unsigned int m_Cost{ 0 }; // If solved

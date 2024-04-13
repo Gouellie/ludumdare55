@@ -25,6 +25,8 @@ public:
     std::vector<Warrior*> m_AssignedWarriors;
     std::string m_Name;
     Event* m_CurrentEvent = nullptr;
+    unsigned int m_Health{ 100 };
+    unsigned int m_Income{ 5 };
 
     void AddEvent(std::string& name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
     Event* GetEvent() { return m_CurrentEvent; }
@@ -42,6 +44,8 @@ public:
     const unsigned int GetWarriorPower() const;
     void ClearWarriors();
     Color GetColor();
+
+    const unsigned int GetIncome() const { return m_Income; }
 
 private:
 

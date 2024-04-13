@@ -33,6 +33,11 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
             header = const_cast<char*>(TextFormat("%s", event->GetName().c_str()));
             message = const_cast<char*>(TextFormat("The Event will last for : %i turns", event->m_TurnsToResolve));
         }
+        else
+        {
+            header = "All Clear";
+            message = "Nothing to see here ;)";
+        }
     }
     object.GetComponent<BoardComponent>()->SetHeader(header)->SetMessage(message)->SetShown(true, true);
     if (m_PickedModel != nullptr)
@@ -53,6 +58,8 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
 // Handle end of turn
 void GameDirector::ResolveTurn(const Scene& scene)
 {
+    HealWarriors();
+
     for (GameObject* child : scene.GetChildren())
     {
         if (!child)
@@ -104,9 +111,62 @@ void GameDirector::ResolveTurn(const Scene& scene)
         }
     }
 
+    AddCash(scene);
+
     ++m_CurrentTurn;
-    if (m_CurrentTurn == MAX_TURNS)
+    if (m_CurrentTurn == MAX_TURNS || AreAllSettlementsDestroyed(scene))
     {
         // SIGNAL END GAME HERE
+    }
+}
+
+bool GameDirector::AreAllSettlementsDestroyed(const Scene& scene)
+{
+    for (GameObject* child : scene.GetChildren())
+    {
+        if (!child)
+            continue;
+
+        if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
+        {
+            if (settlement->GetStatus() != SettlementStatus::Clear)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+void GameDirector::AddCash(const Scene& scene)
+{
+    for (GameObject* child : scene.GetChildren())
+    {
+        if (!child)
+            continue;
+
+        if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
+        {
+            if (settlement->GetStatus() == SettlementStatus::Clear)
+            {
+                m_Cash += settlement->GetIncome();
+            }
+        }
+    }
+}
+
+void GameDirector::HealWarriors()
+{
+    for (Warrior warrior : m_AvailableWarriors)
+    {
+        if (warrior.GetStatus() == WarriorStatus::Waiting)
+        {
+            warrior.SetHealth(warrior.GetHealth() + 10);
+        }
+        else if (warrior.GetStatus() == WarriorStatus::Healing)
+        {
+            warrior.SetHealth(warrior.GetHealth() + 25);
+        }
     }
 }
