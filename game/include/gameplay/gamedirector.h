@@ -9,6 +9,7 @@
 
 class Scene;
 class ModelComponent;
+class SettlementComponent;
 
 class GameDirector
 {
@@ -37,6 +38,7 @@ public:
 
     void SetPickedModel(ModelComponent* picked);
     [[nodiscard]] ModelComponent* GetPickedModel() { return m_PickedModel; }
+    [[nodiscard]] SettlementComponent* GetPickedSettlement();
 
     bool AddWarrior(std::string name, unsigned int health, unsigned int power);
     [[nodiscard]] Warrior* GetWarrior(std::size_t index) { return &m_AvailableWarriors.at(index); }

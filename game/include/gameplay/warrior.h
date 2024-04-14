@@ -31,7 +31,7 @@ public:
     const unsigned int GetMaxHealth() const { return m_MaxHealth; }
     const unsigned int GetPowerLevel() const { return m_PowerLevel; }
     void SetPowerLevel(unsigned int newVal) { m_PowerLevel = newVal; }
-    void TakeDamage(int dmg) { SetHealth(m_Health - dmg); }
+    void TakeDamage(int dmg);
 
 private:
     unsigned int m_Health{ 100 };

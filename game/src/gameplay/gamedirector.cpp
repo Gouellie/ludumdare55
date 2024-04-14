@@ -71,6 +71,16 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
     }
 }
 
+SettlementComponent* GameDirector::GetPickedSettlement()
+{
+    if (m_PickedModel == nullptr)
+    {
+        return nullptr;
+    }
+
+    return m_PickedModel->GetGameObject().GetComponent<SettlementComponent>();
+}
+
 // Handle end of turn
 void GameDirector::ResolveTurn(const Scene& scene)
 {
