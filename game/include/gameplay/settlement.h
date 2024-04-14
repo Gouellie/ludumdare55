@@ -23,20 +23,23 @@ public:
     DEFINE_COMPONENT(SettlementComponent)
     SettlementStatus m_Status{ SettlementStatus::Clear };
     std::vector<Warrior*> m_AssignedWarriors;
-    std::string m_Name;
+    char* m_Name;
     Event* m_CurrentEvent = nullptr;
     int m_Health{ 100 };
     unsigned int m_Income{ 5 };
 
     void AddEvent(char* name, int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
+    void AddEvent(const Event& event);
     Event* GetEvent() { return m_CurrentEvent; }
     void ClearEvent();
+
+    void HandleEventEnd(const bool success);
 
     void SetStatus(SettlementStatus newStatus) { m_Status = newStatus; }
     SettlementStatus GetStatus() { return m_Status; }
 
-    std::string GetName() { return m_Name; }
-    void GetData(std::string& name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
+    char* GetName() { return m_Name; }
+    void GetData(char* name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
 
     void TakeDamage(int dmg) { m_Health -= dmg; }
 
@@ -44,10 +47,12 @@ public:
     void AddWarrior(Warrior* warrior);
     void RemoveWarrior(std::size_t index);
     const unsigned int GetWarriorPower() const;
+    void DealDamageToWarriors();
     void ClearWarriors();
     Color GetColor();
 
     const unsigned int GetIncome() const { return m_Income; }
+    void InflictPenalty();
 
 private:
 

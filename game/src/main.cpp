@@ -81,6 +81,9 @@ static void UpdateMainLoop(void);           // Update and draw one frame
 
 void SetupScene()
 {
+    GameDirector& director = GameDirector::GetInstance();
+    director.PopulateEventList();
+
     auto* board = TestScene.AddObject();
     board->AddComponent<ModelComponent>()->SetModel(Board);
     board->AddComponent<Transform3DComponent>()->SetPosition({0.0f, 0.0f, 0.0f});

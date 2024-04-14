@@ -5,7 +5,6 @@
 
 #include <ui/boardcomponent.h>
 #include <gameplay/settlement.h>
-#include <gameplay/warrior.h>
 
 #include <algorithm>
 #include <string.h>
@@ -99,12 +98,9 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
     {
         if (settlement->GetStatus() == SettlementStatus::Clear)
         {
-            int min = 0;
-            int max = 10;
-            int random = min + (rand() % static_cast<int>(max - min + 1));
-            if (random > 5)
+            if (GetRandomValue(0, 10) > 5)
             {
-                settlement->AddEvent("ATTACK", 15, 10, 0, 10);
+                settlement->AddEvent(GetRandomEvent());
                 settlement->SetStatus(SettlementStatus::Attacked);
             }
         }
@@ -114,18 +110,18 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
             settlement->GetWarriors(warriors);
             if (Event* event = settlement->GetEvent())
             {
+                bool success = false;
                 if (settlement->GetWarriorPower() >= event->m_RequiredPower)
                 {
-                    settlement->SetStatus(SettlementStatus::Clear);
-                    settlement->ClearEvent();
-                    settlement->ClearWarriors();
+                    success = true;
+                    settlement->HandleEventEnd(success);
                 }
                 else
                 {
                     settlement->TakeDamage(event->m_Damage);
                     if (settlement->m_Health <= 0)
                     {
-                        settlement->SetStatus(SettlementStatus::Destroyed);
+                        settlement->HandleEventEnd(success);
                     }
                 }
             }
@@ -181,4 +177,16 @@ void GameDirector::HealWarriors()
             warrior.SetHealth(warrior.GetHealth() + 25);
         }
     }
+}
+
+void GameDirector::PopulateEventList()
+{
+    m_EventList.emplace_back(Event("ATTACK", 30, 20, 50, 20));
+    m_EventList.emplace_back(Event("AMBUSH", 15, 10, 30, 10));
+    m_EventList.emplace_back(Event("SKIRMISH", 5, 5, 15, 5));
+}
+
+Event& GameDirector::GetRandomEvent()
+{
+    return m_EventList[GetRandomValue(0, m_EventList.size() - 1)];
 }

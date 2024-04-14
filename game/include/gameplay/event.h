@@ -14,6 +14,7 @@ public:
     Event();
     Event(char* name, unsigned int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int damageToWarriors)
         : m_Name(name), m_Damage{ damagePerTurn }, m_RequiredPower{ requiredPower }, m_Penalty{penalty}, m_DamageToWarriors{ damageToWarriors } {}
+    Event(const Event& other);
 
     void SetName(char* name) { m_Name = name; }
     char* GetName() { return m_Name; }

@@ -2,6 +2,7 @@
 
 #include "game_object.h"
 
+#include <gameplay/event.h>
 #include <gameplay/warrior.h>
 
 #include <vector>
@@ -13,6 +14,7 @@ class GameDirector
 {
 public:
     std::vector<Warrior> m_AvailableWarriors;
+    std::vector<Event> m_EventList;
     ModelComponent* m_PickedModel = nullptr;
     unsigned int m_CurrentTurn{ 0 };
     unsigned int m_Cash{ 100 };
@@ -22,6 +24,7 @@ public:
     {
         static GameDirector* directorInstance = new GameDirector();
         directorInstance->m_AvailableWarriors.reserve(MAX_WARRIORS);
+        directorInstance->m_EventList.reserve(NB_EVENTS);
         return *directorInstance;
     }
 
@@ -47,10 +50,16 @@ public:
     void SetGameOver(bool state) { m_GameOver = state; }
     [[nodiscard]] bool GetGameOver() { return m_GameOver; }
 
+    void PopulateEventList();
+    Event& GetRandomEvent();
+
+    void TakePenalty(int penalty) { m_Cash - penalty; }
+
 private:
     GameDirector() {}
 
     bool m_GameOver{ false };
     static constexpr unsigned int MAX_TURNS{ 30 };
     static constexpr int MAX_WARRIORS{ 20 };
+    static constexpr int NB_EVENTS{ 5 };
 };
