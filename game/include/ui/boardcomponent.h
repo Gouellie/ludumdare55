@@ -5,7 +5,6 @@
 class BoardComponent : public Component
 {
 private:
-    std::string m_Header;
     std::string m_Message;
     bool m_Shown = false;
 
@@ -33,8 +32,6 @@ public:
 
     bool GetMouseOverCloseButton() { return m_bMouseOverCloseButton; }
 
-    BoardComponent* SetHeader(const char* header) { m_Header = header; return this; }
-    std::string GetHeader() { return m_Header; };
     BoardComponent* SetMessage(const char* message) { m_Message = message; return this; }
     std::string GetMessage() { return m_Message; };
 

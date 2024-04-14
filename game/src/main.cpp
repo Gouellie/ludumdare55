@@ -107,6 +107,16 @@ public:
     }
 };
 
+void CreateSettlement(const char* name, Vector3& pos) 
+{
+    auto* settlement = Settlements.AddObject();
+    settlement->AddComponent<Transform3DComponent>()->SetPosition(pos);
+    settlement->AddComponent<ModelComponent>()->SetModel(Settlement);
+    settlement->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
+    auto* component = settlement->AddComponent<SettlementComponent>();
+    component->SetName(name);
+}
+
 void SetupScene()
 {
     GameDirector& director = GameDirector::GetInstance();
@@ -120,29 +130,10 @@ void SetupScene()
     nextTurnButton->AddComponent<NextTurnButtonComponent>()->SetSprite(UIButton);
 
     // Settlements
-    auto* settlement_1 = Settlements.AddObject();
-    settlement_1->AddComponent<SettlementComponent>();
-    settlement_1->AddComponent<Transform3DComponent>()->SetPosition({ -6.0, 0.0, -3.0});
-    settlement_1->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_1->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
-
-    auto* settlement_2 = Settlements.AddObject();
-    settlement_2->AddComponent<SettlementComponent>();
-    settlement_2->AddComponent<Transform3DComponent>()->SetPosition({ 6.30, 0.0, 2.25 });
-    settlement_2->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_2->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
-
-    auto* settlement_3 = Settlements.AddObject();
-    settlement_3->AddComponent<SettlementComponent>();
-    settlement_3->AddComponent<Transform3DComponent>()->SetPosition({ -6.25, 0.0, 2.75 });
-    settlement_3->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_3->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
-
-    auto* settlement_4 = Settlements.AddObject();
-    settlement_4->AddComponent<SettlementComponent>();
-    settlement_4->AddComponent<Transform3DComponent>()->SetPosition({ 3.5f, 0.0, -2.5 });
-    settlement_4->AddComponent<ModelComponent>()->SetModel(Settlement);
-    settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
+    CreateSettlement("Quebec",      Vector3{ -6.0, 0.0, -3.0 });
+    CreateSettlement("Montreal",    Vector3{ 6.30, 0.0, 2.25 });
+    CreateSettlement("Singapour",   Vector3{ -6.25, 0.0, 2.75 });
+    CreateSettlement("Paris",       Vector3{ 3.5f, 0.0, -2.5 });
 
     // Barack
     Barracks.AddComponent<BarrackController>()->SetSprite(SummonWarriorButton, BarracksButton, WarriorButton, WarriorPanel);

@@ -49,23 +49,7 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
         m_PickedModel = nullptr;
         return;
     }
-
-    char* header = "";
-    char* message = "";
-    if (SettlementComponent* settlement = picked->GetComponent<SettlementComponent>())
-    {
-        if (Event* event = settlement->GetEvent())
-        {
-            header = const_cast<char*>(TextFormat("%s", event->GetName()));
-            message = const_cast<char*>(TextFormat("Event will inflict : %i per turn\n Settlement has: %i HP\n Event Requires %i PowerLevel", event->GetDamage(), settlement->GetHealth(), event->GetRequiredPower()));
-        }
-        else
-        {
-            header = "All Clear";
-            message = "Nothing to see here ;)";
-        }
-    }
-    picked->GetComponent<BoardComponent>()->SetHeader(header)->SetMessage(message)->SetShown(true, true);
+    picked->GetComponent<BoardComponent>()->SetShown(true, true);
     if (m_PickedModel != nullptr)
     {
         GameObject& oldObject = m_PickedModel->GetGameObject();

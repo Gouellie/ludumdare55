@@ -42,13 +42,10 @@ void BoardComponent::OnRender()
     if (!m_Shown)
         return;
 
-    if (m_Message.length() == 0)
+    SettlementComponent* settlement = GetComponent<SettlementComponent>();
+
+    if (settlement == nullptr)
         return;
-
-    //SettlementComponent* settlement = GetComponent<SettlementComponent>();
-
-    //if (settlement == nullptr)
-    //    return;
 
     m_bMouseOverCloseButton = false;
 
@@ -81,10 +78,24 @@ void BoardComponent::OnRender()
         position.x = pos.x - MeasureTextEx(TextFont, m_Message.c_str(), TextFont.baseSize, 2).x / 2.0f;
         position.y = pos.y;
 
-    if (m_Header.length() > 0) {
-        DrawTextEx(TextFont, m_Header.c_str(), position, TextFont.baseSize * 1.2f, 2, WHITE);
-        position.y += 50;
-    }
+    DrawTextEx(TextFont, settlement->GetName(), position, TextFont.baseSize * 1.2f, 2, WHITE);
+    position.y += 50;
+
+    //char* header = "";
+    //char* message = "";
+    //if (SettlementComponent* settlement = picked->GetComponent<SettlementComponent>())
+    //{
+    //    if (Event* event = settlement->GetEvent())
+    //    {
+    //        header = const_cast<char*>(TextFormat("%s", event->GetName()));
+    //        message = const_cast<char*>(TextFormat("Event will inflict : %i per turn\n Settlement has: %i HP\n Event Requires %i PowerLevel", event->GetDamage(), settlement->GetHealth(), event->GetRequiredPower()));
+    //    }
+    //    else
+    //    {
+    //        header = "All Clear";
+    //        message = "Nothing to see here ;)";
+    //    }
+    //}
 
     SetTextLineSpacing(30);
     DrawTextEx(TextFont, m_Message.c_str(), position, TextFont.baseSize, 2, WHITE);
