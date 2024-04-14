@@ -33,11 +33,6 @@ void BoardComponent::OnUpdate()
     }
 }
 
-void BoardComponent::OnRender3D()
-{
-
-}
-
 void BoardComponent::OnRender()
 {
     if (!m_Shown)
