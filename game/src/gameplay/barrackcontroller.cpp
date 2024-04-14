@@ -22,7 +22,8 @@ void BarrackController::OnRender()
     const float buttonWidth = 40;
     float xOffset = buttonWidth + 100;
 
-    if (m_bExpanded) {
+    if (m_bExpanded) 
+    {
         DrawRectangle(0, ScreenHeight - m_fHeight, ScreenWidth, m_fHeight, DARKBROWN);
 
         if (IsTextureReady(m_WarriorSprite))
@@ -32,7 +33,8 @@ void BarrackController::OnRender()
             for (Warrior& warrior : gameDirector.GetWarriors())
             {
                 TextureButtonState state = TextureButtonState::STATE_NORMAL;
-                if (warrior.GetStatus() == WarriorStatus::Dead) {
+                if (warrior.GetStatus() == WarriorStatus::Dead) 
+                {
                     state = TextureButtonState::STATE_DISABLED;
                 }
 
@@ -104,7 +106,8 @@ void BarrackController::OnRender()
             }
         }
     }
-    else {
+    else 
+    {
         DrawRectangle(0, ScreenHeight - m_fHeight, 100, m_fHeight, DARKBROWN);
     }
 
@@ -112,11 +115,19 @@ void BarrackController::OnRender()
     {
         bool isMouseOver = false;
         float yOrigin = ScreenHeight - 48.f - (float)m_SummonWarriorSprite.height;
-        if (TextureButtonWithMouseOver({ 8.f, yOrigin, (float)m_SummonWarriorSprite.width/ BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height}, m_SummonWarriorSprite, false, &isMouseOver)) {
+
+        TextureButtonState state = TextureButtonState::STATE_NORMAL;
+        if (GameDirector::GetInstance().GetCash() == 0)
+        {
+            state = TextureButtonState::STATE_DISABLED;
+        }
+        if (TextureButtonWithMouseOver({ 8.f, yOrigin, (float)m_SummonWarriorSprite.width/ BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height}, m_SummonWarriorSprite, false, &isMouseOver, state))
+        {
             GameDirector::GetInstance().AddWarrior("Ludum Dare", 150, 100);
             m_bExpanded = true;
         }
-        if (isMouseOver) {
+        if (state != TextureButtonState::STATE_DISABLED && isMouseOver)
+        {
             DrawTextPro(TextFont, "SUMMON A WARRIOR!", { 50.f, yOrigin + 3.f }, { 0.f }, 0.f, 30.f, 2.f, WHITE);
         }
     }
@@ -124,7 +135,8 @@ void BarrackController::OnRender()
     if (IsTextureReady(m_BarracksSprite))
     {
         Rectangle bounds = { 90, ScreenHeight - m_fHeight, buttonWidth, m_fHeight };
-        if (TextureButton(bounds, m_BarracksSprite, m_bExpanded)) {
+        if (TextureButton(bounds, m_BarracksSprite, m_bExpanded)) 
+        {
             m_bExpanded = !m_bExpanded;
         }
 
