@@ -26,9 +26,12 @@ public:
     const int GetHealth() const { return m_Health; }
     void SetHealth(int newVal);
     const int GetMaxHealth() const { return m_MaxHealth; }
+    void SetMaxHealth(int newMaxHealth) { m_MaxHealth = newMaxHealth; }
     const int GetPowerLevel() const { return m_PowerLevel; }
     void SetPowerLevel(int newVal) { m_PowerLevel = newVal; }
     void TakeDamage(int dmg);
+
+    void LevelUp();
 
     void SetIndex(int idx) { m_Index = idx; }
     int GetIndex() { return m_Index; }
@@ -43,4 +46,7 @@ private:
     int m_PowerLevel{ 100 };
     int m_Index{ 0 };
     static constexpr int WARRIOR_COST{ 50 };
+
+    static constexpr int HEALTH_LEVEL_UP_GAIN{ 15 };
+    static constexpr int POWER_LEVEL_LVL_UP_GAIN{ 25 };
 };
