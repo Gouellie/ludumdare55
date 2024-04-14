@@ -76,7 +76,7 @@ void SettlementComponent::DealDamageToWarriors()
 {
     for (Warrior* warrior : m_AssignedWarriors)
     {
-        warrior->TakeDamage(m_CurrentEvent->m_DamageToWarriors);
+        warrior->TakeDamage(m_CurrentEvent->GetDamageToWarriors());
     }
 }
 
@@ -99,7 +99,7 @@ void SettlementComponent::GetData(char* name, SettlementStatus& status, std::vec
 void SettlementComponent::InflictPenalty()
 {
     GameDirector& director = GameDirector::GetInstance();
-    director.TakePenalty(m_CurrentEvent->m_Penalty);
+    director.TakePenalty(m_CurrentEvent->GetPenalty());
 }
 
 Color SettlementComponent::GetColor()

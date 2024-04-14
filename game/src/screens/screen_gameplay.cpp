@@ -92,6 +92,7 @@ void UpdateGameplayScreen(void)
 
     if (directorInstance.GetGameOver()) 
     {
+        // Check for GameState to go to a different screen
         finishScreen = 42; 
     }
 }

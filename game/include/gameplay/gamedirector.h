@@ -11,6 +11,13 @@ class Scene;
 class ModelComponent;
 class SettlementComponent;
 
+enum class GameState
+{
+    Running = 0,
+    Victory = 1,
+    Fail = 2
+};
+
 class GameDirector
 {
 public:
@@ -47,6 +54,8 @@ public:
 
     void SetGameOver(bool state) { m_GameOver = state; }
     [[nodiscard]] bool GetGameOver() { return m_GameOver; }
+    void SetGameState(GameState newState) { m_CurrentState = newState; }
+    void EvaluateGameOver(const Scene& scene);
 
     void PopulateEventList();
     Event& GetRandomEvent();
@@ -55,6 +64,7 @@ public:
 
 private:
     GameDirector() {}
+    GameState m_CurrentState{ GameState::Running };
     std::vector<Warrior> m_AvailableWarriors;
     std::vector<Event> m_EventList;
     ModelComponent* m_PickedModel = nullptr;
