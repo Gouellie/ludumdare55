@@ -6,8 +6,9 @@
 #include "screens.h"
 #include "ui/texturebutton.h"
 
-void BarrackController::SetSprite(const Texture2D& barracksSprite, const Texture2D& warriorSprite, const Texture2D& warriorPanelSprite)
+void BarrackController::SetSprite(const Texture2D& summonWarriorSprite, const Texture2D& barracksSprite, const Texture2D& warriorSprite, const Texture2D& warriorPanelSprite)
 {
+    m_SummonWarriorSprite = summonWarriorSprite;
     m_BarracksSprite = barracksSprite;
     m_WarriorSprite = warriorSprite;
     m_WarriorPanelSprite = warriorPanelSprite;
@@ -33,9 +34,6 @@ void BarrackController::OnRender()
                 TextureButtonState state = TextureButtonState::STATE_NORMAL;
                 if (warrior.GetStatus() == WarriorStatus::Dead) {
                     state = TextureButtonState::STATE_DISABLED;
-                }
-                else if (warriorIndex == gameDirector.GetPickedWarriorIndex()) {
-                    state = TextureButtonState::STATE_SELECTED;
                 }
 
                 Rectangle bounds = { xOffset, ScreenHeight - m_fHeight, 40, m_fHeight };
@@ -108,6 +106,19 @@ void BarrackController::OnRender()
     }
     else {
         DrawRectangle(0, ScreenHeight - m_fHeight, 100, m_fHeight, DARKBROWN);
+    }
+
+    if (IsTextureReady(m_SummonWarriorSprite))
+    {
+        bool isMouseOver = false;
+        float yOrigin = ScreenHeight - 48.f - (float)m_SummonWarriorSprite.height;
+        if (TextureButtonWithMouseOver({ 8.f, yOrigin, (float)m_SummonWarriorSprite.width/ BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height}, m_SummonWarriorSprite, false, &isMouseOver)) {
+            GameDirector::GetInstance().AddWarrior("Ludum Dare", 150, 100);
+            m_bExpanded = true;
+        }
+        if (isMouseOver) {
+            DrawTextPro(TextFont, "SUMMON A WARRIOR!", { 50.f, yOrigin + 3.f }, { 0.f }, 0.f, 30.f, 2.f, WHITE);
+        }
     }
 
     if (IsTextureReady(m_BarracksSprite))

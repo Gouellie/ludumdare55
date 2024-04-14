@@ -51,6 +51,7 @@ Texture Sprite = { 0 };
 
 Texture BoardBackground = { 0 };
 Texture CloseButton = { 0 };
+Texture SummonWarriorButton = { 0 };
 Texture BarracksButton = { 0 };
 Texture WarriorButton = { 0 };
 Texture WarriorPanel = { 0 };
@@ -115,13 +116,14 @@ void SetupScene()
     settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
 
     // Barack
-    Barracks.AddComponent<BarrackController>()->SetSprite(BarracksButton, WarriorButton, WarriorPanel);
+    Barracks.AddComponent<BarrackController>()->SetSprite(SummonWarriorButton, BarracksButton, WarriorButton, WarriorPanel);
 }
 
 void LoadResources()
 {
     BoardBackground = LoadTexture("resources/board_background.png");
     CloseButton = LoadTexture("resources/ui/ui_close.png");
+    SummonWarriorButton = LoadTexture("resources/ui/ui_summon_warrior.png");
     BarracksButton = LoadTexture("resources/ui/ui_barracks.png");
     WarriorButton = LoadTexture("resources/ui/ui_warrior.png");
     WarriorPanel = LoadTexture("resources/ui/warrior_panel.png");
@@ -357,11 +359,6 @@ static void UpdateMainLoop(void)
     if (GuiButton({ 10, 10, 80, 20 }, "ORBIT")) 
     {
         cameraOrbit = !cameraOrbit;
-    }
-
-    if (GuiButton({ 100, 10, 80, 20 }, "ADD WARRIOR"))
-    {
-        GameDirector::GetInstance().AddWarrior("Hello", 100, 100);
     }
 
     EndDrawing();
