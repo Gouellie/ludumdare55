@@ -4,6 +4,7 @@
 #include <scene.h>
 
 #include <ui/boardcomponent.h>
+#include <gameplay/buyable.h>
 #include <gameplay/settlement.h>
 
 #include <algorithm>
@@ -19,15 +20,15 @@ void GameDirector::ResetDirector()
     m_PickedWarriorIndex = -1;
 }
 
-bool GameDirector::AddWarrior(std::string name, unsigned int health, unsigned int power)
+bool GameDirector::AddWarrior(Warrior warrior)
 {
-    if (m_AvailableWarriors.size() == MAX_WARRIORS || m_Cash - WARRIOR_COST < 0)
+    if (m_AvailableWarriors.size() == MAX_WARRIORS || m_Cash - warrior.GetPrice() < 0)
     {
         return false;
     }
 
-    m_AvailableWarriors.emplace_back(Warrior(name, health, power));
-    m_Cash -= WARRIOR_COST;
+    m_AvailableWarriors.emplace_back(warrior);
+    m_Cash -= warrior.GetPrice();
     return true;
 }
 
@@ -267,4 +268,10 @@ void GameDirector::EvaluateGameOver(const Scene& scene)
 
         SetGameOver(true);
     }
+}
+
+const bool GameDirector::CanBuy(const Buyable& item) const
+{
+
+    return false;
 }

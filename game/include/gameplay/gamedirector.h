@@ -7,6 +7,7 @@
 
 #include <vector>
 
+class Buyable;
 class Scene;
 class ModelComponent;
 class SettlementComponent;
@@ -38,11 +39,13 @@ public:
     [[nodiscard]] bool AreAllSettlementsDestroyed(const Scene& scene);
     void HandleTutorialTurn(const Scene& scene, int currentTurn);
 
+    [[nodiscard]] const bool CanBuy(const Buyable& item) const;
+
     void SetPickedModel(ModelComponent* picked);
     [[nodiscard]] ModelComponent* GetPickedModel() { return m_PickedModel; }
     [[nodiscard]] SettlementComponent* GetPickedSettlement();
 
-    bool AddWarrior(std::string name, unsigned int health, unsigned int power);
+    bool AddWarrior(Warrior warrior);
     void AddStartingWarriors();
     [[nodiscard]] Warrior* GetWarrior(std::size_t index) { return &m_AvailableWarriors.at(index); }
     [[nodiscard]] const Warrior* GetWarrior(std::size_t index) const { return &m_AvailableWarriors.at(index); }
@@ -79,5 +82,4 @@ private:
     static constexpr int MAX_TURNS{ 30 };
     static constexpr int MAX_WARRIORS{ 20 };
     static constexpr int NB_EVENTS{ 5 };
-    static constexpr int WARRIOR_COST{ 50 };
 };

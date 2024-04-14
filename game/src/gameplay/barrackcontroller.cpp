@@ -60,8 +60,8 @@ void BarrackController::OnRender()
 
                     float warriorNameFontSize = 30.f;
                     Vector2 textSize;
-                    textSize = MeasureTextEx(TextFont, warrior.m_Name.c_str(), warriorNameFontSize, 2.f);
-                    DrawTextPro(TextFont, warrior.m_Name.c_str(), { textX - textSize.x / 2.f, textY }, { 0,0 }, 0.f, warriorNameFontSize, 2.f, WHITE);
+                    textSize = MeasureTextEx(TextFont, warrior.GetName(), warriorNameFontSize, 2.f);
+                    DrawTextPro(TextFont, warrior.GetName(), {textX - textSize.x / 2.f, textY}, {0,0}, 0.f, warriorNameFontSize, 2.f, WHITE);
 
                     const char* status;
 
@@ -123,7 +123,7 @@ void BarrackController::OnRender()
         }
         if (TextureButtonWithMouseOver({ 8.f, yOrigin, (float)m_SummonWarriorSprite.width / BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height }, m_SummonWarriorSprite, false, &isMouseOver, state))
         {
-            GameDirector::GetInstance().AddWarrior("Ludum Dare", 150, 100);
+            GameDirector::GetInstance().AddWarrior(Warrior("Ludum Dare", 150, 100));
             m_bExpanded = true;
         }
         if (state != TextureButtonState::STATE_DISABLED && isMouseOver)
