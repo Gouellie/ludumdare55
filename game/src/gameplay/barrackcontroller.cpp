@@ -1,14 +1,16 @@
 #include <raygui.h>
 #include "gameplay/barrackcontroller.h"
 #include "gameplay/gamedirector.h"
+#include "gameplay/settlement.h"
 
 #include "screens.h"
 #include "ui/texturebutton.h"
 
-void BarrackController::SetSprite(const Texture2D& barracksSprite, const Texture2D& warriorSprite)
+void BarrackController::SetSprite(const Texture2D& barracksSprite, const Texture2D& warriorSprite, const Texture2D& warriorPanelSprite)
 {
     m_BarracksSprite = barracksSprite;
     m_WarriorSprite = warriorSprite;
+    m_WarriorPanelSprite = warriorPanelSprite;
 }
 
 void BarrackController::OnRender()
@@ -17,9 +19,10 @@ void BarrackController::OnRender()
     int ScreenHeight = GetScreenHeight();
 
     const float buttonWidth = 40;
-    float xOffset = buttonWidth + 10;
+    float xOffset = buttonWidth + 100;
+
     if (m_bExpanded) {
-        DrawRectangle(0, ScreenHeight - m_fHeight, ScreenWidth, m_fHeight, DARKGREEN);
+        DrawRectangle(0, ScreenHeight - m_fHeight, ScreenWidth, m_fHeight, DARKBROWN);
 
         if (IsTextureReady(m_WarriorSprite))
         {
@@ -27,31 +30,75 @@ void BarrackController::OnRender()
             GameDirector& gameDirector = GameDirector::GetInstance();
             for (Warrior& warrior : gameDirector.m_AvailableWarriors)
             {
-                Color color;
-                switch (warrior.GetStatus()) {
-                case WarriorStatus::Waiting:
-                    color = WHITE;
-                    break;
-                case WarriorStatus::Dispatched:
-                    color = BLUE;
-                    break;
-                case WarriorStatus::Healing:
-                    color = GREEN;
-                    break;
-                case WarriorStatus::Dead:
-                    color = RED;
-                    break;
-                }
-
                 TextureButtonState state = TextureButtonState::STATE_NORMAL;
-                if (warriorIndex == gameDirector.GetPickedWarriorIndex()) {
+                if (warrior.GetStatus() == WarriorStatus::Dead) {
+                    state = TextureButtonState::STATE_DISABLED;
+                }
+                else if (warriorIndex == gameDirector.GetPickedWarriorIndex()) {
                     state = TextureButtonState::STATE_SELECTED;
                 }
 
                 Rectangle bounds = { xOffset, ScreenHeight - m_fHeight, 40, m_fHeight };
-                if (TextureButton(bounds, m_WarriorSprite, false, state))
+                bool isMouseOver = false;
+                if (TextureButtonWithMouseOver(bounds, m_WarriorSprite, false, &isMouseOver, state))
                 {
-                    gameDirector.SetPickedWarriorIndex(warriorIndex);
+                    SettlementComponent* pickedSettlement = gameDirector.GetPickedSettlement();
+                    if (pickedSettlement) {
+                        pickedSettlement->AddWarrior(gameDirector.GetWarrior(warriorIndex));
+                    }
+                }
+                if (isMouseOver) 
+                {
+                    float height = GetScreenHeight() - m_WarriorPanelSprite.height;
+                    float width = m_WarriorPanelSprite.width;
+
+                    float panelX = xOffset - width / 2 + 20;
+                    DrawTexture(m_WarriorPanelSprite, panelX, height - 64, WHITE);
+
+                    float textX = panelX + width / 2;
+                    float textY = height - 32.f;
+
+                    float warriorNameFontSize = 30.f;
+                    Vector2 textSize;
+                    textSize = MeasureTextEx(TextFont, warrior.m_Name.c_str(), warriorNameFontSize, 2.f);
+                    DrawTextPro(TextFont, warrior.m_Name.c_str(), { textX - textSize.x / 2.f, textY }, { 0,0 }, 0.f, warriorNameFontSize, 2.f, WHITE);
+
+                    const char* status;
+
+                    switch (warrior.GetStatus())
+                    {
+                    case WarriorStatus::Waiting:
+                        status = "Waiting";
+                        break;
+                    case WarriorStatus::Dispatched:
+                        status = "Dispatched";
+                        break;
+                    case WarriorStatus::Healing:
+                        status = "Healing";
+                        break;
+                    case WarriorStatus::Dead:
+                        status = "Dead";
+                        break;
+                    default:
+                        status = "Unknown";
+                        break;
+                    }
+
+                    textY += 50;
+                    float warriorInfoFontSize = 20.f;
+                    textSize = MeasureTextEx(TextFont, status, warriorInfoFontSize, 2.f);
+                    DrawTextPro(TextFont, status, {textX - textSize.x / 2.f, textY}, {0,0}, 0.f, warriorInfoFontSize, 2.f, WHITE);
+
+                    textY += 30;
+
+                    const char* healthText = TextFormat("Health: %d/%d", warrior.GetHealth(), warrior.GetMaxHealth());
+                    textSize = MeasureTextEx(TextFont, healthText, warriorInfoFontSize, 2.f);
+                    DrawTextPro(TextFont, healthText, { textX - textSize.x / 2.f, textY }, { 0,0 }, 0.f, warriorInfoFontSize, 2.f, WHITE);
+
+                    textY += 30;
+                    const char* powerText = TextFormat("Power Level: %d", warrior.GetPowerLevel());
+                    textSize = MeasureTextEx(TextFont, powerText, warriorInfoFontSize, 2.f);
+                    DrawTextPro(TextFont, powerText, { textX - textSize.x / 2.f, textY }, { 0,0 }, 0.f, warriorInfoFontSize, 2.f, WHITE);
                 }
 
                 xOffset += 50;
@@ -59,12 +106,17 @@ void BarrackController::OnRender()
             }
         }
     }
+    else {
+        DrawRectangle(0, ScreenHeight - m_fHeight, 100, m_fHeight, DARKBROWN);
+    }
 
     if (IsTextureReady(m_BarracksSprite))
     {
-        Rectangle bounds = { 0, ScreenHeight - m_fHeight, buttonWidth, m_fHeight };
+        Rectangle bounds = { 90, ScreenHeight - m_fHeight, buttonWidth, m_fHeight };
         if (TextureButton(bounds, m_BarracksSprite, m_bExpanded)) {
             m_bExpanded = !m_bExpanded;
         }
+
+        DrawTextPro(TextFont, TextFormat("%d$", GameDirector::GetInstance().m_Cash), {8.f, ScreenHeight - 32.f}, {0.f}, 0.f, 30.f, 2.f, WHITE);
     }
 }

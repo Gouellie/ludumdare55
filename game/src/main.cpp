@@ -53,6 +53,7 @@ Texture BoardBackground = { 0 };
 Texture CloseButton = { 0 };
 Texture BarracksButton = { 0 };
 Texture WarriorButton = { 0 };
+Texture WarriorPanel = { 0 };
 
 Model   Board = {0};
 Model   Settlement = { 0 };
@@ -114,7 +115,7 @@ void SetupScene()
     settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
 
     // Barack
-    Barracks.AddComponent<BarrackController>()->SetSprite(BarracksButton, WarriorButton);
+    Barracks.AddComponent<BarrackController>()->SetSprite(BarracksButton, WarriorButton, WarriorPanel);
 }
 
 void LoadResources()
@@ -123,6 +124,7 @@ void LoadResources()
     CloseButton = LoadTexture("resources/ui/ui_close.png");
     BarracksButton = LoadTexture("resources/ui/ui_barracks.png");
     WarriorButton = LoadTexture("resources/ui/ui_warrior.png");
+    WarriorPanel = LoadTexture("resources/ui/warrior_panel.png");
 
     Board = LoadModel("resources/models/board.glb");
     Settlement = LoadModel("resources/models/settlement.glb");

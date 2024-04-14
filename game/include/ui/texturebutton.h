@@ -12,10 +12,17 @@ enum class TextureButtonState
 };
 
 int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButtonState state = TextureButtonState::STATE_NORMAL);
+int TextureButtonWithMouseOver(Rectangle bounds, Texture2D& texture, bool flip, bool* mouseOver, TextureButtonState state = TextureButtonState::STATE_NORMAL);
 
 #ifdef TEXTUREBUTTON_IMPLEMENTATION
 
 int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButtonState state)
+{
+    bool mouseOver = false;
+    return TextureButtonWithMouseOver(bounds, texture, flip, &mouseOver, state);
+}
+
+int TextureButtonWithMouseOver(Rectangle bounds, Texture2D& texture, bool flip, bool* mouseOver, TextureButtonState state)
 {
     int result = 0;
 
@@ -23,26 +30,28 @@ int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButton
 
     // Update control
     //--------------------------------------------------------------------
-    if ((state != TextureButtonState::STATE_DISABLED))
-    {
-        Vector2 mousePoint = GetMousePosition();
 
-        // Check button state
-        if (CheckCollisionPointRec(mousePoint, bounds))
+    Vector2 mousePoint = GetMousePosition();
+
+    // Check button state
+    if (CheckCollisionPointRec(mousePoint, bounds))
+    {
+        (*mouseOver) = true;
+        if ((state != TextureButtonState::STATE_DISABLED))
         {
-            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
+            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
                 state = TextureButtonState::STATE_PRESSED;
-            else 
+            else
                 state = TextureButtonState::STATE_FOCUSED;
 
-            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) 
+            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
                 result = 1;
         }
     }
 
     Rectangle source = { (float)state * width, 0.f, width, (float)texture.height };
-    
-    if (flip) 
+
+    if (flip)
     {
         source.width *= -1;
     }
