@@ -5,6 +5,16 @@ void Warrior::GetData()
 
 }
 
+void Warrior::SetHealth(unsigned int newVal) 
+{
+    if (newVal > m_MaxHealth)
+    {
+        newVal = m_MaxHealth;
+    }
+
+    m_Health = newVal;
+}
+
 void Warrior::TakeDamage(int dmg)
 {
     SetHealth(m_Health - dmg);

@@ -29,7 +29,7 @@ void BarrackController::OnRender()
         {
             int warriorIndex = 0;
             GameDirector& gameDirector = GameDirector::GetInstance();
-            for (Warrior& warrior : gameDirector.m_AvailableWarriors)
+            for (Warrior& warrior : gameDirector.GetWarriors())
             {
                 TextureButtonState state = TextureButtonState::STATE_NORMAL;
                 if (warrior.GetStatus() == WarriorStatus::Dead) {

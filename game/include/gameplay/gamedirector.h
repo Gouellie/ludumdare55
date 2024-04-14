@@ -14,11 +14,9 @@ class SettlementComponent;
 class GameDirector
 {
 public:
-    std::vector<Warrior> m_AvailableWarriors;
-    std::vector<Event> m_EventList;
     ModelComponent* m_PickedModel = nullptr;
     unsigned int m_CurrentTurn{ 0 };
-    unsigned int m_Cash{ 100 };
+    int m_Cash{ 100 };
     int m_PickedWarriorIndex{ -1 };
 
     [[nodiscard]] static GameDirector& GetInstance()
@@ -41,8 +39,10 @@ public:
     [[nodiscard]] SettlementComponent* GetPickedSettlement();
 
     bool AddWarrior(std::string name, unsigned int health, unsigned int power);
+    void AddStartingWarriors();
     [[nodiscard]] Warrior* GetWarrior(std::size_t index) { return &m_AvailableWarriors.at(index); }
     [[nodiscard]] const Warrior* GetWarrior(std::size_t index) const { return &m_AvailableWarriors.at(index); }
+    [[nodiscard]] std::vector<Warrior>& GetWarriors() { return m_AvailableWarriors; }
 
     void HealWarriors();
 
@@ -59,9 +59,12 @@ public:
 
 private:
     GameDirector() {}
+    std::vector<Warrior> m_AvailableWarriors;
+    std::vector<Event> m_EventList;
 
     bool m_GameOver{ false };
     static constexpr unsigned int MAX_TURNS{ 30 };
     static constexpr int MAX_WARRIORS{ 20 };
     static constexpr int NB_EVENTS{ 5 };
+    static constexpr int WARRIOR_COST{ 50 };
 };

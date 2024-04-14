@@ -45,6 +45,11 @@ void SettlementComponent::GetWarriors(std::vector<Warrior*>& warriors)
 
 void SettlementComponent::AddWarrior(Warrior* warrior)
 {
+    if (m_AssignedWarriors.size() >= MAX_ASSIGNED_WARRIORS || warrior->GetStatus() != WarriorStatus::Waiting)
+    {
+        return;
+    }
+
     m_AssignedWarriors.push_back(warrior);
     warrior->SetStatus(WarriorStatus::Dispatched);
 }

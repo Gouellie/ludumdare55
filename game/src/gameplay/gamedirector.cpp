@@ -21,13 +21,20 @@ void GameDirector::ResetDirector()
 
 bool GameDirector::AddWarrior(std::string name, unsigned int health, unsigned int power)
 {
-    if (m_AvailableWarriors.size() == MAX_WARRIORS)
+    if (m_AvailableWarriors.size() == MAX_WARRIORS || m_Cash - WARRIOR_COST < 0)
     {
         return false;
     }
 
     m_AvailableWarriors.emplace_back(Warrior(name, health, power));
+    m_Cash -= WARRIOR_COST;
     return true;
+}
+
+void GameDirector::AddStartingWarriors()
+{
+    m_AvailableWarriors.emplace_back(Warrior("Guillaume", 150, 100));
+    m_AvailableWarriors.emplace_back(Warrior("Pierre", 150, 100));
 }
 
 void GameDirector::SetPickedModel(ModelComponent* picked)

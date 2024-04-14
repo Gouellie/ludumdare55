@@ -29,7 +29,7 @@ void InitGameplayScreen(void)
     finishScreen = 0;
 
     GameDirector& directorInstance = GameDirector::GetInstance();
-    directorInstance.AddWarrior("Guillaume", 150, 100);
+    directorInstance.AddStartingWarriors();
 }
 
 // Gameplay Screen Update logic
@@ -75,17 +75,6 @@ void UpdateGameplayScreen(void)
                 if (raycol.hit && isMousePressed && settlement->GetStatus() != SettlementStatus::Destroyed)
                 {
                     directorInstance.SetPickedModel(model);
-
-                    const int idx = directorInstance.GetPickedWarriorIndex();
-                    if (idx < 0)
-                    {
-                        continue;
-                    }
-
-                    if (directorInstance.GetWarrior(idx)->GetStatus() == WarriorStatus::Waiting)
-                    {
-                        settlement->AddWarrior(directorInstance.GetWarrior(idx));
-                    }
                 }
                 else
                 {

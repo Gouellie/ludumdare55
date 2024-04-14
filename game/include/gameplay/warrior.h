@@ -27,7 +27,7 @@ public:
     const WarriorStatus GetStatus() { return m_Status; }
     void SetStatus(WarriorStatus newStatus) { m_Status = newStatus; }
     const unsigned int GetHealth() const { return m_Health; }
-    void SetHealth(unsigned int newVal) { m_Health = newVal; }
+    void SetHealth(unsigned int newVal);
     const unsigned int GetMaxHealth() const { return m_MaxHealth; }
     const unsigned int GetPowerLevel() const { return m_PowerLevel; }
     void SetPowerLevel(unsigned int newVal) { m_PowerLevel = newVal; }

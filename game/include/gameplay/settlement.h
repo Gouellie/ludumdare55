@@ -55,5 +55,5 @@ public:
     void InflictPenalty();
 
 private:
-
+    static constexpr int MAX_ASSIGNED_WARRIORS{ 3 };
 };
