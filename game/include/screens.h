@@ -2,6 +2,8 @@
 #ifndef SCREENS_H
 #define SCREENS_H
 
+#include <palette.h>
+
 class Scene;
 
 //----------------------------------------------------------------------------------

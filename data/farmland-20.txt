@@ -1,0 +1,25 @@
+;paint.net Palette File
+;Downloaded from Lospec.com/palette-list
+;Palette Name: Farmland-20
+;Description: A fairly desaturated 20 color palette, useful for landscapes and nature with a lot of earthy colors.
+;Colors: 20
+FFecf3b0
+FFb8ddd2
+FF8bb3c1
+FF879797
+FF548ca4
+FF536871
+FF50486a
+FF2d3c56
+FF1c2025
+FF0c0f00
+FF40291c
+FF672d20
+FF953a2f
+FFac6b2f
+FFc8ad56
+FF8d9855
+FF7a7b6b
+FF4b5431
+FF725336
+FF9f865b
