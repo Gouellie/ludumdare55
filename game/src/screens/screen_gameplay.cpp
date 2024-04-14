@@ -74,11 +74,18 @@ void UpdateGameplayScreen(void)
                 RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox(&matrix));
                 if (raycol.hit && isMousePressed && settlement->GetStatus() != SettlementStatus::Destroyed)
                 {
-                    if (directorInstance.GetWarrior(0)->GetStatus() == WarriorStatus::Waiting)
-                    {
-                        settlement->AddWarrior(directorInstance.GetWarrior(0)); // Must have a proper way to assign
-                    }
                     directorInstance.SetPickedModel(model);
+
+                    const int idx = directorInstance.GetPickedWarriorIndex();
+                    if (idx < 0)
+                    {
+                        continue;
+                    }
+
+                    if (directorInstance.GetWarrior(idx)->GetStatus() == WarriorStatus::Waiting)
+                    {
+                        settlement->AddWarrior(directorInstance.GetWarrior(idx));
+                    }
                 }
                 else
                 {
