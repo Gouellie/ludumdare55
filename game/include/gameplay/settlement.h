@@ -21,12 +21,6 @@ class SettlementComponent : public Component
 {
 public:
     DEFINE_COMPONENT(SettlementComponent)
-    SettlementStatus m_Status{ SettlementStatus::Clear };
-    std::vector<Warrior*> m_AssignedWarriors;
-    char* m_Name;
-    Event* m_CurrentEvent = nullptr;
-    int m_Health{ 100 };
-    unsigned int m_Income{ 5 };
 
     void AddEvent(char* name, int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
     void AddEvent(const Event& event);
@@ -51,9 +45,17 @@ public:
     void ClearWarriors();
     Color GetColor();
 
+    [[nodiscard]] const int GetHealth() const { return m_Health; }
+
     const unsigned int GetIncome() const { return m_Income; }
     void InflictPenalty();
 
 private:
+    SettlementStatus m_Status{ SettlementStatus::Clear };
+    std::vector<Warrior*> m_AssignedWarriors;
+    char* m_Name;
+    Event* m_CurrentEvent = nullptr;
+    int m_Health{ 100 };
+    unsigned int m_Income{ 5 };
     static constexpr int MAX_ASSIGNED_WARRIORS{ 3 };
 };

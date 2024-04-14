@@ -1,5 +1,6 @@
 #include <gameplay/settlement.h>
 
+#include <palette.h>
 #include <gameplay/warrior.h>
 #include <gameplay/gamedirector.h>
 
@@ -107,16 +108,16 @@ Color SettlementComponent::GetColor()
     switch (GetStatus())
     {
     case SettlementStatus::Clear:
-        return BLUE;
+        return PAL_LIGHT_BLUE;
         break;
     case SettlementStatus::Attacked:
-        return RED;
+        return PAL_RED;
         break;
     case SettlementStatus::Destroyed:
-        return GREEN;
+        return PAL_NEAR_BLACK;
         break;
     default:
-        return WHITE;
+        return PAL_PURPLE;
         break;
     }
 }

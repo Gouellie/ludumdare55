@@ -54,7 +54,7 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
         if (Event* event = settlement->GetEvent())
         {
             header = const_cast<char*>(TextFormat("%s", event->GetName()));
-            message = const_cast<char*>(TextFormat("The Event will inflict : %i per turn\n Settlement has: %i HP", event->GetDamage(), settlement->m_Health));
+            message = const_cast<char*>(TextFormat("The Event will inflict : %i per turn\n Settlement has: %i HP", event->GetDamage(), settlement->GetHealth()));
         }
         else
         {
@@ -140,7 +140,7 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
                 else
                 {
                     settlement->TakeDamage(event->GetDamage());
-                    if (settlement->m_Health <= 0)
+                    if (settlement->GetHealth() <= 0)
                     {
                         settlement->HandleEventEnd(success);
                     }
