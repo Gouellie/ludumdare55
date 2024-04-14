@@ -34,6 +34,9 @@ public:
     void SetPowerLevel(unsigned int newVal) { m_PowerLevel = newVal; }
     void TakeDamage(int dmg);
 
+    void SetIndex(int idx) { m_Index = idx; }
+    int GetIndex() { return m_Index; }
+
     const int GetPrice() const override { return WARRIOR_COST; }
 
 private:
@@ -42,5 +45,6 @@ private:
     unsigned int m_Health{ 100 };
     unsigned int m_MaxHealth{ 100 };
     unsigned int m_PowerLevel{ 100 };
+    int m_Index{ 0 };
     static constexpr int WARRIOR_COST{ 50 };
 };

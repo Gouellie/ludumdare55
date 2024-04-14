@@ -37,7 +37,6 @@ public:
     void AddCash(GameObject& child);
     [[nodiscard]] const int GetCash() const { return m_Cash; }
     [[nodiscard]] bool AreAllSettlementsDestroyed(const Scene& scene);
-    void HandleTutorialTurn(const Scene& scene, int currentTurn);
 
     [[nodiscard]] const bool CanBuy(const Buyable& item) const;
 
@@ -67,7 +66,7 @@ public:
     void PopulateEventList();
     Event& GetRandomEvent();
 
-    void TakePenalty(int penalty) { m_Cash - penalty; }
+    void TakePenalty(int penalty) { m_Cash -= penalty; }
 
 private:
     GameDirector() {}

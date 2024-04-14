@@ -22,12 +22,13 @@ void GameDirector::ResetDirector()
 
 bool GameDirector::AddWarrior(Warrior warrior)
 {
-    if (m_AvailableWarriors.size() == MAX_WARRIORS || m_Cash - warrior.GetPrice() < 0)
+    if (m_AvailableWarriors.size() == MAX_WARRIORS || !CanBuy(warrior))
     {
         return false;
     }
 
     m_AvailableWarriors.emplace_back(warrior);
+    m_AvailableWarriors[m_AvailableWarriors.size() - 1].SetIndex(m_AvailableWarriors.size() - 1);
     m_Cash -= warrior.GetPrice();
     return true;
 }
@@ -35,7 +36,9 @@ bool GameDirector::AddWarrior(Warrior warrior)
 void GameDirector::AddStartingWarriors()
 {
     m_AvailableWarriors.emplace_back(Warrior("Guillaume", 150, 100));
+    m_AvailableWarriors[0].SetIndex(0);
     m_AvailableWarriors.emplace_back(Warrior("Pierre", 150, 100));
+    m_AvailableWarriors[1].SetIndex(1);
 }
 
 void GameDirector::SetPickedModel(ModelComponent* picked)
@@ -47,15 +50,14 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
         return;
     }
 
-    GameObject& object = picked->GetGameObject();
     char* header = "";
     char* message = "";
-    if (SettlementComponent* settlement = object.GetComponent<SettlementComponent>())
+    if (SettlementComponent* settlement = picked->GetComponent<SettlementComponent>())
     {
         if (Event* event = settlement->GetEvent())
         {
             header = const_cast<char*>(TextFormat("%s", event->GetName()));
-            message = const_cast<char*>(TextFormat("The Event will inflict : %i per turn\n Settlement has: %i HP", event->GetDamage(), settlement->GetHealth()));
+            message = const_cast<char*>(TextFormat("Event will inflict : %i per turn\n Settlement has: %i HP\n Event Requires %i PowerLevel", event->GetDamage(), settlement->GetHealth(), event->GetRequiredPower()));
         }
         else
         {
@@ -63,7 +65,7 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
             message = "Nothing to see here ;)";
         }
     }
-    object.GetComponent<BoardComponent>()->SetHeader(header)->SetMessage(message)->SetShown(true, true);
+    picked->GetComponent<BoardComponent>()->SetHeader(header)->SetMessage(message)->SetShown(true, true);
     if (m_PickedModel != nullptr)
     {
         GameObject& oldObject = m_PickedModel->GetGameObject();
@@ -86,27 +88,20 @@ SettlementComponent* GameDirector::GetPickedSettlement()
         return nullptr;
     }
 
-    return m_PickedModel->GetGameObject().GetComponent<SettlementComponent>();
+    return m_PickedModel->GetComponent<SettlementComponent>();
 }
 
 // Handle end of turn
 void GameDirector::ResolveTurn(const Scene& scene)
 {
     HealWarriors();
-//     if (m_CurrentTurn < 3)
-//     {
-//         HandleTutorialTurn(scene, GetCurrentTurn());
-//     }
-//     else
+    for (GameObject* child : scene.GetChildren())
     {
-        for (GameObject* child : scene.GetChildren())
-        {
-            if (!child)
-                continue;
+        if (!child)
+            continue;
 
-            ResolveSettlementEvent(*child);
-            AddCash(*child);
-        }
+        ResolveSettlementEvent(*child);
+        AddCash(*child);
     }
 
     IncrementTurn();
@@ -119,7 +114,8 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
     {
         if (settlement->GetStatus() == SettlementStatus::Clear)
         {
-            if (GetRandomValue(0, 10) > 5)
+            int targetProbability = 25 + GetCurrentTurn() * 2;
+            if (GetRandomValue(0, 100) < targetProbability)
             {
                 settlement->AddEvent(GetRandomEvent());
                 settlement->GetEvent()->ApplyDifficultyScale(GetCurrentTurn());
@@ -153,46 +149,6 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
         {
             model->SetTint(settlement->GetColor());
         }
-    }
-}
-
-void GameDirector::HandleTutorialTurn(const Scene& scene, int currentTurn)
-{
-    const std::vector<GameObject*>& children = scene.GetChildren();
-    auto pred = [](GameObject* child) -> bool { return child->GetComponent<SettlementComponent>() != nullptr; };
-    int nbSettlements = std::count_if(children.begin(), children.end(), pred);
-
-    std::vector<SettlementComponent*> settlements;
-    settlements.reserve(nbSettlements);
-
-    for (GameObject* child : children)
-    {
-        if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
-        {
-            settlements.push_back(settlement);
-        }
-    }
-
-    switch (currentTurn)
-    {
-    case 0:
-        settlements[0]->AddEvent(m_EventList[0]);
-        settlements[0]->SetStatus(SettlementStatus::Attacked);
-        break;
-    case 1:
-        settlements[0]->AddEvent(m_EventList[0]);
-        settlements[0]->SetStatus(SettlementStatus::Attacked);
-        settlements[1]->AddEvent(m_EventList[0]);
-        settlements[1]->SetStatus(SettlementStatus::Attacked);
-        break;
-    case 2:
-        settlements[0]->AddEvent(m_EventList[0]);
-        settlements[0]->SetStatus(SettlementStatus::Attacked);
-        settlements[1]->AddEvent(m_EventList[0]);
-        settlements[1]->SetStatus(SettlementStatus::Attacked);
-        settlements[2]->AddEvent(m_EventList[1]);
-        settlements[2]->SetStatus(SettlementStatus::Attacked);
-        break;
     }
 }
 
