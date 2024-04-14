@@ -33,7 +33,7 @@ public:
     SettlementStatus GetStatus() { return m_Status; }
 
     const char* GetName() const { return m_Name; }
-    void GetData(char* name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
+    void GetData(SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
 
     void TakeDamage(int dmg) { m_Health -= dmg; }
 

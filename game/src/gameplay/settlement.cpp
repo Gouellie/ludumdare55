@@ -90,9 +90,8 @@ void SettlementComponent::ClearWarriors()
     m_AssignedWarriors.clear();
 }
 
-void SettlementComponent::GetData(char* name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors)
+void SettlementComponent::GetData(SettlementStatus& status, std::vector<Warrior*>& assignedWarriors)
 {
-    name = GetName();
     status = m_Status;
     GetWarriors(assignedWarriors);
 }
