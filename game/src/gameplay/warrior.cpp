@@ -5,7 +5,7 @@ void Warrior::GetData()
 
 }
 
-void Warrior::SetHealth(unsigned int newVal) 
+void Warrior::SetHealth(int newVal) 
 {
     if (newVal > m_MaxHealth)
     {

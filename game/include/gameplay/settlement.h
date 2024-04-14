@@ -32,7 +32,7 @@ public:
     void SetStatus(SettlementStatus newStatus) { m_Status = newStatus; }
     SettlementStatus GetStatus() { return m_Status; }
 
-    char* GetName() { return m_Name; }
+    const char* GetName() const { return m_Name; }
     void GetData(char* name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
 
     void TakeDamage(int dmg) { m_Health -= dmg; }
