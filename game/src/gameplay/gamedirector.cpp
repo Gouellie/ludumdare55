@@ -54,7 +54,7 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
         if (Event* event = settlement->GetEvent())
         {
             header = const_cast<char*>(TextFormat("%s", event->GetName()));
-            message = const_cast<char*>(TextFormat("The Event will inflict : %i per turn\n Settlement has: %i HP", event->m_Damage, settlement->m_Health));
+            message = const_cast<char*>(TextFormat("The Event will inflict : %i per turn\n Settlement has: %i HP", event->GetDamage(), settlement->m_Health));
         }
         else
         {
@@ -103,10 +103,7 @@ void GameDirector::ResolveTurn(const Scene& scene)
     }
 
     ++m_CurrentTurn;
-    if (m_CurrentTurn == MAX_TURNS || AreAllSettlementsDestroyed(scene))
-    {
-        SetGameOver(true);
-    }
+    EvaluateGameOver(scene);
 }
 
 void GameDirector::ResolveSettlementEvent(GameObject& child)
@@ -128,14 +125,14 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
             if (Event* event = settlement->GetEvent())
             {
                 bool success = false;
-                if (settlement->GetWarriorPower() >= event->m_RequiredPower)
+                if (settlement->GetWarriorPower() >= event->GetRequiredPower())
                 {
                     success = true;
                     settlement->HandleEventEnd(success);
                 }
                 else
                 {
-                    settlement->TakeDamage(event->m_Damage);
+                    settlement->TakeDamage(event->GetDamage());
                     if (settlement->m_Health <= 0)
                     {
                         settlement->HandleEventEnd(success);
@@ -206,4 +203,21 @@ void GameDirector::PopulateEventList()
 Event& GameDirector::GetRandomEvent()
 {
     return m_EventList[GetRandomValue(0, m_EventList.size() - 1)];
+}
+
+void GameDirector::EvaluateGameOver(const Scene& scene)
+{
+    if (m_CurrentTurn == MAX_TURNS)
+    {
+        if (AreAllSettlementsDestroyed(scene))
+        {
+            SetGameState(GameState::Fail);
+        }
+        else
+        {
+            SetGameState(GameState::Victory);
+        }
+
+        SetGameOver(true);
+    }
 }
