@@ -92,17 +92,23 @@ SettlementComponent* GameDirector::GetPickedSettlement()
 void GameDirector::ResolveTurn(const Scene& scene)
 {
     HealWarriors();
-
-    for (GameObject* child : scene.GetChildren())
+//     if (m_CurrentTurn < 3)
+//     {
+//         HandleTutorialTurn(scene, GetCurrentTurn());
+//     }
+//     else
     {
-        if (!child)
-            continue;
+        for (GameObject* child : scene.GetChildren())
+        {
+            if (!child)
+                continue;
 
-        ResolveSettlementEvent(*child);
-        AddCash(*child);
+            ResolveSettlementEvent(*child);
+            AddCash(*child);
+        }
     }
 
-    ++m_CurrentTurn;
+    IncrementTurn();
     EvaluateGameOver(scene);
 }
 
@@ -115,6 +121,7 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
             if (GetRandomValue(0, 10) > 5)
             {
                 settlement->AddEvent(GetRandomEvent());
+                settlement->GetEvent()->ApplyDifficultyScale(GetCurrentTurn());
                 settlement->SetStatus(SettlementStatus::Attacked);
             }
         }
@@ -145,6 +152,46 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
         {
             model->SetTint(settlement->GetColor());
         }
+    }
+}
+
+void GameDirector::HandleTutorialTurn(const Scene& scene, int currentTurn)
+{
+    const std::vector<GameObject*>& children = scene.GetChildren();
+    auto pred = [](GameObject* child) -> bool { return child->GetComponent<SettlementComponent>() != nullptr; };
+    int nbSettlements = std::count_if(children.begin(), children.end(), pred);
+
+    std::vector<SettlementComponent*> settlements;
+    settlements.reserve(nbSettlements);
+
+    for (GameObject* child : children)
+    {
+        if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
+        {
+            settlements.push_back(settlement);
+        }
+    }
+
+    switch (currentTurn)
+    {
+    case 0:
+        settlements[0]->AddEvent(m_EventList[0]);
+        settlements[0]->SetStatus(SettlementStatus::Attacked);
+        break;
+    case 1:
+        settlements[0]->AddEvent(m_EventList[0]);
+        settlements[0]->SetStatus(SettlementStatus::Attacked);
+        settlements[1]->AddEvent(m_EventList[0]);
+        settlements[1]->SetStatus(SettlementStatus::Attacked);
+        break;
+    case 2:
+        settlements[0]->AddEvent(m_EventList[0]);
+        settlements[0]->SetStatus(SettlementStatus::Attacked);
+        settlements[1]->AddEvent(m_EventList[0]);
+        settlements[1]->SetStatus(SettlementStatus::Attacked);
+        settlements[2]->AddEvent(m_EventList[1]);
+        settlements[2]->SetStatus(SettlementStatus::Attacked);
+        break;
     }
 }
 
@@ -180,7 +227,7 @@ void GameDirector::AddCash(GameObject& child)
 
 void GameDirector::HealWarriors()
 {
-    for (Warrior warrior : m_AvailableWarriors)
+    for (Warrior& warrior : m_AvailableWarriors)
     {
         if (warrior.GetStatus() == WarriorStatus::Waiting)
         {
@@ -195,9 +242,9 @@ void GameDirector::HealWarriors()
 
 void GameDirector::PopulateEventList()
 {
-    m_EventList.emplace_back(Event("ATTACK", 30, 20, 50, 20));
-    m_EventList.emplace_back(Event("AMBUSH", 15, 10, 30, 10));
     m_EventList.emplace_back(Event("SKIRMISH", 5, 5, 15, 5));
+    m_EventList.emplace_back(Event("AMBUSH", 15, 10, 30, 10));
+    m_EventList.emplace_back(Event("ATTACK", 30, 20, 50, 20));
 }
 
 Event& GameDirector::GetRandomEvent()

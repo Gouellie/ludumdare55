@@ -84,12 +84,6 @@ void UpdateGameplayScreen(void)
         }
     }
 
-    // Here, plug event on "EndTurn" button pressed
-    if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT))
-    {
-        directorInstance.ResolveTurn(Settlements);
-    }
-
     if (directorInstance.GetGameOver()) 
     {
         // Check for GameState to go to a different screen

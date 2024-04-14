@@ -36,6 +36,7 @@ public:
     void AddCash(GameObject& child);
     [[nodiscard]] const int GetCash() const { return m_Cash; }
     [[nodiscard]] bool AreAllSettlementsDestroyed(const Scene& scene);
+    void HandleTutorialTurn(const Scene& scene, int currentTurn);
 
     void SetPickedModel(ModelComponent* picked);
     [[nodiscard]] ModelComponent* GetPickedModel() { return m_PickedModel; }
@@ -51,6 +52,9 @@ public:
 
     [[nodiscard]] int GetPickedWarriorIndex() { return m_PickedWarriorIndex; }
     void SetPickedWarriorIndex(int index) { m_PickedWarriorIndex = index; }
+
+    [[nodiscard]] const int GetCurrentTurn() const { return m_CurrentTurn; }
+    void IncrementTurn() { ++m_CurrentTurn; }
 
     void SetGameOver(bool state) { m_GameOver = state; }
     [[nodiscard]] bool GetGameOver() { return m_GameOver; }
@@ -70,9 +74,9 @@ private:
     ModelComponent* m_PickedModel = nullptr;
     int m_Cash{ 100 };
     int m_PickedWarriorIndex{ -1 };
-    unsigned int m_CurrentTurn{ 0 };
+    int m_CurrentTurn{ 0 };
     bool m_GameOver{ false };
-    static constexpr unsigned int MAX_TURNS{ 30 };
+    static constexpr int MAX_TURNS{ 30 };
     static constexpr int MAX_WARRIORS{ 20 };
     static constexpr int NB_EVENTS{ 5 };
     static constexpr int WARRIOR_COST{ 50 };

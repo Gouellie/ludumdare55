@@ -31,10 +31,13 @@ public:
     unsigned int GetDamageToWarriors() { return m_DamageToWarriors; }
     const unsigned int GetDamageToWarriors() const { return m_DamageToWarriors; }
 
+    void ApplyDifficultyScale(const int currentTurn);
+
 private:
     char* m_Name;
     unsigned int m_Damage{ 0 };
     unsigned int m_RequiredPower{ 0 };
     unsigned int m_Penalty{ 0 }; // Cost in cash if Event destroys settlement
     unsigned int m_DamageToWarriors{ 0 }; // Damage inflicted to warriors upon solving the event
+    static constexpr unsigned int BASE_DIFFICULTY_BONUS{ 5 };
 };

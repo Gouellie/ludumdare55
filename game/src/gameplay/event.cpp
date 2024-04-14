@@ -8,3 +8,10 @@ Event::Event(const Event& other)
     m_Penalty = other.m_Penalty;
     m_DamageToWarriors = other.m_DamageToWarriors;
 }
+
+void Event::ApplyDifficultyScale(const int currentTurn)
+{
+    m_Damage += BASE_DIFFICULTY_BONUS * currentTurn;
+    m_RequiredPower += BASE_DIFFICULTY_BONUS * currentTurn;
+    m_DamageToWarriors += BASE_DIFFICULTY_BONUS * currentTurn;
+}
