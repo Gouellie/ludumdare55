@@ -8,7 +8,6 @@
 #include <gameplay/settlement.h>
 
 #include <algorithm>
-#include <string.h>
 
 void GameDirector::ResetDirector()
 {

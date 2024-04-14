@@ -52,14 +52,14 @@ public:
 
     void HealWarriors();
 
-    [[nodiscard]] int GetPickedWarriorIndex() { return m_PickedWarriorIndex; }
+    [[nodiscard]] const int GetPickedWarriorIndex() const { return m_PickedWarriorIndex; }
     void SetPickedWarriorIndex(int index) { m_PickedWarriorIndex = index; }
 
     [[nodiscard]] const int GetCurrentTurn() const { return m_CurrentTurn; }
     void IncrementTurn() { ++m_CurrentTurn; }
 
     void SetGameOver(bool state) { m_GameOver = state; }
-    [[nodiscard]] bool GetGameOver() { return m_GameOver; }
+    [[nodiscard]] const bool GetGameOver() const { return m_GameOver; }
     void SetGameState(GameState newState) { m_CurrentState = newState; }
     void EvaluateGameOver(const Scene& scene);
 

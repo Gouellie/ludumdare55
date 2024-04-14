@@ -2,8 +2,6 @@
 
 #include <gameplay/buyable.h>
 
-#include <string>
-
 enum class WarriorStatus
 {
     Waiting = 0,
@@ -16,14 +14,12 @@ class Warrior : public Buyable
 {
 public:
     Warrior() = default;
-    Warrior(char* name, int health, int power)
+    Warrior(const char* name, int health, int power)
         : m_Name(name), m_Health{ health }, m_MaxHealth{ health }, m_PowerLevel {
         power
     } {}
 
-    void GetData();
-
-    char* GetName() { return m_Name; }
+    const char* GetName() { return m_Name; }
     const char* GetName() const { return m_Name; }
     const WarriorStatus GetStatus() { return m_Status; }
     void SetStatus(WarriorStatus newStatus);
@@ -40,7 +36,7 @@ public:
     const int GetPrice() const override { return WARRIOR_COST; }
 
 private:
-    char* m_Name;
+    const char* m_Name;
     WarriorStatus m_Status{ WarriorStatus::Waiting };
     int m_Health{ 100 };
     int m_MaxHealth{ 100 };

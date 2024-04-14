@@ -4,7 +4,6 @@
 
 #include <gameplay/event.h>
 
-#include <string>
 #include <vector>
 
 class Warrior;
@@ -22,7 +21,7 @@ class SettlementComponent : public Component
 public:
     DEFINE_COMPONENT(SettlementComponent)
 
-    void AddEvent(char* name, int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
+    void AddEvent(const char* name, int damagePerTurn, int requiredPower, int penalty, int cost);
     void AddEvent(const Event& event);
     Event* GetEvent() { return m_CurrentEvent; }
     void ClearEvent();
@@ -41,14 +40,14 @@ public:
     void GetWarriors(std::vector<Warrior*>& warriors);
     void AddWarrior(Warrior* warrior);
     void RemoveWarrior(std::size_t index);
-    const unsigned int GetWarriorPower() const;
+    const int GetWarriorPower() const;
     void DealDamageToWarriors();
     void ClearWarriors();
     Color GetColor();
 
     [[nodiscard]] const int GetHealth() const { return m_Health; }
 
-    const unsigned int GetIncome() const { return m_Income; }
+    const int GetIncome() const { return m_Income; }
     void InflictPenalty();
 
 private:
@@ -57,6 +56,6 @@ private:
     const char* m_Name;
     Event* m_CurrentEvent = nullptr;
     int m_Health{ 100 };
-    unsigned int m_Income{ 5 };
+    int m_Income{ 5 };
     static constexpr int MAX_ASSIGNED_WARRIORS{ 3 };
 };

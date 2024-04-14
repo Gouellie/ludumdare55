@@ -4,7 +4,7 @@
 #include <gameplay/warrior.h>
 #include <gameplay/gamedirector.h>
 
-void SettlementComponent::AddEvent(char* name, int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int cost)
+void SettlementComponent::AddEvent(const char* name, int damagePerTurn, int requiredPower, int penalty, int cost)
 {
     m_CurrentEvent = new Event(name, damagePerTurn, requiredPower, penalty, cost);
 }
@@ -63,9 +63,9 @@ void SettlementComponent::RemoveWarrior(std::size_t index)
     m_AssignedWarriors.erase(it);
 }
 
-const unsigned int SettlementComponent::GetWarriorPower() const
+const int SettlementComponent::GetWarriorPower() const
 {
-    unsigned int totalPower = 0;
+    int totalPower = 0;
     for (const Warrior* warrior : m_AssignedWarriors)
     {
         totalPower += warrior->GetPowerLevel();

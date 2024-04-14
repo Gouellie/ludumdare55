@@ -2,11 +2,6 @@
 
 #include <algorithm>
 
-void Warrior::GetData()
-{
-
-}
-
 void Warrior::SetHealth(int newVal) 
 {
     newVal = std::clamp(newVal, 0, m_MaxHealth);
