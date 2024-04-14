@@ -18,7 +18,9 @@ public:
 
     Warrior() = default;
     Warrior(std::string name, unsigned int health, unsigned int power)
-        : m_Name(name), m_Health{ health }, m_PowerLevel{ power } {}
+        : m_Name(name), m_Health{ health }, m_MaxHealth{ health }, m_PowerLevel {
+        power
+    } {}
 
     void GetData();
 
@@ -26,11 +28,13 @@ public:
     void SetStatus(WarriorStatus newStatus) { m_Status = newStatus; }
     const unsigned int GetHealth() const { return m_Health; }
     void SetHealth(unsigned int newVal) { m_Health = newVal; }
+    const unsigned int GetMaxHealth() const { return m_MaxHealth; }
     const unsigned int GetPowerLevel() const { return m_PowerLevel; }
     void SetPowerLevel(unsigned int newVal) { m_PowerLevel = newVal; }
     void TakeDamage(int dmg) { SetHealth(m_Health - dmg); }
 
 private:
     unsigned int m_Health{ 100 };
+    unsigned int m_MaxHealth{ 100 };
     unsigned int m_PowerLevel{ 100 };
 };
