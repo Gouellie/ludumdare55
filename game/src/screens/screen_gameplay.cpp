@@ -54,7 +54,7 @@ void UpdateGameplayScreen(void)
             if (BoardComponent* board = settlement->GetComponent<BoardComponent>()) {
                 if (board->GetShown() && board->GetCanBeClosed()) 
                 {
-                    if (isMousePressed && board->GetMouseOverCloseButton())
+                    if (board->GetMouseOverCloseButton())
                     {
                         board->SetShown(false);
                         directorInstance.SetPickedModel(nullptr);
@@ -123,7 +123,7 @@ void DrawGameplayScreen(void)
 // Gameplay Screen Unload logic
 void UnloadGameplayScreen(void)
 {
-    // TODO: Unload GAMEPLAY screen variables here!
+    GameDirector::GetInstance().ResetDirector();
 }
 
 // Gameplay Screen should finish?

@@ -88,6 +88,8 @@ public:
     void SetSprite(const Texture2D& texture, const Rectangle& sourceRect);
     void SetSpriteRect(const Rectangle& sourceRect);
 
+    Rectangle GetSourceRect(void) const { return SourceRect; }
+
     void SetTint(Color tint);
     Color GetTint() const;
 

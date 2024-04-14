@@ -1,17 +1,13 @@
 
 #include <game_object.h>
 #include <ui/boardcomponent.h>
+#include "ui/texturebutton.h"
 #include <screens.h>
 
 void BoardComponent::OnUpdate()
 {
     if (!m_Shown)
         return;
-
-    if (m_bCanBeClosed) 
-    {
-        Vector2 mousePos = GetMousePosition();
-    }
 
     const float maxOffset = 5.0f;
     const float offset = 0.1f;
@@ -48,6 +44,8 @@ void BoardComponent::OnRender()
     if (m_Message.length() == 0)
         return;
 
+    m_bMouseOverCloseButton = false;
+
     GameObject& gameObject = GetGameObject();
     Transform3DComponent* transform = gameObject.GetComponent<Transform3DComponent>();
     if (!transform)
@@ -62,14 +60,15 @@ void BoardComponent::OnRender()
     }
 
     if (m_bCanBeClosed && IsTextureReady(m_CloseButtonSprite)) {
-        Vector2 spritePos = { pos.x + fabsf(SourceRect.width) / 2 - fabsf(m_CloseButtonSourceRect.width) / 2, GetScreenHeight() / 2 - fabsf(SourceRect.height) / 2 };
+        Vector2 spritePos = { pos.x + fabsf(SourceRect.width) / 2 - fabsf(m_CloseButtonSourceRect.width / BUTTON_STATE_COUNT) / 2, GetScreenHeight() / 2 - fabsf(SourceRect.height) / 2 };
         pos.y = spritePos.y + 40;
 
-        float halfWidth = m_CloseButtonSourceRect.width / 2;
+        float halfWidth = m_CloseButtonSourceRect.width / BUTTON_STATE_COUNT / 2;
 
-        Vector2 mousePos = GetMousePosition();
-        m_bMouseOverCloseButton = CheckCollisionPointCircle(mousePos, {spritePos.x + halfWidth, spritePos.y + halfWidth}, halfWidth);
-        DrawTextureEx(m_CloseButtonSprite, spritePos, 0, m_bMouseOverCloseButton ? 1.1 : 1, WHITE);
+        Vector2 origin = { spritePos.x, spritePos.y - halfWidth };
+        if (TextureButton({ origin.x, origin.y, 64.f, 64.f }, m_CloseButtonSprite, false)) {
+            m_bMouseOverCloseButton = true;
+        }
     }
 
     Vector2 position;

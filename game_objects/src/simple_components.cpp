@@ -321,7 +321,6 @@ void ModelComponent::OnRender3D() {
 
     Transform3DComponent* transform = GetComponent<Transform3DComponent>();
     if (transform) {
-        Vector3 pos = transform->GetPosition();
         DrawModelEx(m_Model, transform->GetPosition(), transform->GetRotationAxis(), transform->GetRotation(), Vector3One(), m_Tint);
     }
 }

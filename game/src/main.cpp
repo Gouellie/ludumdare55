@@ -5,6 +5,9 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"                 // Required for GUI controls
 
+#define TEXTUREBUTTON_IMPLEMENTATION
+#include "ui/texturebutton.h"
+
 #if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
 #else   // PLATFORM_ANDROID, PLATFORM_WEB
@@ -48,6 +51,8 @@ Texture Sprite = { 0 };
 
 Texture BoardBackground = { 0 };
 Texture CloseButton = { 0 };
+Texture BarracksButton = { 0 };
+Texture WarriorButton = { 0 };
 
 Model   Board = {0};
 Model   Settlement = { 0 };
@@ -106,13 +111,15 @@ void SetupScene()
     settlement_4->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
 
     // Barack
-    Barracks.AddComponent<BarrackController>();
+    Barracks.AddComponent<BarrackController>()->SetSprite(BarracksButton, WarriorButton);
 }
 
 void LoadResources()
 {
     BoardBackground = LoadTexture("resources/board_background.png");
     CloseButton = LoadTexture("resources/ui/ui_close.png");
+    BarracksButton = LoadTexture("resources/ui/ui_barracks.png");
+    WarriorButton = LoadTexture("resources/ui/ui_warrior.png");
 
     Board = LoadModel("resources/models/board.glb");
     Settlement = LoadModel("resources/models/settlement.glb");
