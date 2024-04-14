@@ -45,7 +45,11 @@ public:
     void ClearWarriors();
     Color GetColor();
 
+    void InitHealth(int val);
+    void SetHealth(int newHealth) { m_Health = newHealth; }
+    void SetMaxHealth(int newMaxHealth) { m_MaxHealth = newMaxHealth; }
     [[nodiscard]] const int GetHealth() const { return m_Health; }
+    [[nodiscard]] const int GetMaxHealth() const { return m_MaxHealth; }
 
     const int GetIncome() const { return m_Income; }
     void InflictPenalty();
@@ -56,6 +60,7 @@ private:
     const char* m_Name;
     Event* m_CurrentEvent = nullptr;
     int m_Health{ 100 };
+    int m_MaxHealth{ 100 };
     int m_Income{ 5 };
     static constexpr int MAX_ASSIGNED_WARRIORS{ 3 };
 };

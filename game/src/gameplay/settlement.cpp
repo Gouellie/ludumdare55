@@ -39,6 +39,12 @@ void SettlementComponent::HandleEventEnd(const bool success)
     }
 }
 
+void SettlementComponent::InitHealth(int val)
+{
+    SetHealth(val);
+    SetMaxHealth(val);
+}
+
 void SettlementComponent::GetWarriors(std::vector<Warrior*>& warriors)
 {
     warriors = m_AssignedWarriors;
