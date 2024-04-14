@@ -77,14 +77,7 @@ void UpdateGameplayScreen(void)
                     model->SetTint(PAL_YELLOW);
                     if (!PickingHandled && isMousePressed)
                     {
-                        if (settlement->GetStatus() != SettlementStatus::Destroyed) 
-                        {
-                            directorInstance.SetPickedModel(model);
-                        }
-                        else 
-                        {
-                            settlement->GetComponent<BoardComponent>()->SetShown(true, true);
-                        }
+                        directorInstance.SetPickedModel(model);
                     }
                 }
                 else
