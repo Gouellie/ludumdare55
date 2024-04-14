@@ -4,6 +4,16 @@
 #include <gameplay/warrior.h>
 #include <gameplay/gamedirector.h>
 
+void SettlementComponent::Reset()
+{
+    m_Status = SettlementStatus::Clear;
+    m_AssignedWarriors.clear();
+    m_CurrentEvent = nullptr;
+    m_Health = 100;
+    m_MaxHealth = 100;
+    m_Income = 5;
+}
+
 void SettlementComponent::AddEvent(const char* name, int damagePerTurn, int requiredPower, int penalty, int cost)
 {
     m_CurrentEvent = new Event(name, damagePerTurn, requiredPower, penalty, cost);

@@ -20,6 +20,7 @@ class SettlementComponent : public Component
 {
 public:
     DEFINE_COMPONENT(SettlementComponent)
+    void Reset();
 
     void AddEvent(const char* name, int damagePerTurn, int requiredPower, int penalty, int cost);
     void AddEvent(const Event& event);

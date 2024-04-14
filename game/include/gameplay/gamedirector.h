@@ -61,12 +61,13 @@ public:
     void SetGameOver(bool state) { m_GameOver = state; }
     [[nodiscard]] const bool GetGameOver() const { return m_GameOver; }
     void SetGameState(GameState newState) { m_CurrentState = newState; }
+    [[nodiscard]] const GameState GetGameState() const { return m_CurrentState; }
     void EvaluateGameOver(const Scene& scene);
 
     void PopulateEventList();
     Event& GetRandomEvent();
 
-    void TakePenalty(int penalty) { m_Cash -= penalty; }
+    void TakePenalty(int penalty);
 
 private:
     GameDirector() {}

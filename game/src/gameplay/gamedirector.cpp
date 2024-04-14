@@ -1,5 +1,7 @@
 #include <gameplay/gamedirector.h>
 
+#include <screens.h>
+#include <raymath.h>
 #include <game_object.h>
 #include <scene.h>
 
@@ -17,6 +19,17 @@ void GameDirector::ResetDirector()
     m_GameOver = false;
     m_PickedModel = nullptr;
     m_PickedWarriorIndex = -1;
+    for (GameObject* child : Settlements.GetChildren())
+    {
+        if (!child)
+            continue;
+
+        if (SettlementComponent* settlement = child->GetComponent<SettlementComponent>())
+        {
+            settlement->Reset();
+        }
+    }
+
 }
 
 bool GameDirector::AddWarrior(Warrior warrior)
@@ -44,6 +57,7 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
 {
     if (picked == nullptr && m_PickedModel != nullptr)
     {
+        m_PickedModel->GetComponent<BoardComponent>()->SetShown(false);
         m_PickedModel->SetPicked(false);
         m_PickedModel = nullptr;
         return;
@@ -91,6 +105,7 @@ void GameDirector::ResolveTurn(const Scene& scene)
         AddCash(*child);
     }
 
+    SetPickedModel(nullptr);
     IncrementTurn();
     EvaluateGameOver(scene);
 }
@@ -200,17 +215,14 @@ Event& GameDirector::GetRandomEvent()
 
 void GameDirector::EvaluateGameOver(const Scene& scene)
 {
-    if (m_CurrentTurn == MAX_TURNS)
+    if (AreAllSettlementsDestroyed(scene))
     {
-        if (AreAllSettlementsDestroyed(scene))
-        {
-            SetGameState(GameState::Fail);
-        }
-        else
-        {
-            SetGameState(GameState::Victory);
-        }
-
+        SetGameState(GameState::Fail);
+        SetGameOver(true);
+    }
+    else if (m_CurrentTurn >= MAX_TURNS)
+    {
+        SetGameState(GameState::Victory);
         SetGameOver(true);
     }
 }
@@ -223,4 +235,9 @@ const bool GameDirector::CanBuy(const Buyable& item) const
     }
 
     return true;
+}
+
+void GameDirector::TakePenalty(int penalty)
+{
+    m_Cash = Clamp(m_Cash - penalty, 0, INT_MAX);
 }

@@ -10,6 +10,8 @@ enum class WarriorStatus
     Dead = 3
 };
 
+class SettlementComponent;
+
 class Warrior : public Buyable
 {
 public:
@@ -31,6 +33,8 @@ public:
     void SetPowerLevel(int newVal) { m_PowerLevel = newVal; }
     void TakeDamage(int dmg);
 
+    void SetAssignedSettlement(SettlementComponent* newAssignement) { m_AssignedSettlement = newAssignement; }
+
     void LevelUp();
 
     void SetIndex(int idx) { m_Index = idx; }
@@ -45,6 +49,8 @@ private:
     int m_MaxHealth{ 100 };
     int m_PowerLevel{ 100 };
     int m_Index{ 0 };
+    SettlementComponent* m_AssignedSettlement = nullptr;
+
     static constexpr int WARRIOR_COST{ 50 };
 
     static constexpr int HEALTH_LEVEL_UP_GAIN{ 15 };
