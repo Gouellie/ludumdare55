@@ -1,5 +1,7 @@
 #include <gameplay/warrior.h>
 
+#include <algorithm>
+
 void Warrior::GetData()
 {
 
@@ -7,12 +9,14 @@ void Warrior::GetData()
 
 void Warrior::SetHealth(int newVal) 
 {
-    if (newVal > m_MaxHealth)
-    {
-        newVal = m_MaxHealth;
-    }
+    newVal = std::clamp(newVal, 0, m_MaxHealth);
 
     m_Health = newVal;
+}
+
+void Warrior::SetStatus(WarriorStatus newStatus)
+{
+    m_Status = newStatus;
 }
 
 void Warrior::TakeDamage(int dmg)

@@ -26,7 +26,7 @@ public:
     char* GetName() { return m_Name; }
     const char* GetName() const { return m_Name; }
     const WarriorStatus GetStatus() { return m_Status; }
-    void SetStatus(WarriorStatus newStatus) { m_Status = newStatus; }
+    void SetStatus(WarriorStatus newStatus);
     const int GetHealth() const { return m_Health; }
     void SetHealth(int newVal);
     const int GetMaxHealth() const { return m_MaxHealth; }
