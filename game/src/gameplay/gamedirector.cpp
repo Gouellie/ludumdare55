@@ -48,6 +48,10 @@ void GameDirector::SetPickedModel(ModelComponent* picked)
         m_PickedModel = nullptr;
         return;
     }
+    else if (picked == nullptr) 
+    {
+        return;
+    }
     picked->GetComponent<BoardComponent>()->SetShown(true, true);
     if (m_PickedModel != nullptr)
     {

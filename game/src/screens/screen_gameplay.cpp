@@ -72,9 +72,20 @@ void UpdateGameplayScreen(void)
                 Matrix matrix = transform->GetMatrix();
 
                 RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox(&matrix));
-                if (raycol.hit && isMousePressed && settlement->GetStatus() != SettlementStatus::Destroyed)
+                if (raycol.hit) 
                 {
-                    directorInstance.SetPickedModel(model);
+                    model->SetTint(PAL_YELLOW);
+                    if (isMousePressed)
+                    {
+                        if (settlement->GetStatus() != SettlementStatus::Destroyed) 
+                        {
+                            directorInstance.SetPickedModel(model);
+                        }
+                        else 
+                        {
+                            settlement->GetComponent<BoardComponent>()->SetShown(true, true);
+                        }
+                    }
                 }
                 else
                 {

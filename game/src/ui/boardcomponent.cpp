@@ -2,6 +2,7 @@
 #include <game_object.h>
 #include <ui/boardcomponent.h>
 #include "ui/texturebutton.h"
+#include "ui/texthelpers.h"
 #include "gameplay/settlement.h"
 #include <screens.h>
 
@@ -75,30 +76,38 @@ void BoardComponent::OnRender()
     }
 
     Vector2 position;
-        position.x = pos.x - MeasureTextEx(TextFont, m_Message.c_str(), TextFont.baseSize, 2).x / 2.0f;
-        position.y = pos.y;
+        position.x = pos.x;
+        position.y = pos.y + 50;
 
-    DrawTextEx(TextFont, settlement->GetName(), position, TextFont.baseSize * 1.2f, 2, WHITE);
-    position.y += 50;
+    DrawTextCentered(settlement->GetName(), position, 70, PAL_YELLOW);
 
-    //char* header = "";
-    //char* message = "";
-    //if (SettlementComponent* settlement = picked->GetComponent<SettlementComponent>())
-    //{
-    //    if (Event* event = settlement->GetEvent())
-    //    {
-    //        header = const_cast<char*>(TextFormat("%s", event->GetName()));
-    //        message = const_cast<char*>(TextFormat("Event will inflict : %i per turn\n Settlement has: %i HP\n Event Requires %i PowerLevel", event->GetDamage(), settlement->GetHealth(), event->GetRequiredPower()));
-    //    }
-    //    else
-    //    {
-    //        header = "All Clear";
-    //        message = "Nothing to see here ;)";
-    //    }
-    //}
-
-    SetTextLineSpacing(30);
-    DrawTextEx(TextFont, m_Message.c_str(), position, TextFont.baseSize, 2, WHITE);
+    const int eventSize = 60;
+    const int infoSize = 30;
+    position.y += 80;
+    if (Event* event = settlement->GetEvent())
+    {
+        DrawTextCentered(TextFormat("%s", event->GetName()), position, eventSize, PAL_DARK_RED);
+        position.y += 60;
+        DrawTextCentered(TextFormat("HP : %d/%d", settlement->GetHealth(), settlement->GetMaxHealth()), position, infoSize, WHITE);
+        position.y += 60;
+        DrawTextCentered(TextFormat("Inflicts : %d per turn", event->GetDamage()), position, infoSize, WHITE);
+        position.y += 60;
+        DrawTextCentered(TextFormat("Requires : %d power level", event->GetRequiredPower()), position, infoSize, WHITE);
+    }
+    else
+    {
+        if (settlement->GetStatus() == SettlementStatus::Destroyed) 
+        {
+            position.y += 60;
+            DrawTextCentered("Destroyed", position, eventSize, PAL_NEAR_BLACK);
+        }
+        else 
+        {
+            DrawTextCentered("All Clear", position, eventSize, WHITE);
+            position.y += 60;
+            DrawTextCentered(TextFormat("HP : %d", settlement->GetHealth()), position, infoSize, WHITE);
+        }
+    }
 }
 
 BoardComponent* BoardComponent::SetSprite(const Texture2D& background, const Texture2D& closeButton)

@@ -8,6 +8,9 @@
 #define TEXTUREBUTTON_IMPLEMENTATION
 #include "ui/texturebutton.h"
 
+#define TEXT_HELPERS_IMPLEMENTATION
+#include "ui/texthelpers.h"
+
 #if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
 #else   // PLATFORM_ANDROID, PLATFORM_WEB
@@ -174,6 +177,7 @@ int main()
     SetupScene();
 
     TextureButtonSetFont(TextFont);
+    TextHelpersSetFont(TextFont);
 
 // Setup and init first screen
 #ifdef DEBUG
