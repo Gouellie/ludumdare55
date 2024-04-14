@@ -48,6 +48,7 @@ void BoardComponent::OnRender()
     if (settlement == nullptr)
         return;
 
+    PickingHandled = false;
     m_bMouseOverCloseButton = false;
 
     GameObject& gameObject = GetGameObject();
@@ -61,6 +62,7 @@ void BoardComponent::OnRender()
         Vector2 spritePos = { pos.x - fabsf(SourceRect.width) / 2, GetScreenHeight() / 2 - fabsf(SourceRect.height) / 2 };
         pos.y = spritePos.y + 40;
         DrawTexture(m_BackgroundSprite, spritePos.x, spritePos.y - m_yOffset, WHITE);
+        PickingHandled = CheckCollisionPointRec(GetMousePosition(), { spritePos.x, spritePos.y, (float)m_BackgroundSprite.width, (float)m_BackgroundSprite.height });
     }
 
     if (m_bCanBeClosed && IsTextureReady(m_CloseButtonSprite)) {
@@ -72,6 +74,7 @@ void BoardComponent::OnRender()
         Vector2 origin = { spritePos.x, spritePos.y - halfWidth };
         if (TextureButton({ origin.x, origin.y, 64.f, 64.f }, m_CloseButtonSprite, false)) {
             m_bMouseOverCloseButton = true;
+            PickingHandled = false;
         }
     }
 

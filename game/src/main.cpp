@@ -47,6 +47,7 @@ Scene Barracks;
 
 static const int ScreenWidth = 1280;
 static const int ScreenHeight = 800;
+bool PickingHandled;
 
 Texture Wabbit = { 0 };
 Texture Logo = { 0 };

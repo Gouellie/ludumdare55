@@ -75,7 +75,7 @@ void UpdateGameplayScreen(void)
                 if (raycol.hit) 
                 {
                     model->SetTint(PAL_YELLOW);
-                    if (isMousePressed)
+                    if (!PickingHandled && isMousePressed)
                     {
                         if (settlement->GetStatus() != SettlementStatus::Destroyed) 
                         {
