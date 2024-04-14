@@ -16,8 +16,8 @@ void BarrackController::SetSprite(const Texture2D& summonWarriorSprite, const Te
 
 void BarrackController::OnRender()
 {
-    int ScreenWidth = GetScreenWidth();
-    int ScreenHeight = GetScreenHeight();
+    float ScreenWidth = (float)GetScreenWidth();
+    float ScreenHeight = (float)GetScreenHeight();
 
     const float buttonWidth = 40;
     float xOffset = buttonWidth + 100;
@@ -38,7 +38,7 @@ void BarrackController::OnRender()
                     state = TextureButtonState::STATE_DISABLED;
                 }
 
-                Rectangle bounds = { xOffset, ScreenHeight - m_WarriorSprite.height, m_WarriorSprite.width / BUTTON_STATE_COUNT, m_WarriorSprite.height };
+                Rectangle bounds = { xOffset, ScreenHeight - m_WarriorSprite.height, m_WarriorSprite.width / (float)BUTTON_STATE_COUNT, (float)m_WarriorSprite.height };
                 bool isMouseOver = false;
                 if (TextureButtonWithMouseOver(bounds, m_WarriorSprite, false, &isMouseOver, state))
                 {
@@ -49,7 +49,7 @@ void BarrackController::OnRender()
                 }
                 if (isMouseOver) 
                 {
-                    float height = GetScreenHeight() - m_WarriorPanelSprite.height;
+                    float height = ScreenHeight - m_WarriorPanelSprite.height;
                     float width = m_WarriorPanelSprite.width;
 
                     float panelX = xOffset - width / 2 + 20;

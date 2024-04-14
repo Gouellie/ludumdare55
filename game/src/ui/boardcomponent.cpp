@@ -2,6 +2,7 @@
 #include <game_object.h>
 #include <ui/boardcomponent.h>
 #include "ui/texturebutton.h"
+#include "gameplay/settlement.h"
 #include <screens.h>
 
 void BoardComponent::OnUpdate()
@@ -43,6 +44,11 @@ void BoardComponent::OnRender()
 
     if (m_Message.length() == 0)
         return;
+
+    //SettlementComponent* settlement = GetComponent<SettlementComponent>();
+
+    //if (settlement == nullptr)
+    //    return;
 
     m_bMouseOverCloseButton = false;
 

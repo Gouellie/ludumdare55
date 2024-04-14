@@ -96,9 +96,9 @@ public:
         {
             float realWidth = (float)m_buttonSprite.width / BUTTON_STATE_COUNT;
             bool mouseOver;
-            Rectangle bounds = { GetScreenWidth() - realWidth - 10 , GetScreenHeight() - m_buttonSprite.height - 50, realWidth, m_buttonSprite.height};
-            TextureButtonSetFontColor(PAL_NEAR_BLACK);
-            if (TextureButtonWithMouseOverAndText(bounds, m_buttonSprite, "Next Turn", 20, &mouseOver)) 
+            Rectangle bounds = { GetScreenWidth() - realWidth - 10.f , GetScreenHeight() - m_buttonSprite.height - 50.f, realWidth, (float)m_buttonSprite.height};
+            TextureButtonSetFontColor(PAL_DARK_BLUE);
+            if (TextureButtonWithMouseOverAndText(bounds, m_buttonSprite, "Next Turn", 28, &mouseOver)) 
             {
                 GameDirector::GetInstance().ResolveTurn(Settlements);
             }
