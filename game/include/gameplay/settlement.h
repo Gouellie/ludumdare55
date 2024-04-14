@@ -33,7 +33,7 @@ public:
     SettlementStatus GetStatus() { return m_Status; }
 
     const char* GetName() const { return m_Name; }
-    void SetName(char* newName) { m_Name = newName; }
+    void SetName(const char* newName) { m_Name = newName; }
     void GetData(SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
 
     void TakeDamage(int dmg) { m_Health -= dmg; }
@@ -54,7 +54,7 @@ public:
 private:
     SettlementStatus m_Status{ SettlementStatus::Clear };
     std::vector<Warrior*> m_AssignedWarriors;
-    char* m_Name;
+    const char* m_Name;
     Event* m_CurrentEvent = nullptr;
     int m_Health{ 100 };
     unsigned int m_Income{ 5 };
