@@ -25,10 +25,10 @@ public:
     std::vector<Warrior*> m_AssignedWarriors;
     std::string m_Name;
     Event* m_CurrentEvent = nullptr;
-    unsigned int m_Health{ 100 };
+    int m_Health{ 100 };
     unsigned int m_Income{ 5 };
 
-    void AddEvent(char* name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
+    void AddEvent(char* name, int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int cost);
     Event* GetEvent() { return m_CurrentEvent; }
     void ClearEvent();
 
@@ -37,6 +37,8 @@ public:
 
     std::string GetName() { return m_Name; }
     void GetData(std::string& name, SettlementStatus& status, std::vector<Warrior*>& assignedWarriors);
+
+    void TakeDamage(int dmg) { m_Health -= dmg; }
 
     void GetWarriors(std::vector<Warrior*>& warriors);
     void AddWarrior(Warrior* warrior);

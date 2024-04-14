@@ -2,9 +2,9 @@
 
 #include <gameplay/warrior.h>
 
-void SettlementComponent::AddEvent(char* name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost)
+void SettlementComponent::AddEvent(char* name, int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int cost)
 {
-    m_CurrentEvent = new Event(name, timeToSolve, requiredPower, penalty, cost);
+    m_CurrentEvent = new Event(name, damagePerTurn, requiredPower, penalty, cost);
 }
 
 void SettlementComponent::ClearEvent()

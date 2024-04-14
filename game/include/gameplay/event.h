@@ -6,15 +6,14 @@ class Event
 {
 public:
     char* m_Name;
-    unsigned int m_TurnsToResolve{ 0 };
     unsigned int m_Damage{ 0 };
     unsigned int m_RequiredPower{ 0 };
-    unsigned int m_Penalty{ 0 }; // If ignored
-    unsigned int m_Cost{ 0 }; // If solved
+    unsigned int m_Penalty{ 0 }; // Cost in cash if Event destroys settlement
+    unsigned int m_DamageToWarriors{ 0 }; // Damage inflicted to warriors upon solving the event
 
     Event();
-    Event(char* name, unsigned int timeToSolve, unsigned int requiredPower, unsigned int penalty, unsigned int cost)
-        : m_Name(name), m_TurnsToResolve{ timeToSolve }, m_RequiredPower{ requiredPower }, m_Penalty{penalty}, m_Cost{cost} {}
+    Event(char* name, unsigned int damagePerTurn, unsigned int requiredPower, unsigned int penalty, unsigned int damageToWarriors)
+        : m_Name(name), m_Damage{ damagePerTurn }, m_RequiredPower{ requiredPower }, m_Penalty{penalty}, m_DamageToWarriors{ damageToWarriors } {}
 
     void SetName(char* name) { m_Name = name; }
     char* GetName() { return m_Name; }

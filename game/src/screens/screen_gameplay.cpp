@@ -94,7 +94,7 @@ void UpdateGameplayScreen(void)
         directorInstance.ResolveTurn(Settlements);
     }
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) 
+    if (directorInstance.GetGameOver()) 
     {
         finishScreen = 42; 
     }
