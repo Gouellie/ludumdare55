@@ -272,6 +272,10 @@ void GameDirector::EvaluateGameOver(const Scene& scene)
 
 const bool GameDirector::CanBuy(const Buyable& item) const
 {
+    if (GetCash() - item.GetPrice() < 0)
+    {
+        return false;
+    }
 
-    return false;
+    return true;
 }
