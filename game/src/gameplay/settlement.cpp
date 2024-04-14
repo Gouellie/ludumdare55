@@ -54,6 +54,15 @@ void SettlementComponent::AddWarrior(Warrior* warrior)
 {
     if (m_AssignedWarriors.size() >= MAX_ASSIGNED_WARRIORS || warrior->GetStatus() != WarriorStatus::Waiting)
     {
+        if (warrior->GetStatus() == WarriorStatus::Dispatched)
+        {
+            auto it = std::find(m_AssignedWarriors.begin(), m_AssignedWarriors.end(), warrior);
+            if (it != m_AssignedWarriors.end())
+            {
+                warrior->SetStatus(WarriorStatus::Waiting);
+                m_AssignedWarriors.erase(it);
+            }
+        }
         return;
     }
 
