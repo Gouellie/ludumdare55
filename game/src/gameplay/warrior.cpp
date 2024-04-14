@@ -22,3 +22,14 @@ void Warrior::TakeDamage(int dmg)
         SetStatus(WarriorStatus::Dead);
     }
 }
+
+void Warrior::LevelUp()
+{
+    int newMaxHealth = m_MaxHealth + HEALTH_LEVEL_UP_GAIN;
+    if (GetHealth() == GetMaxHealth())
+    {
+        SetHealth(newMaxHealth);
+    }
+    SetMaxHealth(newMaxHealth);
+    SetPowerLevel(m_PowerLevel + POWER_LEVEL_LVL_UP_GAIN);
+}

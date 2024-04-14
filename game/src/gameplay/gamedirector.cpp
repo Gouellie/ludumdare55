@@ -128,6 +128,8 @@ void GameDirector::ResolveSettlementEvent(GameObject& child)
             }
         }
 
+        settlement->ClearWarriors();
+
         if (ModelComponent* model = child.GetComponent<ModelComponent>())
         {
             model->SetTint(settlement->GetColor());

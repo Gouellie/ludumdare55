@@ -81,9 +81,16 @@ const int SettlementComponent::GetWarriorPower() const
 
 void SettlementComponent::DealDamageToWarriors()
 {
+    if (m_AssignedWarriors.empty())
+    {
+        return;
+    }
+
+    int damageDealt = m_CurrentEvent->GetDamageToWarriors();
+    damageDealt /= m_AssignedWarriors.size();
     for (Warrior* warrior : m_AssignedWarriors)
     {
-        warrior->TakeDamage(m_CurrentEvent->GetDamageToWarriors());
+        warrior->TakeDamage(damageDealt);
     }
 }
 
