@@ -56,6 +56,8 @@ Texture BarracksButton = { 0 };
 Texture WarriorButton = { 0 };
 Texture WarriorPanel = { 0 };
 
+Texture UIButton = { 0 };
+
 Model   Board = {0};
 Model   Settlement = { 0 };
 
@@ -75,11 +77,33 @@ static GameScreen transToScreen = UNKNOWN;
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
 //----------------------------------------------------------------------------------
-static void ChangeToScreen(GameScreen screen);     // Change to screen, no transition effect
-static void TransitionToScreen(GameScreen screen); // Request transition to next screen
-static void UpdateTransition(void);         // Update transition effect
-static void DrawTransition(void);           // Draw transition effect (full-screen rectangle)
-static void UpdateMainLoop(void);           // Update and draw one frame
+static void ChangeToScreen(GameScreen screen);      // Change to screen, no transition effect
+static void TransitionToScreen(GameScreen screen);  // Request transition to next screen
+static void UpdateTransition(void);                 // Update transition effect
+static void DrawTransition(void);                   // Draw transition effect (full-screen rectangle)
+static void UpdateMainLoop(void);                   // Update and draw one frame
+
+class NextTurnButtonComponent : public Component
+{
+    Texture2D m_buttonSprite = { 0 };
+public:
+    DEFINE_COMPONENT(NextTurnButtonComponent)
+
+    void SetSprite(const Texture2D& buttonSprite) { m_buttonSprite = buttonSprite; }
+    void OnRender() override 
+    {
+        if (IsTextureReady(m_buttonSprite)) 
+        {
+            float realWidth = (float)m_buttonSprite.width / BUTTON_STATE_COUNT;
+            bool mouseOver;
+            Rectangle bounds = { GetScreenWidth() - realWidth - 10 , 10, realWidth, m_buttonSprite.height};
+            if (TextureButtonWithMouseOverAndText(bounds, m_buttonSprite, "Next Turn", 20, &mouseOver)) 
+            {
+                GameDirector::GetInstance().ResolveTurn(Settlements);
+            }
+        }
+    }
+};
 
 void SetupScene()
 {
@@ -89,6 +113,9 @@ void SetupScene()
     auto* board = TestScene.AddObject();
     board->AddComponent<ModelComponent>()->SetModel(Board);
     board->AddComponent<Transform3DComponent>()->SetPosition({0.0f, 0.0f, 0.0f});
+
+    auto* nextTurnButton = TestScene.AddObject();
+    nextTurnButton->AddComponent<NextTurnButtonComponent>()->SetSprite(UIButton);
 
     // Settlements
     auto* settlement_1 = Settlements.AddObject();
@@ -127,6 +154,7 @@ void LoadResources()
     BarracksButton = LoadTexture("resources/ui/ui_barracks.png");
     WarriorButton = LoadTexture("resources/ui/ui_warrior.png");
     WarriorPanel = LoadTexture("resources/ui/warrior_panel.png");
+    UIButton = LoadTexture("resources/ui/ui_button.png");
 
     Board = LoadModel("resources/models/board.glb");
     Settlement = LoadModel("resources/models/settlement.glb");
@@ -151,6 +179,8 @@ int main()
 
     LoadResources();
     SetupScene();
+
+    TextureButtonSetFont(TextFont);
 
 // Setup and init first screen
 #ifdef DEBUG

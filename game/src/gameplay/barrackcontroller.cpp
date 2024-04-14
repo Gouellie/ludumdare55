@@ -121,7 +121,7 @@ void BarrackController::OnRender()
         {
             state = TextureButtonState::STATE_DISABLED;
         }
-        if (TextureButtonWithMouseOver({ 8.f, yOrigin, (float)m_SummonWarriorSprite.width/ BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height}, m_SummonWarriorSprite, false, &isMouseOver, state))
+        if (TextureButtonWithMouseOver({ 8.f, yOrigin, (float)m_SummonWarriorSprite.width / BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height }, m_SummonWarriorSprite, false, &isMouseOver, state))
         {
             GameDirector::GetInstance().AddWarrior("Ludum Dare", 150, 100);
             m_bExpanded = true;
