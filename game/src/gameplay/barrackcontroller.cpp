@@ -24,7 +24,7 @@ void BarrackController::OnRender()
 
     if (m_bExpanded) 
     {
-        DrawRectangle(0, ScreenHeight - m_fHeight, ScreenWidth, m_fHeight, DARKBROWN);
+        DrawRectangle(0, ScreenHeight - m_fHeight, ScreenWidth, m_fHeight, PAL_DARK_BROWN);
 
         if (IsTextureReady(m_WarriorSprite))
         {
@@ -38,7 +38,7 @@ void BarrackController::OnRender()
                     state = TextureButtonState::STATE_DISABLED;
                 }
 
-                Rectangle bounds = { xOffset, ScreenHeight - m_fHeight, 40, m_fHeight };
+                Rectangle bounds = { xOffset, ScreenHeight - m_WarriorSprite.height, m_WarriorSprite.width / BUTTON_STATE_COUNT, m_WarriorSprite.height };
                 bool isMouseOver = false;
                 if (TextureButtonWithMouseOver(bounds, m_WarriorSprite, false, &isMouseOver, state))
                 {
@@ -65,32 +65,38 @@ void BarrackController::OnRender()
 
                     const char* status;
 
+                    Color statusColor = { 0 };
                     switch (warrior.GetStatus())
                     {
                     case WarriorStatus::Waiting:
                         status = "Waiting";
+                        statusColor = WHITE;
                         break;
                     case WarriorStatus::Dispatched:
                         status = "Dispatched";
+                        statusColor = PAL_CADET_BLUE;
                         break;
                     case WarriorStatus::Healing:
                         status = "Healing";
+                        statusColor = PAL_DARK_GREEN;
                         break;
                     case WarriorStatus::Dead:
                         status = "Dead";
+                        statusColor = PAL_RED;
                         break;
                     default:
                         status = "Unknown";
+                        statusColor = PAL_RED;
                         break;
                     }
 
                     textY += 50;
+                    float warriorStatusFontSize = 40.f;
+                    textSize = MeasureTextEx(TextFont, status, warriorStatusFontSize, 2.f);
+                    DrawTextPro(TextFont, status, {textX - textSize.x / 2.f, textY}, {0,0}, 0.f, warriorStatusFontSize, 2.f, statusColor);
+
+                    textY += 70;
                     float warriorInfoFontSize = 20.f;
-                    textSize = MeasureTextEx(TextFont, status, warriorInfoFontSize, 2.f);
-                    DrawTextPro(TextFont, status, {textX - textSize.x / 2.f, textY}, {0,0}, 0.f, warriorInfoFontSize, 2.f, WHITE);
-
-                    textY += 30;
-
                     const char* healthText = TextFormat("Health: %d/%d", warrior.GetHealth(), warrior.GetMaxHealth());
                     textSize = MeasureTextEx(TextFont, healthText, warriorInfoFontSize, 2.f);
                     DrawTextPro(TextFont, healthText, { textX - textSize.x / 2.f, textY }, { 0,0 }, 0.f, warriorInfoFontSize, 2.f, WHITE);
@@ -108,27 +114,30 @@ void BarrackController::OnRender()
     }
     else 
     {
-        DrawRectangle(0, ScreenHeight - m_fHeight, 100, m_fHeight, DARKBROWN);
+        DrawRectangle(0, ScreenHeight - m_fHeight, 116, m_fHeight, PAL_DARK_BROWN);
     }
 
     if (IsTextureReady(m_SummonWarriorSprite))
     {
         bool isMouseOver = false;
-        float yOrigin = ScreenHeight - 48.f - (float)m_SummonWarriorSprite.height;
+        float yOrigin = ScreenHeight - 40.f - (float)m_SummonWarriorSprite.height;
 
         TextureButtonState state = TextureButtonState::STATE_NORMAL;
-        if (GameDirector::GetInstance().GetCash() == 0)
+        Warrior* war = GameDirector::GetInstance().GetWarrior(0);
+        if (!GameDirector::GetInstance().CanBuy(*war))
         {
             state = TextureButtonState::STATE_DISABLED;
         }
-        if (TextureButtonWithMouseOver({ 8.f, yOrigin, (float)m_SummonWarriorSprite.width / BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height }, m_SummonWarriorSprite, false, &isMouseOver, state))
+        if (TextureButtonWithMouseOver({ 12.f, yOrigin, (float)m_SummonWarriorSprite.width / BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height }, m_SummonWarriorSprite, false, &isMouseOver, state))
         {
             GameDirector::GetInstance().AddWarrior(Warrior("Ludum Dare", 150, 100));
             m_bExpanded = true;
         }
-        if (state != TextureButtonState::STATE_DISABLED && isMouseOver)
+        if (isMouseOver)
         {
-            DrawTextPro(TextFont, "SUMMON A WARRIOR!", { 50.f, yOrigin + 3.f }, { 0.f }, 0.f, 30.f, 2.f, WHITE);
+            const char* text = (state != TextureButtonState::STATE_DISABLED) ? TextFormat("SUMMON a Warrior! (%d$)", war->GetPrice()) : TextFormat("Not enough funds! (%d$)", war->GetPrice());
+
+            DrawTextPro(TextFont, text, { 50.f, yOrigin + 6.f }, { 0.f }, 0.f, 30.f, 2.f, WHITE);
         }
     }
 

@@ -26,6 +26,8 @@ extern Scene Barracks;
 
 extern Font TextFont;
 
+extern bool PickingHandled;
+
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions
 #endif

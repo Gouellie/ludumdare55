@@ -96,11 +96,13 @@ public:
         {
             float realWidth = (float)m_buttonSprite.width / BUTTON_STATE_COUNT;
             bool mouseOver;
-            Rectangle bounds = { GetScreenWidth() - realWidth - 10 , 10, realWidth, m_buttonSprite.height};
+            Rectangle bounds = { GetScreenWidth() - realWidth - 10 , GetScreenHeight() - m_buttonSprite.height - 50, realWidth, m_buttonSprite.height};
+            TextureButtonSetFontColor(PAL_NEAR_BLACK);
             if (TextureButtonWithMouseOverAndText(bounds, m_buttonSprite, "Next Turn", 20, &mouseOver)) 
             {
                 GameDirector::GetInstance().ResolveTurn(Settlements);
             }
+            TextureButtonSetFontColor(WHITE);
         }
     }
 };
@@ -148,7 +150,7 @@ void SetupScene()
 
 void LoadResources()
 {
-    BoardBackground = LoadTexture("resources/board_background.png");
+    BoardBackground = LoadTexture("resources/ui/board_background.png");
     CloseButton = LoadTexture("resources/ui/ui_close.png");
     SummonWarriorButton = LoadTexture("resources/ui/ui_summon_warrior.png");
     BarracksButton = LoadTexture("resources/ui/ui_barracks.png");
@@ -167,7 +169,7 @@ void LoadResources()
     camera.fovy = 45.0f;                                // Camera field-of-view Y
     camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
 
-    TextFont = LoadFont("resources/fonts/custom_alagard.png");
+    TextFont = LoadFont("resources/fonts/alagard.png");
     music = LoadMusicStream("resources/audio/ambient.ogg");
 }
 
@@ -304,7 +306,7 @@ static void UpdateTransition(void)
 // Draw transition effect (full-screen rectangle)
 static void DrawTransition(void)
 {
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, transAlpha));
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(PAL_NEAR_BLACK, transAlpha));
 }
 
 static void UpdateMainLoop(void)
@@ -370,7 +372,7 @@ static void UpdateMainLoop(void)
     //----------------------------------------------------------------------------------
     BeginDrawing();
 
-    ClearBackground(RAYWHITE);
+    ClearBackground(PAL_CADET_BLUE);
 
     switch (currentScreen)
     {
@@ -385,7 +387,7 @@ static void UpdateMainLoop(void)
     // Draw full screen rectangle in front of everything
     if (onTransition) DrawTransition();
 
-    //DrawFPS(10, 10);
+    DrawFPS(100, 10);
     if (GuiButton({ 10, 10, 80, 20 }, "ORBIT")) 
     {
         cameraOrbit = !cameraOrbit;

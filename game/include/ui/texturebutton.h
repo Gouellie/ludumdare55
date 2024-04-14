@@ -12,6 +12,7 @@ enum class TextureButtonState
 };
 
 void TextureButtonSetFont(Font font);
+void TextureButtonSetFontColor(Color color);
 int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButtonState state = TextureButtonState::STATE_NORMAL);
 int TextureButtonWithMouseOver(Rectangle bounds, Texture2D& texture, bool flip, bool* mouseOver, TextureButtonState state = TextureButtonState::STATE_NORMAL);
 int TextureButtonWithMouseOverAndText(Rectangle bounds, Texture2D& texture, const char* text, int fontsize, bool* mouseOver, TextureButtonState state = TextureButtonState::STATE_NORMAL);
@@ -19,6 +20,7 @@ int TextureButtonWithMouseOverAndText(Rectangle bounds, Texture2D& texture, cons
 #ifdef TEXTUREBUTTON_IMPLEMENTATION
 
 Font textFont = {0};
+Color fontColor = WHITE;
 
 int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButtonState state)
 {
@@ -70,7 +72,7 @@ int TextureButtonWithMouseOverAndText(Rectangle bounds, Texture2D& texture, cons
     int value = TextureButtonWithMouseOver(bounds, texture, false, mouseOver, state);
     Vector2 textSize = MeasureTextEx(textFont, text, fontsize, 2.f);
     Vector2 textPos = { bounds.x + bounds.width / 2.f - textSize.x / 2, bounds.y + bounds.height / 2.f - textSize.y / 2 };
-    DrawTextPro(textFont, text, textPos, { 0.f }, 0.f, fontsize, 2.f, WHITE);
+    DrawTextPro(textFont, text, textPos, { 0.f }, 0.f, fontsize, 2.f, fontColor);
     
     return value;
 }
@@ -78,6 +80,11 @@ int TextureButtonWithMouseOverAndText(Rectangle bounds, Texture2D& texture, cons
 void TextureButtonSetFont(Font font) 
 {
     textFont = font;
+}
+
+void TextureButtonSetFontColor(Color color) 
+{
+    fontColor = color;
 }
 
 #endif
