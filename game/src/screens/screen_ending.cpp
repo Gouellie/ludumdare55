@@ -3,6 +3,10 @@
 #include "screens.h"
 #include "scene.h"
 
+#include "gameplay/gamedirector.h"
+#include "ui/texthelpers.h"
+#include "ui/texturebutton.h"
+
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
@@ -24,25 +28,46 @@ void InitEndingScreen(void)
 // Ending Screen Update logic
 void UpdateEndingScreen(void)
 {
-    // TODO: Update ENDING screen variables here!
-
-    // Press enter or tap to return to TITLE screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        finishScreen = 1;
-        PlaySound(fxCoin);
-    }
+    //// Press enter or tap to return to TITLE screen
+    //if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
+    //{
+    //    finishScreen = 1;
+    //    PlaySound(fxCoin);
+    //}
 }
 
 // Ending Screen Draw logic
 void DrawEndingScreen(void)
 {
-    // TODO: Draw ENDING screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), BLUE);
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PAL_HOSPITAL_BLUE);
 
-    Vector2 pos = { 20, 10 };
-    //DrawTextEx(font, "ENDING SCREEN", pos, font.baseSize*3.0f, 4, DARKBLUE);
-    DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+    GameState state = GameDirector::GetInstance().GetGameState();
+
+    const char* message;
+    switch (state)
+    {
+    case GameState::Running:
+        return;
+    case GameState::Victory:
+        message = "YOU WIN!";
+        break;
+    case GameState::Fail:
+        message = "GAME OVER";
+        break;
+    default:
+        return;
+    }
+
+    DrawTextCentered(message, { GetScreenWidth() / 2.f, 200.f }, 200, PAL_HOSPITAL_YELLOW);
+
+    DrawTextCentered("Thank you For Playing!", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 100, PAL_HOSPITAL_YELLOW);
+
+    bool isMouseOver = false;
+    float realWidth = (float)UIButton.width / BUTTON_STATE_COUNT;
+    Rectangle bounds = { GetScreenWidth() / 2.f - realWidth / 2.f, GetScreenHeight() - UIButton.height - 50.f, realWidth, (float)UIButton.height };
+    if (TextureButtonWithMouseOverAndText(bounds, UIButton, "Restart", 20, &isMouseOver)) {
+        finishScreen = 1;
+    }
 }
 
 // Ending Screen Unload logic

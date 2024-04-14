@@ -321,7 +321,7 @@ static void UpdateMainLoop(void)
         {
             UpdateLogoScreen();
 
-            if (FinishLogoScreen()) TransitionToScreen(GAMEPLAY);
+            if (FinishLogoScreen()) TransitionToScreen(TITLE);
 
         } break;
         case TITLE:
@@ -348,14 +348,13 @@ static void UpdateMainLoop(void)
             UpdateGameplayScreen();
 
             if (FinishGameplayScreen() == 42) TransitionToScreen(ENDING);
-            //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
 
         } break;
         case ENDING:
         {
             UpdateEndingScreen();
 
-            if (FinishEndingScreen() == 1) TransitionToScreen(TITLE);
+            if (FinishEndingScreen() == 1) TransitionToScreen(GAMEPLAY);
 
         } break;
         default: break;

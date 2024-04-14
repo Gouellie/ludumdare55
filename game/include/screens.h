@@ -26,6 +26,8 @@ extern Scene Barracks;
 
 extern Font TextFont;
 
+extern Texture UIButton;
+
 extern bool PickingHandled;
 
 #ifdef __cplusplus

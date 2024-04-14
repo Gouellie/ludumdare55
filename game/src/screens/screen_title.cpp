@@ -2,6 +2,8 @@
 #include "raylib.h"
 #include "screens.h"
 #include "scene.h"
+#include "ui/texthelpers.h"
+#include "ui/texturebutton.h"
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
@@ -24,25 +26,22 @@ void InitTitleScreen(void)
 // Title Screen Update logic
 void UpdateTitleScreen(void)
 {
-    // TODO: Update TITLE screen variables here!
-    TestScene.Update();
-    // Press enter or tap to change to GAMEPLAY screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        //finishScreen = 1;   // OPTIONS
-        finishScreen = 2;   // GAMEPLAY
-        PlaySound(fxCoin);
-    }
+
 }
 
 // Title Screen Draw logic
 void DrawTitleScreen(void)
 {
     // TODO: Draw TITLE screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
-    Vector2 pos = { 20, 10 };
-    //DrawTextEx(font, "TITLE SCREEN", pos, font.baseSize*3.0f, 4, DARKGREEN);
-    //DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PAL_YELLOW);
+    DrawTextCentered("GAME TITLE!", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 100, PAL_HOSPITAL_YELLOW);
+
+    bool isMouseOver = false;
+    float realWidth = (float)UIButton.width / BUTTON_STATE_COUNT;
+    Rectangle bounds = { GetScreenWidth() / 2.f - realWidth / 2.f, GetScreenHeight() - UIButton.height - 50.f, realWidth, (float)UIButton.height };
+    if (TextureButtonWithMouseOverAndText(bounds, UIButton, "Start Game", 20, &isMouseOver)) {
+        finishScreen = 2;
+    }
 }
 
 // Title Screen Unload logic
