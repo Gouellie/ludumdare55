@@ -30,6 +30,8 @@ void BarrackController::OnRender()
         {
             int warriorIndex = 0;
             GameDirector& gameDirector = GameDirector::GetInstance();
+            SettlementComponent* pickedSettlement = gameDirector.GetPickedSettlement();
+
             for (Warrior& warrior : gameDirector.GetWarriors())
             {
                 TextureButtonState state = TextureButtonState::STATE_NORMAL;
@@ -37,15 +39,37 @@ void BarrackController::OnRender()
                 {
                     state = TextureButtonState::STATE_DISABLED;
                 }
+                bool isWarriorAssignedToPickedSettlement = false;
+                if (pickedSettlement) 
+                {
+                    std::vector<Warrior*> assignedWarriors;
+                    pickedSettlement->GetWarriors(assignedWarriors);
+                    for (Warrior* assignedWarrior : assignedWarriors)
+                    {
+                        if (warriorIndex == assignedWarrior->GetIndex()) 
+                        {
+                            isWarriorAssignedToPickedSettlement = true;
+                            break;
+                        }
+                    }
+                }
 
                 Rectangle bounds = { xOffset, ScreenHeight - m_WarriorSprite.height, m_WarriorSprite.width / (float)BUTTON_STATE_COUNT, (float)m_WarriorSprite.height };
                 bool isMouseOver = false;
                 if (TextureButtonWithMouseOver(bounds, m_WarriorSprite, false, &isMouseOver, state))
                 {
-                    SettlementComponent* pickedSettlement = gameDirector.GetPickedSettlement();
+
                     if (pickedSettlement) {
                         pickedSettlement->AddWarrior(gameDirector.GetWarrior(warriorIndex));
                     }
+                }
+                if (isWarriorAssignedToPickedSettlement) 
+                {
+                    DrawCircle(xOffset + m_WarriorSprite.width / (float)BUTTON_STATE_COUNT / 2.f, ScreenHeight - 12.f, 10.f, PAL_DARK_GREEN);
+                }
+                else if (warrior.GetStatus() == WarriorStatus::Dispatched)
+                {
+                    DrawCircle(xOffset + m_WarriorSprite.width / (float)BUTTON_STATE_COUNT / 2.f, ScreenHeight - 10.f, 6.f, PAL_GREY);
                 }
                 if (isMouseOver) 
                 {

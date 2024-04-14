@@ -111,7 +111,7 @@ public:
     }
 };
 
-void CreateSettlement(const char* name, Vector3& pos) 
+void CreateSettlement(const char* name, Vector3 pos) 
 {
     auto* settlement = Settlements.AddObject();
     settlement->AddComponent<Transform3DComponent>()->SetPosition(pos);
@@ -134,10 +134,10 @@ void SetupScene()
     nextTurnButton->AddComponent<NextTurnButtonComponent>()->SetSprite(UIButton);
 
     // Settlements
-    CreateSettlement("Quebec",      Vector3{ -6.0, 0.0, -3.0 });
-    CreateSettlement("Montreal",    Vector3{ 6.30, 0.0, 2.25 });
-    CreateSettlement("Singapour",   Vector3{ -6.25, 0.0, 2.75 });
-    CreateSettlement("Paris",       Vector3{ 3.5f, 0.0, -2.5 });
+    CreateSettlement("Quebec",    { -6.0, 0.0, -3.0 });
+    CreateSettlement("Montreal",  { 6.30, 0.0, 2.25 });
+    CreateSettlement("Singapour", { -6.25, 0.0, 2.75 });
+    CreateSettlement("Paris",     { 3.5f, 0.0, -2.5 });
 
     // Barack
     Barracks.AddComponent<BarrackController>()->SetSprite(SummonWarriorButton, BarracksButton, WarriorButton, WarriorPanel);
