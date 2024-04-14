@@ -128,6 +128,6 @@ void BarrackController::OnRender()
             m_bExpanded = !m_bExpanded;
         }
 
-        DrawTextPro(TextFont, TextFormat("%d$", GameDirector::GetInstance().m_Cash), {8.f, ScreenHeight - 32.f}, {0.f}, 0.f, 30.f, 2.f, WHITE);
+        DrawTextPro(TextFont, TextFormat("%d$", GameDirector::GetInstance().GetCash()), {8.f, ScreenHeight - 32.f}, {0.f}, 0.f, 30.f, 2.f, WHITE);
     }
 }

@@ -14,11 +14,6 @@ class SettlementComponent;
 class GameDirector
 {
 public:
-    ModelComponent* m_PickedModel = nullptr;
-    unsigned int m_CurrentTurn{ 0 };
-    int m_Cash{ 100 };
-    int m_PickedWarriorIndex{ -1 };
-
     [[nodiscard]] static GameDirector& GetInstance()
     {
         static GameDirector* directorInstance = new GameDirector();
@@ -32,6 +27,7 @@ public:
     void ResolveTurn(const Scene& scene);
     void ResolveSettlementEvent(GameObject& child);
     void AddCash(GameObject& child);
+    [[nodiscard]] const int GetCash() const { return m_Cash; }
     [[nodiscard]] bool AreAllSettlementsDestroyed(const Scene& scene);
 
     void SetPickedModel(ModelComponent* picked);
@@ -61,7 +57,10 @@ private:
     GameDirector() {}
     std::vector<Warrior> m_AvailableWarriors;
     std::vector<Event> m_EventList;
-
+    ModelComponent* m_PickedModel = nullptr;
+    int m_Cash{ 100 };
+    int m_PickedWarriorIndex{ -1 };
+    unsigned int m_CurrentTurn{ 0 };
     bool m_GameOver{ false };
     static constexpr unsigned int MAX_TURNS{ 30 };
     static constexpr int MAX_WARRIORS{ 20 };
