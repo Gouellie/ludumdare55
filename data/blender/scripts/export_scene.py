@@ -1,5 +1,6 @@
 import bpy
 import os
+import math
 
 def namecleaned(name):
     return name.split('.', 1)[0]
@@ -17,11 +18,9 @@ def export_scene(path):
 
     for m in meshes:
         pos = m.location
-        
-        f.write(namecleaned(m.name))
-        f.write('\n pos (' + str(round(pos.x, 2)) + ', ' + str(round(pos.z, 2)) + ', ' + str(round(pos.y, 2)) + ')')
-        f.write('\n ' + str(m.rotation_euler))
-        f.write('\n')        
+        rota = str(round(math.degrees(m.rotation_euler.z)))
+        f.write('\nCreateSettlement("' + namecleaned(m.name) + '", {' + str(round(pos.x, 2)) + ', ' + str(round(pos.z, 2)) + ', ' + str(round(pos.y, 2)) + '});')
+
     f.close()
     
     return path

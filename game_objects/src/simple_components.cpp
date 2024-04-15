@@ -80,9 +80,10 @@ void TransformComponent::PopMatrix()
 
 //-----------------------Transform3DComponent-------------------------//
 
-void Transform3DComponent::SetPosition(const Vector3& pos)
+Transform3DComponent* Transform3DComponent::SetPosition(const Vector3& pos)
 {
     Translation = pos;
+    return this;
 }
 
 Vector3 Transform3DComponent::GetPosition() const

@@ -54,7 +54,7 @@ private:
 public:
     DEFINE_COMPONENT(Transform3DComponent)
 
-    void SetPosition(const Vector3& pos);
+    Transform3DComponent* SetPosition(const Vector3& pos);
     Vector3 GetPosition() const;
 
     void SetRotationAxis(const Vector3& axis);

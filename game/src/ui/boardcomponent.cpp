@@ -77,7 +77,7 @@ void BoardComponent::OnRenderUI()
         position.x = pos.x;
         position.y = pos.y + 50;
 
-    DrawTextCentered(settlement->GetName(), position, 70, PAL_YELLOW);
+    DrawTextCentered(settlement->GetName(), position, 60, PAL_YELLOW);
 
     const int eventSize = 60;
     const int infoSize = 30;

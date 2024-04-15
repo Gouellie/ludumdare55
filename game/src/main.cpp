@@ -184,10 +184,10 @@ public:
     }
 };
 
-void CreateSettlement(const char* name, Vector3 pos) 
+void CreateSettlement(const char* name, Vector3 pos, float rotation) 
 {
     auto* settlement = Settlements.AddObject();
-    settlement->AddComponent<Transform3DComponent>()->SetPosition(pos);
+    settlement->AddComponent<Transform3DComponent>()->SetPosition(pos)->SetRotation(rotation);
     settlement->AddComponent<ModelComponent>()->SetModel(Settlement);
     settlement->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
     settlement->AddComponent< SettlementIconComponent>()->SetSprite(SettlementIcon);
@@ -205,10 +205,13 @@ void SetupScene()
     board->AddComponent<Transform3DComponent>()->SetPosition({0.0f, 0.0f, 0.0f});
 
     // Settlements
-    CreateSettlement("Quebec",    { -6.0, 0.0, -3.0 });
-    CreateSettlement("Montreal",  { 6.30, 0.0, 2.25 });
-    CreateSettlement("Singapour", { -6.25, 0.0, 2.75 });
-    CreateSettlement("Paris",     { 3.5f, 0.0, -2.5 });
+    CreateSettlement("Rencurelli",      { -1.82, 0.0, -0.79 }, 25.f);
+    CreateSettlement("Gwellington",     { 13.79, 0.0, -9.21 }, 48.f);
+    CreateSettlement("Emmisburg",       { 5.72, 0.0, 18.48 }, 24.f);
+    CreateSettlement("ArkMaxter",       { -5.56, 0.0, -15.57 }, -19.f);
+    CreateSettlement("Los Hazeles",     { 12.75, 0.0, 7.03 }, 56.f);
+    CreateSettlement("Quebec",          { -13.9, 0.0, 10.0 }, 0.f);
+    CreateSettlement("Just Bob",        { -14.89, 0.0, -4.87 }, 0.f);
 
     // Barack
     Barracks.AddComponent<BarrackController>()->SetSprite(SummonWarriorButton, BarracksButton, WarriorButton, WarriorPanel);
@@ -232,7 +235,7 @@ void LoadResources()
 
     // Define the camera to look into our 3d world
     camera = { 0 };
-    camera.position = { 25.0f, 20.f, 25.0f };    // Camera position
+    camera.position = { 29.0f, 15.f, 27.0f };    // Camera position
     camera.target = { 0.0f, 0.0f, 0.0f };      // Camera looking at point
     camera.up = { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
     camera.fovy = 45.0f;                                // Camera field-of-view Y
@@ -415,6 +418,7 @@ static void UpdateMainLoop(void)
         {
             if (CameraOrbit) {
                 UpdateCamera(&camera, CAMERA_ORBITAL);
+                TraceLog(LOG_INFO, TextFormat("x%.2f:, y:%.2f", camera.position.x, camera.position.z));
             }
 
             UpdateGameplayScreen();
