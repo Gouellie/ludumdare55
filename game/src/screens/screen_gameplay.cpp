@@ -69,7 +69,7 @@ void UpdateGameplayScreen(void)
                 RayCollision raycol = GetRayCollisionBox(ray, model->GetBoundingBox(&matrix));
                 if (raycol.hit) 
                 {
-                    model->SetTint(PAL_YELLOW);
+                    model->SetTint(LIGHTGRAY);
                     if (!PickingHandled && isMousePressed)
                     {
                         directorInstance.SetPickedModel(model);
@@ -77,7 +77,7 @@ void UpdateGameplayScreen(void)
                 }
                 else 
                 {
-                    model->SetTint(PAL_BROWN);
+                    model->SetTint(WHITE);
                 }
             }
         }

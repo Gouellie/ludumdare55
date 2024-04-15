@@ -90,15 +90,22 @@ static void UpdateMainLoop(void);                   // Update and draw one frame
 
 class NextTurnButtonComponent : public Component
 {
+private:
     Texture2D m_buttonSprite = { 0 };
 public:
     DEFINE_COMPONENT(NextTurnButtonComponent)
 
     void SetSprite(const Texture2D& buttonSprite) { m_buttonSprite = buttonSprite; }
+
     void OnRender() override 
     {
         if (IsTextureReady(m_buttonSprite)) 
         {
+            int currentTurn = GameDirector::GetInstance().GetCurrentTurn();
+
+            Vector2 textPos = { GetScreenWidth() - 90.f, GetScreenHeight() - 120.f };
+            DrawTextCentered(TextFormat("Turn : %d", currentTurn), textPos, 20, WHITE);
+
             float realWidth = (float)m_buttonSprite.width / BUTTON_STATE_COUNT;
             bool mouseOver;
             Rectangle bounds = { GetScreenWidth() - realWidth - 10.f , GetScreenHeight() - m_buttonSprite.height - 50.f, realWidth, (float)m_buttonSprite.height};
@@ -114,11 +121,45 @@ public:
 
 class SettlementIconComponent : public Component
 {
+    bool m_bDown = false;
+    float m_yOffset = 0;
     Texture2D m_IconSprite = { 0 };
 public:
     DEFINE_COMPONENT(SettlementIconComponent)
 
     void SetSprite(const Texture2D& iconSprite) { m_IconSprite = iconSprite; }
+
+    void OnUpdate() override
+    {
+        const float maxOffset = 5.0f;
+        const float offset = 0.1f;
+
+        SettlementComponent* settlement = GetComponent<SettlementComponent>();
+        if (settlement == nullptr)
+            return;
+
+        if (settlement->GetStatus() == SettlementStatus::Clear)
+            return;
+
+        if (m_bDown) {
+            m_yOffset -= offset;
+            if (m_yOffset < -maxOffset)
+            {
+                m_yOffset = -maxOffset;
+                m_bDown = false;
+            }
+        }
+        else
+        {
+            m_yOffset += offset;
+            if (m_yOffset > maxOffset)
+            {
+                m_yOffset = maxOffset;
+                m_bDown = true;
+            }
+        }
+    }
+
     void OnRender() override
     {
         if (!IsTextureReady(m_IconSprite))
@@ -137,7 +178,7 @@ public:
         float realWidth = m_IconSprite.width / 3.0f; // the three possible states.
 
         pos.x -= realWidth / 2.f;
-        pos.y -= (m_IconSprite.height + 64);
+        pos.y -= (m_IconSprite.height + 128.f) + m_yOffset;
 
         SettlementStatus status = settlement->GetStatus();
         Rectangle source = { realWidth * (float)status, 0, realWidth, (float)m_IconSprite.height };

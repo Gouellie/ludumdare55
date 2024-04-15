@@ -101,7 +101,7 @@ void BoardComponent::OnRenderUI()
         }
         else 
         {
-            DrawTextCentered("All Clear", position, eventSize, WHITE);
+            DrawTextCentered("Peaceful", position, eventSize, WHITE);
             position.y += 60;
             DrawTextCentered(TextFormat("HP : %d", settlement->GetHealth()), position, infoSize, WHITE);
         }
