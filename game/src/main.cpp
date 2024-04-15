@@ -140,7 +140,8 @@ public:
         pos.y -= (m_IconSprite.height + 64);
 
         SettlementStatus status = settlement->GetStatus();
-        DrawTextureRec(m_IconSprite, { realWidth * (float)status, 0, realWidth, (float)m_IconSprite .height}, pos, WHITE);
+        Rectangle source = { realWidth * (float)status, 0, realWidth, (float)m_IconSprite.height };
+        DrawTextureRec(m_IconSprite, source, pos, WHITE);
     }
 };
 
