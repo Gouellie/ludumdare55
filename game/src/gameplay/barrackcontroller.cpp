@@ -14,7 +14,7 @@ void BarrackController::SetSprite(const Texture2D& summonWarriorSprite, const Te
     m_WarriorPanelSprite = warriorPanelSprite;
 }
 
-void BarrackController::OnRender()
+void BarrackController::OnRenderUI()
 {
     float ScreenWidth = (float)GetScreenWidth();
     float ScreenHeight = (float)GetScreenHeight();

@@ -17,9 +17,5 @@ public:
 
     void SetSprite(const Texture2D& summonWarriorSprite, const Texture2D& barracksSprite, const Texture2D& warriorSprite, const Texture2D& warriorPanelSprite);
 
-    void OnUpdate() override
-    {
-    }
-
-    void OnRender() override;
+    void OnRenderUI() override;
 };
