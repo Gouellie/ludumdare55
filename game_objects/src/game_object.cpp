@@ -52,6 +52,15 @@ void GameObject::Render3D()
         child->Render3D();
 }
 
+void GameObject::RenderUI()
+{
+    for (auto& [id, componentPtr] : Components)
+        componentPtr->OnRenderUI();
+
+    for (auto* child : Children)
+        child->RenderUI();
+}
+
 Component* GameObject::AddComponent(std::unique_ptr<Component> component)
 {
     component->OnCreate();

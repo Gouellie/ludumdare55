@@ -23,7 +23,7 @@ public:
     DEFINE_COMPONENT(BoardComponent)
 
     void OnUpdate() override;
-    void OnRender() override;
+    void OnRenderUI() override;
 
     void SetShown(bool value, bool canBeClosed = false) { m_Shown = value; m_bCanBeClosed = canBeClosed; }
     bool GetShown() { return m_Shown; }
