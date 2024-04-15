@@ -34,6 +34,7 @@ public:
     void TakeDamage(int dmg);
 
     void SetAssignedSettlement(SettlementComponent* newAssignement) { m_AssignedSettlement = newAssignement; }
+    SettlementComponent* GetAssignedSettlement() { return m_AssignedSettlement; }
 
     void LevelUp();
 

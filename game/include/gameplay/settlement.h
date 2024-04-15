@@ -41,6 +41,7 @@ public:
     void GetWarriors(std::vector<Warrior*>& warriors);
     void AddWarrior(Warrior* warrior);
     void RemoveWarrior(std::size_t index);
+    void RemoveWarrior(Warrior* warriorToRemove);
     const int GetWarriorPower() const;
     void DealDamageToWarriors();
     void ClearWarriors();

@@ -71,11 +71,21 @@ void SettlementComponent::AddWarrior(Warrior* warrior)
     {
         if (warrior->GetStatus() == WarriorStatus::Dispatched)
         {
-            auto it = std::find(m_AssignedWarriors.begin(), m_AssignedWarriors.end(), warrior);
-            if (it != m_AssignedWarriors.end())
+            if (warrior->GetAssignedSettlement() == this)
             {
-                warrior->SetStatus(WarriorStatus::Waiting);
-                m_AssignedWarriors.erase(it);
+                auto it = std::find(m_AssignedWarriors.begin(), m_AssignedWarriors.end(), warrior);
+                if (it != m_AssignedWarriors.end())
+                {
+                    warrior->SetStatus(WarriorStatus::Waiting);
+                    m_AssignedWarriors.erase(it);
+                }
+            }
+            else
+            {
+                warrior->GetAssignedSettlement()->RemoveWarrior(warrior);
+                m_AssignedWarriors.push_back(warrior);
+                warrior->SetStatus(WarriorStatus::Dispatched);
+                warrior->SetAssignedSettlement(this);
             }
         }
         return;
@@ -83,6 +93,7 @@ void SettlementComponent::AddWarrior(Warrior* warrior)
 
     m_AssignedWarriors.push_back(warrior);
     warrior->SetStatus(WarriorStatus::Dispatched);
+    warrior->SetAssignedSettlement(this);
 }
 
 void SettlementComponent::RemoveWarrior(std::size_t index)
@@ -91,6 +102,16 @@ void SettlementComponent::RemoveWarrior(std::size_t index)
     auto it = m_AssignedWarriors.begin();
     it = std::next(it, index);
     m_AssignedWarriors.erase(it);
+}
+
+void SettlementComponent::RemoveWarrior(Warrior* warriorToRemove)
+{
+    auto it = std::find(m_AssignedWarriors.begin(), m_AssignedWarriors.end(), warriorToRemove);
+    if (it != m_AssignedWarriors.end())
+    {
+        warriorToRemove->SetStatus(WarriorStatus::Waiting);
+        m_AssignedWarriors.erase(it);
+    }
 }
 
 const int SettlementComponent::GetWarriorPower() const
