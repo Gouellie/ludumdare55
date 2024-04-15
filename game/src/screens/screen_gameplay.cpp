@@ -35,7 +35,7 @@ void InitGameplayScreen(void)
 // Gameplay Screen Update logic
 void UpdateGameplayScreen(void)
 {
-    TestScene.Update();
+    WorldScene.Update();
     Settlements.Update();
     Barracks.Update();
 
@@ -63,11 +63,6 @@ void UpdateGameplayScreen(void)
             }
             if (ModelComponent* model = settlement->GetComponent<ModelComponent>())
             {
-                if (model->GetPicked())
-                {
-                    model->SetTint(YELLOW);
-                }
-
                 Transform3DComponent* transform = settlement->GetComponent<Transform3DComponent>();
                 Matrix matrix = transform->GetMatrix();
 
@@ -80,9 +75,9 @@ void UpdateGameplayScreen(void)
                         directorInstance.SetPickedModel(model);
                     }
                 }
-                else
+                else 
                 {
-                    model->SetTint(settlement->GetColor());
+                    model->SetTint(PAL_BROWN);
                 }
             }
         }
@@ -99,13 +94,16 @@ void UpdateGameplayScreen(void)
 void DrawGameplayScreen(void)
 {
     BeginMode3D(camera);
-    TestScene.Render3D();
+    WorldScene.Render3D();
     Settlements.Render3D();
     EndMode3D();
 
-    TestScene.Render();
+    WorldScene.Render();
     Settlements.Render();
     Barracks.Render();
+
+    Settlements.RenderUI();
+    Barracks.RenderUI();
 }
 
 // Gameplay Screen Unload logic

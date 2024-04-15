@@ -42,6 +42,7 @@ public:
     void Update();
     void Render();
     void Render3D();
+    void RenderUI();
 
     Component* AddComponent(std::unique_ptr<Component> component);
     void RemoveComponent(size_t componentID);

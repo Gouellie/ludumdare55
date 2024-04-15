@@ -41,7 +41,7 @@
 GameScreen currentScreen = LOGO;
 Font font = { 0 };
 Sound fxCoin = { 0 };
-Scene TestScene;
+Scene WorldScene;
 Scene Settlements;
 Scene Barracks;
 
@@ -59,6 +59,7 @@ Texture SummonWarriorButton = { 0 };
 Texture BarracksButton = { 0 };
 Texture WarriorButton = { 0 };
 Texture WarriorPanel = { 0 };
+Texture SettlementIcon = { 0 };
 
 Texture UIButton = { 0 };
 
@@ -111,12 +112,46 @@ public:
     }
 };
 
+class SettlementIconComponent : public Component
+{
+    Texture2D m_IconSprite = { 0 };
+public:
+    DEFINE_COMPONENT(SettlementIconComponent)
+
+    void SetSprite(const Texture2D& iconSprite) { m_IconSprite = iconSprite; }
+    void OnRender() override
+    {
+        if (!IsTextureReady(m_IconSprite))
+            return;
+
+        SettlementComponent* settlement = GetComponent<SettlementComponent>();
+        if (settlement == nullptr)
+            return;
+
+        Transform3DComponent* transform = GetComponent<Transform3DComponent>();
+        if (transform == nullptr)
+            return;
+
+        Vector2 pos = GetWorldToScreen(transform->GetPosition(), camera);
+
+        float realWidth = m_IconSprite.width / 3.0f; // the three possible states.
+
+        pos.x -= realWidth / 2.f;
+        pos.y -= (m_IconSprite.height + 64);
+
+        SettlementStatus status = settlement->GetStatus();
+        Rectangle source = { realWidth * (float)status, 0, realWidth, (float)m_IconSprite.height };
+        DrawTextureRec(m_IconSprite, source, pos, WHITE);
+    }
+};
+
 void CreateSettlement(const char* name, Vector3 pos) 
 {
     auto* settlement = Settlements.AddObject();
     settlement->AddComponent<Transform3DComponent>()->SetPosition(pos);
     settlement->AddComponent<ModelComponent>()->SetModel(Settlement);
     settlement->AddComponent<BoardComponent>()->SetSprite(BoardBackground, CloseButton);
+    settlement->AddComponent< SettlementIconComponent>()->SetSprite(SettlementIcon);
     auto* component = settlement->AddComponent<SettlementComponent>();
     component->SetName(name);
 }
@@ -126,12 +161,9 @@ void SetupScene()
     GameDirector& director = GameDirector::GetInstance();
     director.PopulateEventList();
 
-    auto* board = TestScene.AddObject();
+    auto* board = WorldScene.AddObject();
     board->AddComponent<ModelComponent>()->SetModel(Board);
     board->AddComponent<Transform3DComponent>()->SetPosition({0.0f, 0.0f, 0.0f});
-
-    auto* nextTurnButton = TestScene.AddObject();
-    nextTurnButton->AddComponent<NextTurnButtonComponent>()->SetSprite(UIButton);
 
     // Settlements
     CreateSettlement("Quebec",    { -6.0, 0.0, -3.0 });
@@ -141,6 +173,8 @@ void SetupScene()
 
     // Barack
     Barracks.AddComponent<BarrackController>()->SetSprite(SummonWarriorButton, BarracksButton, WarriorButton, WarriorPanel);
+    auto* nextTurnButton = Barracks.AddObject();
+    nextTurnButton->AddComponent<NextTurnButtonComponent>()->SetSprite(UIButton);
 }
 
 void LoadResources()
@@ -152,6 +186,7 @@ void LoadResources()
     WarriorButton = LoadTexture("resources/ui/ui_warrior.png");
     WarriorPanel = LoadTexture("resources/ui/warrior_panel.png");
     UIButton = LoadTexture("resources/ui/ui_button.png");
+    SettlementIcon = LoadTexture("resources/ui/settlement_icon.png");
 
     Board = LoadModel("resources/models/board.glb");
     Settlement = LoadModel("resources/models/settlement.glb");

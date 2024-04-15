@@ -33,7 +33,7 @@ void BoardComponent::OnUpdate()
     }
 }
 
-void BoardComponent::OnRender()
+void BoardComponent::OnRenderUI()
 {
     if (!m_Shown)
         return;

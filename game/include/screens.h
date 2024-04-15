@@ -20,7 +20,7 @@ extern Music music;
 extern Sound fxCoin;
 extern Camera camera;
 
-extern Scene TestScene;
+extern Scene WorldScene;
 extern Scene Settlements;
 extern Scene Barracks;
 

@@ -67,4 +67,5 @@ public:
     virtual void OnUpdate() {};
     virtual void OnRender() {};
     virtual void OnRender3D() {};
+    virtual void OnRenderUI() {};
 };
