@@ -16,6 +16,7 @@ void TextureButtonSetFontColor(Color color);
 int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButtonState state = TextureButtonState::STATE_NORMAL);
 int TextureButtonWithMouseOver(Rectangle bounds, Texture2D& texture, bool flip, bool* mouseOver, TextureButtonState state = TextureButtonState::STATE_NORMAL);
 int TextureButtonWithMouseOverAndText(Rectangle bounds, Texture2D& texture, const char* text, int fontsize, bool* mouseOver, TextureButtonState state = TextureButtonState::STATE_NORMAL);
+int TextureButtonWithText(Rectangle bounds, Texture2D& texture, const char* text, int fontsize, TextureButtonState state = TextureButtonState::STATE_NORMAL);
 
 #ifdef TEXTUREBUTTON_IMPLEMENTATION
 
@@ -65,6 +66,12 @@ int TextureButtonWithMouseOver(Rectangle bounds, Texture2D& texture, bool flip, 
     DrawTexturePro(texture, source, bounds, { 0.f }, 0.f, WHITE);
 
     return result;
+}
+
+int TextureButtonWithText(Rectangle bounds, Texture2D& texture, const char* text, int fontsize, TextureButtonState state)
+{
+    bool mouseOver = false;
+    return TextureButtonWithMouseOverAndText(bounds, texture, text, fontsize, &mouseOver, state);
 }
 
 int TextureButtonWithMouseOverAndText(Rectangle bounds, Texture2D& texture, const char* text, int fontsize, bool* mouseOver, TextureButtonState state)

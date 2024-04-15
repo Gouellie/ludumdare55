@@ -14,6 +14,10 @@ typedef enum GameScreen { UNKNOWN = -1, LOGO = 0, TITLE, OPTIONS, GAMEPLAY, ENDI
 //----------------------------------------------------------------------------------
 // Global Variables Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
+
+extern const int ScreenWidth;
+extern const int ScreenHeight;
+
 extern GameScreen currentScreen;
 extern Font font;
 extern Music music;
@@ -29,6 +33,8 @@ extern Font TextFont;
 extern Texture UIButton;
 
 extern bool PickingHandled;
+
+extern bool CameraOrbit;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

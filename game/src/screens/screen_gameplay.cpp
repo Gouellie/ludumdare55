@@ -8,15 +8,17 @@
 #include <gameplay/gamedirector.h>
 #include <gameplay/settlement.h>
 #include <ui/boardcomponent.h>
+#include <ui/texturebutton.h>
 
 #include <cstdlib>
+
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
-
+static bool isMusicMuted = false;
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -104,6 +106,19 @@ void DrawGameplayScreen(void)
 
     Settlements.RenderUI();
     Barracks.RenderUI();
+
+    float uiButtonWitdh = (float)(UIButton.width / BUTTON_STATE_COUNT);
+    Rectangle bounds = { (float)ScreenWidth - uiButtonWitdh - 10.f, 10.f, uiButtonWitdh, (float)UIButton.height };
+    if (TextureButtonWithText(bounds, UIButton, TextFormat("Music %s", isMusicMuted ? "OFF" : "ON"), 20.f))
+    {
+        isMusicMuted = !isMusicMuted;
+        SetMusicVolume(music, isMusicMuted ? 0.0f : 1.0f);
+    }
+    bounds = { 10.f, 10.f, uiButtonWitdh, (float)UIButton.height };
+    if (TextureButtonWithText(bounds, UIButton, "Orbit", 20.f))
+    {
+        CameraOrbit = !CameraOrbit;
+    }
 }
 
 // Gameplay Screen Unload logic

@@ -2,9 +2,6 @@
 #include "raylib.h"
 #include "raymath.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"                 // Required for GUI controls
-
 #define TEXTUREBUTTON_IMPLEMENTATION
 #include "ui/texturebutton.h"
 
@@ -45,8 +42,8 @@ Scene WorldScene;
 Scene Settlements;
 Scene Barracks;
 
-static const int ScreenWidth = 1280;
-static const int ScreenHeight = 800;
+const int ScreenWidth = 1280;
+const int ScreenHeight = 800;
 bool PickingHandled;
 
 Texture Wabbit = { 0 };
@@ -66,6 +63,7 @@ Texture UIButton = { 0 };
 Model   Board = {0};
 Model   Settlement = { 0 };
 
+bool CameraOrbit = false;
 Camera camera = { 0 };
 Font TextFont = { 0 };
 
@@ -387,8 +385,6 @@ static void UpdateMainLoop(void)
     UpdateMusicStream(music);
 #endif
 
-    static bool cameraOrbit;
-
     if (!onTransition)
     {
         switch (currentScreen)
@@ -417,7 +413,7 @@ static void UpdateMainLoop(void)
         } break;
         case GAMEPLAY:
         {
-            if (cameraOrbit) {
+            if (CameraOrbit) {
                 UpdateCamera(&camera, CAMERA_ORBITAL);
             }
 
@@ -457,12 +453,6 @@ static void UpdateMainLoop(void)
 
     // Draw full screen rectangle in front of everything
     if (onTransition) DrawTransition();
-
-    DrawFPS(100, 10);
-    if (GuiButton({ 10, 10, 80, 20 }, "ORBIT")) 
-    {
-        cameraOrbit = !cameraOrbit;
-    }
 
     EndDrawing();
 }

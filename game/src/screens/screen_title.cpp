@@ -36,10 +36,9 @@ void DrawTitleScreen(void)
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PAL_YELLOW);
     DrawTextCentered("Otherworldly Mercenary", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 100, PAL_HOSPITAL_YELLOW);
 
-    bool isMouseOver = false;
     float realWidth = (float)UIButton.width / BUTTON_STATE_COUNT;
     Rectangle bounds = { GetScreenWidth() / 2.f - realWidth / 2.f, GetScreenHeight() - UIButton.height - 128.f, realWidth, (float)UIButton.height };
-    if (TextureButtonWithMouseOverAndText(bounds, UIButton, "Start Game", 20, &isMouseOver)) {
+    if (TextureButtonWithText(bounds, UIButton, "Start Game", 20)) {
         finishScreen = 2;
     }
 }

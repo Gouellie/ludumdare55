@@ -62,10 +62,9 @@ void DrawEndingScreen(void)
 
     DrawTextCentered("Thank you For Playing!", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 100, PAL_HOSPITAL_YELLOW);
 
-    bool isMouseOver = false;
     float realWidth = (float)UIButton.width / BUTTON_STATE_COUNT;
     Rectangle bounds = { GetScreenWidth() / 2.f - realWidth / 2.f, GetScreenHeight() - UIButton.height - 50.f, realWidth, (float)UIButton.height };
-    if (TextureButtonWithMouseOverAndText(bounds, UIButton, "Restart", 20, &isMouseOver)) {
+    if (TextureButtonWithText(bounds, UIButton, "Restart", 20)) {
         finishScreen = 1;
     }
 }
