@@ -36,7 +36,7 @@ void DrawTitleScreen(void)
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PAL_YELLOW);
     DrawTextCentered("Otherworldly Mercenary", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f - 128.f }, 100, PAL_HOSPITAL_YELLOW);
 
-    DrawTextCentered("By Pierre Rencuriel & Guillaume Ouellet", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 60, PAL_HOSPITAL_YELLOW);
+    DrawTextCentered("By Pierre Rencurel & Guillaume Ouellet", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 60, PAL_HOSPITAL_YELLOW);
 
     DrawTextCentered("For Ludum Dare 55", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f + 78.f }, 40, PAL_HOSPITAL_YELLOW);
 
