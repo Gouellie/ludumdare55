@@ -20,20 +20,19 @@ static int finishScreen = 0;
 // Ending Screen Initialization logic
 void InitEndingScreen(void)
 {
-    // TODO: Initialize ENDING screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+
+    if (GameDirector::GetInstance().GetGameState() == GameState::Fail) 
+    {
+        PlaySound(SoundFXGameOverLose);
+    }
 }
 
 // Ending Screen Update logic
 void UpdateEndingScreen(void)
 {
-    //// Press enter or tap to return to TITLE screen
-    //if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    //{
-    //    finishScreen = 1;
-    //    PlaySound(fxCoin);
-    //}
+
 }
 
 // Ending Screen Draw logic

@@ -152,11 +152,15 @@ void BarrackController::OnRenderUI()
         {
             state = TextureButtonState::STATE_DISABLED;
         }
+
+        TextureButtonSetSound(SoundFXButtonSummon);
         if (TextureButtonWithMouseOver({ 12.f, yOrigin, (float)m_SummonWarriorSprite.width / BUTTON_STATE_COUNT, (float)m_SummonWarriorSprite.height }, m_SummonWarriorSprite, false, &isMouseOver, state))
         {
             GameDirector::GetInstance().AddWarrior(Warrior("Ludum Dare", 150, 100));
             m_bExpanded = true;
         }
+        TextureButtonSetSound(SoundFXButton);
+
         if (isMouseOver)
         {
             const char* text = (state != TextureButtonState::STATE_DISABLED) ? TextFormat("SUMMON a Warrior! (%d$)", war->GetPrice()) : TextFormat("Not enough funds! (%d$)", war->GetPrice());

@@ -66,11 +66,13 @@ void BoardComponent::OnRenderUI()
 
         float halfWidth = m_CloseButtonSourceRect.width / BUTTON_STATE_COUNT / 2;
 
+        TextureButtonSetSound(SoundFXButtonClose);
         Vector2 origin = { spritePos.x, spritePos.y - halfWidth };
         if (TextureButton({ origin.x, origin.y, 64.f, 64.f }, m_CloseButtonSprite, false)) {
             m_bMouseOverCloseButton = true;
             PickingHandled = false;
         }
+        TextureButtonSetSound(SoundFXButton);
     }
 
     Vector2 position;

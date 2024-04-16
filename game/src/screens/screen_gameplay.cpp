@@ -18,6 +18,7 @@
 //----------------------------------------------------------------------------------
 static int framesCounter = 0;
 static int finishScreen = 0;
+static bool isSoundMuted = false;
 static bool isMusicMuted = false;
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -75,6 +76,7 @@ void UpdateGameplayScreen(void)
                     if (!PickingHandled && isMousePressed)
                     {
                         directorInstance.SetPickedModel(model);
+                        PlaySound(SoundFXButtonSettlement);
                     }
                 }
                 else 
@@ -114,6 +116,18 @@ void DrawGameplayScreen(void)
         isMusicMuted = !isMusicMuted;
         SetMusicVolume(music, isMusicMuted ? 0.0f : 1.0f);
     }
+    bounds.x -= uiButtonWitdh + 10.f;
+    if (isSoundMuted) {
+        // There's a glitch when playing a sound while unmuting.
+        TextureButtonSetSound(SoundNone);
+    }
+    if (TextureButtonWithText(bounds, UIButton, TextFormat("Audio %s", isSoundMuted ? "OFF" : "ON"), 20.f))
+    {
+        isSoundMuted = !isSoundMuted;
+        SetSoundsVolumes(isSoundMuted ? 0.0f : 1.0f);
+    }
+    TextureButtonSetSound(SoundFXButton);
+
     bounds = { 10.f, 10.f, uiButtonWitdh, (float)UIButton.height };
     if (TextureButtonWithText(bounds, UIButton, "Orbit", 20.f))
     {
@@ -131,4 +145,14 @@ void UnloadGameplayScreen(void)
 int FinishGameplayScreen(void)
 {
     return finishScreen;
+}
+
+void SetSoundsVolumes(float volume) 
+{
+    SetSoundVolume(SoundFXButton, volume);
+    SetSoundVolume(SoundFXButtonClose, volume);
+    SetSoundVolume(SoundFXButtonSettlement, volume);
+    SetSoundVolume(SoundFXButtonNextTurn, volume);
+    SetSoundVolume(SoundFXButtonSummon, volume);
+    SetSoundVolume(SoundFXGameOverLose, volume);
 }

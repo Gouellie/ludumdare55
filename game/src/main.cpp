@@ -70,6 +70,15 @@ Font TextFont = { 0 };
 // Local Variables
 Music music = { 0 };
 
+Sound SoundFXButton = { 0 };
+Sound SoundFXButtonClose = { 0 };
+Sound SoundFXButtonSettlement = { 0 };
+Sound SoundFXButtonNextTurn = { 0 };
+Sound SoundFXButtonSummon = { 0 };
+Sound SoundFXGameOverLose = { 0 };
+
+Sound SoundNone = { 0 };
+
 // Required variables to manage screen transitions (fade-in, fade-out)
 static float transAlpha = 0.0f;
 static bool onTransition = false;
@@ -108,10 +117,12 @@ public:
             bool mouseOver;
             Rectangle bounds = { GetScreenWidth() - realWidth - 10.f , GetScreenHeight() - m_buttonSprite.height - 50.f, realWidth, (float)m_buttonSprite.height};
             TextureButtonSetFontColor(PAL_DARK_BLUE);
+            TextureButtonSetSound(SoundFXButtonNextTurn);
             if (TextureButtonWithMouseOverAndText(bounds, m_buttonSprite, "Next Turn", 28, &mouseOver)) 
             {
                 GameDirector::GetInstance().ResolveTurn(Settlements);
             }
+            TextureButtonSetSound(SoundFXButton);
             TextureButtonSetFontColor(WHITE);
         }
     }
@@ -219,6 +230,17 @@ void SetupScene()
     nextTurnButton->AddComponent<NextTurnButtonComponent>()->SetSprite(UIButton);
 }
 
+void SetupCamera()
+{
+    // Define the camera to look into our 3d world
+    camera = { 0 };
+    camera.position = { 29.0f, 15.f, 27.0f };    // Camera position
+    camera.target = { 0.0f, 0.0f, 0.0f };      // Camera looking at point
+    camera.up = { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
+    camera.fovy = 45.0f;                                // Camera field-of-view Y
+    camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
+}
+
 void LoadResources()
 {
     BoardBackground = LoadTexture("resources/ui/board_background.png");
@@ -233,16 +255,42 @@ void LoadResources()
     Board = LoadModel("resources/models/board.glb");
     Settlement = LoadModel("resources/models/settlement.glb");
 
-    // Define the camera to look into our 3d world
-    camera = { 0 };
-    camera.position = { 29.0f, 15.f, 27.0f };    // Camera position
-    camera.target = { 0.0f, 0.0f, 0.0f };      // Camera looking at point
-    camera.up = { 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-    camera.fovy = 45.0f;                                // Camera field-of-view Y
-    camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
-
     TextFont = LoadFont("resources/fonts/alagard.png");
+
     music = LoadMusicStream("resources/audio/ambient.ogg");
+
+    SoundFXButton = LoadSound("resources/audio/click3.ogg");
+    SoundFXButtonClose = LoadSound("resources/audio/click1.ogg");
+    SoundFXButtonSettlement = LoadSound("resources/audio/click2.ogg");
+    SoundFXButtonSummon = LoadSound("resources/audio/rollover2.ogg");
+    SoundFXButtonNextTurn = LoadSound("resources/audio/rollover2.ogg");
+    SoundFXGameOverLose = LoadSound("resources/audio/jingles_PIZZI07.ogg");
+}
+
+void UnloadResources() 
+{
+    UnloadTexture(BoardBackground);
+    UnloadTexture(CloseButton);
+    UnloadTexture(SummonWarriorButton);
+    UnloadTexture(BarracksButton);
+    UnloadTexture(WarriorButton);
+    UnloadTexture(WarriorPanel);
+    UnloadTexture(UIButton);
+    UnloadTexture(SettlementIcon);
+
+    UnloadModel(Board);
+    UnloadModel(Settlement);
+
+    UnloadFont(TextFont);
+
+    UnloadMusicStream(music);
+
+    UnloadSound(SoundFXButton);
+    UnloadSound(SoundFXButtonClose);
+    UnloadSound(SoundFXButtonSettlement);
+    UnloadSound(SoundFXButtonSummon);
+    UnloadSound(SoundFXButtonNextTurn);
+    UnloadSound(SoundFXGameOverLose);
 }
 
 int main()
@@ -251,11 +299,13 @@ int main()
     InitWindow(ScreenWidth, ScreenHeight, "Game Object Test");
     InitAudioDevice();      // Initialize audio device
 
+    SetupCamera();
     LoadResources();
     SetupScene();
 
-    TextureButtonSetFont(TextFont);
     TextHelpersSetFont(TextFont);
+    TextureButtonSetFont(TextFont);
+    TextureButtonSetSound(SoundFXButton);
 
 // Setup and init first screen
 #ifdef DEBUG
@@ -278,6 +328,7 @@ int main()
     }
 #endif
     // cleanup
+    UnloadResources();
     CloseWindow();
     return 0;
 }

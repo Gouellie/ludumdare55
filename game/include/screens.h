@@ -32,6 +32,15 @@ extern Font TextFont;
 
 extern Texture UIButton;
 
+extern Sound SoundFXButton;
+extern Sound SoundFXButtonClose;
+extern Sound SoundFXButtonSettlement;
+extern Sound SoundFXButtonNextTurn;
+extern Sound SoundFXButtonSummon;
+extern Sound SoundFXGameOverLose;
+
+extern Sound SoundNone;
+
 extern bool PickingHandled;
 
 extern bool CameraOrbit;
@@ -84,6 +93,8 @@ void UpdateEndingScreen(void);
 void DrawEndingScreen(void);
 void UnloadEndingScreen(void);
 int FinishEndingScreen(void);
+
+void SetSoundsVolumes(float volume);
 
 #ifdef __cplusplus
 }

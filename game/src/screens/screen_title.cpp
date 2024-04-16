@@ -34,7 +34,11 @@ void DrawTitleScreen(void)
 {
     // TODO: Draw TITLE screen here!
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PAL_YELLOW);
-    DrawTextCentered("Otherworldly Mercenary", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 100, PAL_HOSPITAL_YELLOW);
+    DrawTextCentered("Otherworldly Mercenary", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f - 128.f }, 100, PAL_HOSPITAL_YELLOW);
+
+    DrawTextCentered("By Pierre Rencuriel & Guillaume Ouellet", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f }, 60, PAL_HOSPITAL_YELLOW);
+
+    DrawTextCentered("For Ludum Dare 55", { GetScreenWidth() / 2.f, GetScreenHeight() / 2.f + 78.f }, 40, PAL_HOSPITAL_YELLOW);
 
     float realWidth = (float)UIButton.width / BUTTON_STATE_COUNT;
     Rectangle bounds = { GetScreenWidth() / 2.f - realWidth / 2.f, GetScreenHeight() - UIButton.height - 128.f, realWidth, (float)UIButton.height };

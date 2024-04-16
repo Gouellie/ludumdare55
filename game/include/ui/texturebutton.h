@@ -11,6 +11,7 @@ enum class TextureButtonState
     STATE_SELECTED  = 4,
 };
 
+void TextureButtonSetSound(Sound sound);
 void TextureButtonSetFont(Font font);
 void TextureButtonSetFontColor(Color color);
 int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButtonState state = TextureButtonState::STATE_NORMAL);
@@ -22,6 +23,7 @@ int TextureButtonWithText(Rectangle bounds, Texture2D& texture, const char* text
 
 Font textFont = {0};
 Color fontColor = WHITE;
+Sound buttonSoundFX = { 0 };
 
 int TextureButton(Rectangle bounds, Texture2D& texture, bool flip, TextureButtonState state)
 {
@@ -46,13 +48,21 @@ int TextureButtonWithMouseOver(Rectangle bounds, Texture2D& texture, bool flip, 
         (*mouseOver) = true;
         if ((state != TextureButtonState::STATE_DISABLED))
         {
-            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) 
                 state = TextureButtonState::STATE_PRESSED;
             else
                 state = TextureButtonState::STATE_FOCUSED;
 
             if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
                 result = 1;
+
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+            {
+                if (IsSoundReady(buttonSoundFX) && !IsSoundPlaying(buttonSoundFX))
+                {
+                    PlaySound(buttonSoundFX);
+                }
+            }
         }
     }
 
@@ -92,6 +102,11 @@ void TextureButtonSetFont(Font font)
 void TextureButtonSetFontColor(Color color) 
 {
     fontColor = color;
+}
+
+void TextureButtonSetSound(Sound sound) 
+{
+    buttonSoundFX = sound;
 }
 
 #endif
