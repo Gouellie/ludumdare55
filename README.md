@@ -1,3 +1,8 @@
+# Otherworldy Mercenary
+A game made for Ludum Dare 55.
+
+![alt text](screen_shot_original_release.png?raw=true)
+
 # Download this repository
 You can either download the zip file, or clone the repository.
 
