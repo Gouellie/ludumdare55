@@ -77,7 +77,7 @@ private:
     ModelComponent* m_PickedModel = nullptr;
     int m_Cash{ 100 };
     int m_PickedWarriorIndex{ -1 };
-    int m_CurrentTurn{ 0 };
+    int m_CurrentTurn{ 1 };
     bool m_GameOver{ false };
     static constexpr int MAX_TURNS{ 30 };
     static constexpr int MAX_WARRIORS{ 20 };

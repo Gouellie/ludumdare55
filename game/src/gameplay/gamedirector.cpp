@@ -14,7 +14,7 @@
 void GameDirector::ResetDirector()
 {
     m_AvailableWarriors.clear();
-    m_CurrentTurn = 0;
+    m_CurrentTurn = 1;
     m_Cash = 100;
     m_GameOver = false;
     m_PickedModel = nullptr;
