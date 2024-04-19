@@ -1,5 +1,7 @@
 # Otherworldy Mercenary
-A game made for Ludum Dare 55.
+A game made for [Ludum Dare 55](https://ldjam.com/events/ludum-dare/55/otherworldly-mercenary).
+
+[Play it on itch.io](https://gouellie.itch.io/otherworldly-mercenary)
 
 ![alt text](screen_shot_original_release.png?raw=true)
 
